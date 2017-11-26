@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入物资系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='materialSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        物资
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        配 验 选 质量 抽检
+                    </item>
+                    <item>
+                        催 物资 张 单
+                    </item>
+                    <item>
+                        物资 规格 弹
+                    </item>
+                    <item>
+                        查 张 工单
+                    </item>
+                    <item>
+                        删除 申请 单
+                    </item>
+                    <item>
+                        调拨 单 结束
+                    </item>
+                    <item>
+                        实施 数量 信息
+                    </item>
+                    <item>
+                        物资 查询
+                    </item>
+                    <item>
+                        物资 字典 表
+                    </item>
+                    <item>
+                        库存 物资 失败
+                    </item>
+                    <item>
+                        物资 保存 缓慢
+                    </item>
+                    <item>
+                        物资 申购 采购 服务器 改 时间
+                    </item>
+                    <item>
+                        物资 添加 权限
+                    </item>
+                    <item>
+                        到货 界面 撤销
+                    </item>
+                    <item>
+                        物资 系统 项目 需要 权限
+                    </item>
+                    <item>
+                        待办 找不到 发来 单据
+                    </item>
+                    <item>
+                        需求 上报 找不到 部长
+                    </item>
+                    <item>
+                        需求 页面 新增 项目 选不到
+                    </item>
+                    <item>
+                        退库 找不到 配置 项目
+                    </item>
+                    <item>
+                        出库 环节 差异
+                    </item>
+                    <item>
+                        物资 采购 审批 电商 未确认
+                    </item>
+                    <item>
+                        领料 最后 节点 失败
+                    </item>
+                    <item>
+                        生成 验收 单 错误
+                    </item>
+                    <item>
+                        需求 审批 处理 单
+                    </item>
+                    <item>
+                        系统 账号 权限 申请
+                    </item>
+                    <item>
+                        删除 技术 规范 书
+                    </item>
+                    <item>
+                        合同 提示 版本 使用
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

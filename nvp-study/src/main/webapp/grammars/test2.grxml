@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- root="_ROOT_":指定入口 -->
+<grammar version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0" root="_ROOT_">
+    <!-- 声明meta -->
+    <meta name="swirec_compile_parser" content="1"/>
+    <!-- 入口在这里 -->
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <tag>dm_root='yes'</tag>
+                <one-of>
+                    <item>查询电价</item>
+                    <item>
+                        <item repeat="0-1">我想</item>
+                        <item>查询阶梯电价</item>
+                    </item>
+                    <item>阶梯电价</item>
+                    <item>阶梯</item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN"
+    version="1.0"
+    xmlns="http://www.w3.org/2001/06/grammar"
+    tag-format="swi-semantics/1.0"
+    mode="dtmf"
+    root="_fallback">
+
+    <meta name="interdigittimeout" content="2000"/>
+    
+    <rule id="_fallback" scope="public">
+        <one-of>
+            <item>
+                1
+                <tag>
+                    SWI_meaning='QualityID'; dm_root='QualityID'; app_tag='QualityID';
+                </tag>
+            </item>
+            <item>
+                2
+                <tag>
+                    SWI_meaning='House'; dm_root='House'; app_tag='House';
+                </tag>
+            </item>
+            <item>
+                3
+                <tag>
+                    SWI_meaning='TaxiService'; dm_root='TaxiService'; app_tag='Taxi';
+                </tag>
+            </item>
+            <item>
+                4
+                <tag>
+                    SWI_meaning='Others'; dm_root='Others'; app_tag='Others';
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

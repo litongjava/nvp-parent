@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入物资系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='capitalSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        基建
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        工程 按时 完成率 体现
+                    </item>
+                    <item>
+                        合同 承包商 管理 权限
+                    </item>
+                    <item>
+                        招标 线下 导入 提示 失败
+                    </item>
+                    <item>
+                        招标 评价 规约 合同 零
+                    </item>
+                    <item>
+                        资产 配网 验收 失败
+                    </item>
+                    <item>
+                        规约 错误 退回 申请 人
+                    </item>
+                    <item>
+                        可 估算 规约 导入 失败
+                    </item>
+                    <item>
+                        验收 接收 电子化 状态
+                    </item>
+                    <item>
+                        配网 基建 资料 表 填写
+                    </item>
+                    <item>
+                        承包商 考核 修改 录入 整改
+                    </item>
+                    <item>
+                        工程量 调整 修改 金额
+                    </item>
+                    <item>
+                        基建 无法 进度 管理
+                    </item>
+                    <item>
+                        招标 施工 批次 数据
+                    </item>
+                    <item>
+                        配网 基建 工单 出错
+                    </item>
+                    <item>
+                        完成 结算 报表 零
+                    </item>
+                    <item>
+                        合同 承包商 管理 权限
+                    </item>
+                    <item>
+                        配网 招标 修改 数据
+                    </item>
+                    <item>
+                        主网 实施 增加 工程
+                    </item>
+                    <item>
+                        配网 系统 回退 单
+                    </item>
+                    <item>
+                        走完 工程 单 撤回
+                    </item>
+                    <item>
+                        基建 批次 错 修改
+                    </item>
+                    <item>
+                        招标 评价 录入 合同 零
+                    </item>
+                    <item>
+                        工程 导入 数据 失败
+                    </item>
+                    <item>
+                        基建 申建 发送 投资 失败
+                    </item>
+                    <item>
+                        新建 发票 合同 添加
+                    </item>
+                    <item>
+                        配网 项目 申请 失败
+                    </item>
+                    <item>
+                        两个 权限 账号 电子化 申请
+                    </item>
+                    <item>
+                        转 紧急 工程 找不到
+                    </item>
+                    <item>
+                        配网 阶段 新增 项目
+                    </item>
+                    <item>
+                        启动 计划 其他 地市局
+                    </item>
+                    <item>
+                        概预算 计划 控制数 环节 过来的
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

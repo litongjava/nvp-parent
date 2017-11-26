@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar mode="voice" root="_menu" version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar">
+	<meta content="1500" name="incompletetimeout"/>
+	<meta content="7000" name="maxspeechtimeout"/>
+	<rule id="_menu" scope="public">
+		<one-of>
+			<item>
+				<ruleref uri="#menu"/>
+				<tag>SWI_meaning='menu'; dm_root='menu'; app_tag='menu';</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="menu" scope="private">
+		<!-- 菜单/帮助/按键菜单/传统菜单/ -->
+		<one-of>
+			<item>菜单</item>
+			<item>帮助</item>
+			<item>按键 菜单</item>
+			<item>传统 菜单</item>
+		</one-of>
+	</rule>
+</grammar>

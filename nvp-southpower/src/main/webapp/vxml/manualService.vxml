@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+    <!--开始定义请求数据变量-->
+    <!--请求数据的地址-->
+    <var name="remote" expr="'http://192.168.28.216:8080/recive/test2.do'"/>
+    <var name="filename" expr="'/dianli/vxml/index.vxml'"/>
+    <!--请求正确后返回执行的formid-->
+    <var name="formidSuccess" expr="'#success'"/>
+    <!--请求错误后返回执行的formid-->
+    <var name="formidFail" expr="'#fail'"/>
+    <var name="qname" expr="''"/>
+    <var name="shangji" expr="'*'"/>
+    <var name="toindex" expr="'#'"/>
+    <!--结束话术-->
+    <var name="endP" expr="'感谢您的致电,再见'"/>
+    <!--输入错误时的话术-->
+    <var name="inputError" expr="'您的输入无效,'"/>
+    <!--输入无效话术-->
+    <var name="inputInvalid" expr="'您的意思我没有太理解,'"/>
+
+    <!--<form>-->
+    <!--<block>测试成功</block>-->
+    <!--</form>-->
+
+    <var name="A1P" expr="'请直接说出您的问题,或选择以下系统,
+                营销系统请按1,
+                生产系统请按2，
+                物资系统请按3,
+                基建系统请按4,
+                项目管理请按5,
+                其它系统请按6,
+                人工服务请按0,
+                重听请按9，
+                '"/>
+
+    <!--人工系统-->
+    <form id="A1">
+        <field name="input" type="digits?language=zh-CN;length=1">
+            <prompt>
+                <value expr="A1P"/>
+            </prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <!--匹配生产系统-->
+            <grammar src="../grammars/productionSys.grxml"/>
+            <!--匹配物资系统-->
+            <grammar src="../grammars/materialSys.grxml"/>
+            <!--匹配基建系统-->
+            <grammar src="../grammars/capitalSys.grxml"/>
+            <!--匹配项目管理-->
+            <grammar src="../grammars/projectManager.grxml"/>
+            <!--匹配营销系统-->
+            <grammar src="../grammars/marketingSys.grxml"/>
+            <!--统一图档-->
+            <grammar src="../grammars/unifiedDoc.grxml"/>
+            <!--财务系统-->
+            <grammar src="../grammars/finaceSys.grxml"/>
+            <!--匹配人资系统-->
+            <grammar src="../grammars/humanResourceSys.grxml"/>
+            <!--陪评系统-->
+            <grammar src="../grammars/commentSys.grxml"/>
+            <!--匹配进入oak系统-->
+            <grammar src="../grammars/oakSys.grxml"/>
+            <!--匹配进入gis系统-->
+            <grammar src="../grammars/gisSys.grxml"/>
+            <!--匹配进入4a系统-->
+            <grammar src="../grammars/a4Sys.grxml"/>
+            <!--匹配进入电子商务系统-->
+            <grammar src="../grammars/ecSys.grxml"/>
+            <!--匹配进入投资计划系统-->
+            <grammar src="../grammars/investmentPlanSys.grxml"/>
+            <filled>
+                <!--进入营销系统-->
+                <if cond="input==1 || input.dm_root=='matchOne' || input.dm_root=='marketingSys'">
+                    <goto next="marketingSys.vxml#A1_1"/>
+                </if>
+                <!--生产系统-->
+                <if cond="input==2 || input.dm_root=='matchTwo' || input.dm_root=='productionSys'">
+                    <goto next="productionSys.vxml#A1_2"/>
+                </if>
+                <!--物资系统-->
+                <if cond="input==3 || input.dm_root=='matchThree' || input.dm_root=='materialSys'">
+                    <goto next="materialSys.vxml#A1_3"/>
+                </if>
+                <!--基建系统-->
+                <if cond="input==4 || input.dm_root=='matchFour' || input.dm_root=='capitalSys'">
+                    <goto next="capitalSys.vxml#A1_4"/>
+                </if>
+                <!--项目管理-->
+                <if cond="input==5 || input.dm_root=='matchFive' || input.dm_root=='projectManager'">
+                    <goto next="projectManager.vxml#A1_5"/>
+                </if>
+                <!--其它系统-->
+                <if cond="input==6 || input.dm_root=='matchSix' || input.dm_root=='otherSys'">
+                    <goto next="#A1_other"/>
+                </if>
+                <!--人工服务-->
+                <if cond="input==0 || input.dm_root=='matchZero' || input.dm_root=='manualSys'">
+                    <goto next="#transfer"/>
+                </if>
+                <!--重播-->
+                <if cond="input==9 || input.dm_root=='matchNine'">
+                    <goto next="#A1"/>
+                </if>
+
+                <!--进入统一图档-->
+                <if cond="input.dm_root=='unifiedDoc'">
+                    <goto next="unifiedDoc.vxml#A1_14"/>
+                </if>
+                <!--进入财务系统-->
+                <if cond="input.dm_root=='finaceSys'">
+                    <goto next="finaceSys.vxml#A1_15"/>
+                </if>
+                <!--进入人资系统-->
+                <if cond="input.dm_root=='humanRecourceSys'">
+                    <goto next="humanRecourceSys.vxml#A1_16"/>
+                </if>
+                <!--进入陪评系统-->
+                <if cond="input.dm_root=='commentSys'">
+                    <goto next="commentSys.vxml#A1_17"/>
+                </if>
+                <!--O A K-->
+                <if cond="input.dm_root=='oakSys'">
+                    <goto next="oakSys.vxml#A1_7"/>
+                </if>
+                <!--G I S-->
+                <if cond="input.dm_root=='gisSys'">
+                    <goto next="gisSys.vxml#A1_8"/>
+                </if>
+                <!--4A-->
+                <if cond="input.dm_root=='4aSys'">
+                    <goto next="a4Sys.vxml#A1_9"/>
+                </if>
+                <!--电子商务-->
+                <if cond="input.dm_root=='ecSys'">
+                    <goto next="ecSys.vxml#A1_11"/>
+                </if>
+                <!--投资计划-->
+                <if cond="input.dm_root=='investmentPlanSys'">
+                    <goto next="investmentPlanSys.vxml#A1_12"/>
+                </if>
+
+                <prompt>
+                    <value expr="inputInvalid"/>
+                </prompt>
+                <goto next="#A1"/>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <var name="A1_otherP" expr="'
+    电子商务请按1,
+    投资计划请按2,
+    其它系统请按3,
+    O A K 系统请按4,
+    G I S 系统请按5,
+    4 A 系统请按6,
+    人工服务请按0,
+    重听请按9，
+    返回上级菜单请按星号键
+    ,'"/>
+
+    <form id="A1_other">
+        <field name="input" type="digits?language=zh_CN;length=1">
+            <prompt>
+                <value expr="A1_otherP"/>
+            </prompt>
+            <grammar src="../grammars/query2.grxml"/>
+            <grammar src="../grammars/query1.grxml"/>
+            <!--匹配进入oak系统-->
+            <grammar src="../grammars/oakSys.grxml"/>
+            <!--匹配进入gis系统-->
+            <grammar src="../grammars/gisSys.grxml"/>
+            <!--匹配进入4a系统-->
+            <grammar src="../grammars/a4Sys.grxml"/>
+            <!--匹配进入电子商务系统-->
+            <grammar src="../grammars/ecSys.grxml"/>
+            <!--匹配进入投资计划系统-->
+            <grammar src="../grammars/investmentPlanSys.grxml"/>
+            <!--匹配生产系统-->
+            <grammar src="../grammars/productionSys.grxml"/>
+            <!--匹配物资系统-->
+            <grammar src="../grammars/materialSys.grxml"/>
+            <!--匹配基建系统-->
+            <grammar src="../grammars/capitalSys.grxml"/>
+            <!--匹配项目管理-->
+            <grammar src="../grammars/projectManager.grxml"/>
+            <!--匹配营销系统-->
+            <grammar src="../grammars/marketingSys.grxml"/>
+            <!--统一图档-->
+            <grammar src="../grammars/unifiedDoc.grxml"/>
+            <!--财务系统-->
+            <grammar src="../grammars/finaceSys.grxml"/>
+            <!--匹配人资系统-->
+            <grammar src="../grammars/humanResourceSys.grxml"/>
+            <!--陪评系统-->
+            <grammar src="../grammars/commentSys.grxml"/>
+
+            <filled>
+                <!--O A K-->
+                <if cond="input==4 || input.dm_root=='matchSeven' || input.dm_root=='oakSys'">
+                    <goto next="oakSys.vxml#A1_7"/>
+                </if>
+                <!--G I S-->
+                <if cond="input==5 || input.dm_root=='matchNight' || input.dm_root=='gisSys'">
+                    <goto next="gisSys.vxml#A1_8"/>
+                </if>
+                <!--4A-->
+                <if cond="input==6 || input.dm_root=='matchNine' || input.dm_root=='4aSys'">
+                    <goto next="a4Sys.vxml#A1_9"/>
+                </if>
+                <!--电子商务-->
+                <if cond="input==1 || input.dm_root=='matchOne' || input.dm_root=='ecSys'">
+                    <goto next="ecSys.vxml#A1_11"/>
+                </if>
+                <!--投资计划-->
+                <if cond="input==2 || input.dm_root=='matchTwo' || input.dm_root=='investmentPlanSys'">
+                    <goto next="investmentPlanSys.vxml#A1_12"/>
+                </if>
+                <!--其它系统-->
+                <if cond="input==3 || input.dm_root=='matchThree' || input.dm_root=='otherSys'">
+                    <goto next="#A1_other2"/>
+                </if>
+                <!--人工服务-->
+                <if cond="input==0 || input.dm_root=='matchZero' || input.dm_root=='manualSys'">
+                    <goto next="#transfer"/>
+                </if>
+                <!--重播-->
+                <if cond="input==9 || input.dm_root=='matchNine'">
+                    <goto next="#A1_other"/>
+                </if>
+                <!--上级菜单-->
+                <if cond="shangji">
+                    <goto next="#A1"/>
+                </if>
+                <!--进入营销系统-->
+                <if cond="input.dm_root=='marketingSys'">
+                    <goto next="#A1_1"/>
+                </if>
+                <!--生产系统-->
+                <if cond="input.dm_root=='productionSys'">
+                    <goto next="#A1_2"/>
+                </if>
+                <!--物资系统-->
+                <if cond="input.dm_root=='materialSys'">
+                    <goto next="#A1_3"/>
+                </if>
+                <!--基建系统-->
+                <if cond="input.dm_root=='capitalSys'">
+                    <goto next="#A1_4"/>
+                </if>
+                <!--项目管理-->
+                <if cond="input.dm_root=='projectManager'">
+                    <goto next="#A1_5"/>
+                </if>
+                <!--进入统一图档-->
+                <if cond="input.dm_root=='unifiedDoc'">
+                    <goto next="unifiedDoc.vxml#A1_14"/>
+                </if>
+                <!--进入财务系统-->
+                <if cond="input.dm_root=='finaceSys'">
+                    <goto next="finaceSys.vxml#A1_15"/>
+                </if>
+                <!--进入人资系统-->
+                <if cond="input.dm_root=='humanRecourceSys'">
+                    <goto next="humanRecourceSys.vxml#A1_16"/>
+                </if>
+                <!--进入陪评系统-->
+                <if cond="input.dm_root=='commentSys'">
+                    <goto next="commentSys.vxml#A1_17"/>
+                </if>
+
+                <prompt>
+                    <value expr="inputInvalid"/>
+                </prompt>
+                <goto next="#A1_other"/>
+            </filled>
+
+            <catch count="1" event="noinput nomatch">
+                <prompt>
+                    <value expr="inputInvalid"/>
+                    <value expr="A1_otherP"/>
+                </prompt>
+            </catch>
+
+            <catch count="2" event="noinput nomatch">
+                <prompt>
+                    <value expr="inputInvalid"/>
+                    <value expr="A1_otherP"/>
+                </prompt>
+            </catch>
+
+            <catch count="3" event="noinput nomatch">
+                <prompt>
+                    <value expr="inputInvalid"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+    <var name="A1_other2P" expr="'
+    统一图档请按4,
+    财务系统请按5,
+    人资系统请按6,
+    陪评系统请按7,
+    人工服务请按0，
+    重听请按9,
+    返回上级菜单请按星号键，
+    返回主菜单请按井号键
+    '"/>
+
+    <form id="A1_other2">
+        <field name="input" type="digits?language=zh_CN;length=1">
+            <prompt>
+                <value expr="A1_other2P"/>
+            </prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <!--统一图档-->
+            <grammar src="../grammars/unifiedDoc.grxml"/>
+            <!--财务系统-->
+            <grammar src="../grammars/finaceSys.grxml"/>
+            <!--匹配人资系统-->
+            <grammar src="../grammars/humanResourceSys.grxml"/>
+            <!--陪评系统-->
+            <grammar src="../grammars/commentSys.grxml"/>
+            <!--匹配生产系统-->
+            <grammar src="../grammars/productionSys.grxml"/>
+            <!--匹配物资系统-->
+            <grammar src="../grammars/materialSys.grxml"/>
+            <!--匹配基建系统-->
+            <grammar src="../grammars/capitalSys.grxml"/>
+            <!--匹配项目管理-->
+            <grammar src="../grammars/projectManager.grxml"/>
+            <!--匹配营销系统-->
+            <grammar src="../grammars/marketingSys.grxml"/>
+            <!--匹配进入oak系统-->
+            <grammar src="../grammars/oakSys.grxml"/>
+            <!--匹配进入gis系统-->
+            <grammar src="../grammars/gisSys.grxml"/>
+            <!--匹配进入4a系统-->
+            <grammar src="../grammars/a4Sys.grxml"/>
+            <!--匹配进入电子商务系统-->
+            <grammar src="../grammars/ecSys.grxml"/>
+            <!--匹配进入投资计划系统-->
+            <grammar src="../grammars/investmentPlanSys.grxml"/>
+            <option value="shangji" dtmf="*"/>
+            <option value="toindex" dtmf="#"/>
+            <filled>
+                <!--进入统一图档-->
+                <if cond="input==4 || input.dm_root=='matchFour' || input.dm_root=='unifiedDoc'">
+                    <goto next="unifiedDoc.vxml#A1_14"/>
+                </if>
+                <!--进入财务系统-->
+                <if cond="input==5 || input.dm_root=='matchFive' || input.dm_root=='finaceSys'">
+                    <goto next="finaceSys.vxml#A1_15"/>
+                </if>
+                <!--进入人资系统-->
+                <if cond="input==6 || input.dm_root=='matchSix' || input.dm_root=='humanRecourceSys'">
+                    <goto next="humanRecourceSys.vxml#A1_16"/>
+                </if>
+                <!--进入陪评系统-->
+                <if cond="input==7 || input.dm_root=='matchSeven' || input.dm_root=='commentSys'">
+                    <goto next="commentSys.vxml#A1_17"/>
+                </if>
+                <!--人工服务-->
+                <if cond="input==0 || input.dm_root=='matchZero' || input.dm_root=='manualSys'">
+                    <goto next="#transfer"/>
+                </if>
+                <!--重播-->
+                <if cond="input==9 || input.dm_root=='matchNine'">
+                    <goto next="#A1_other2"/>
+                </if>
+                <!--上级菜单-->
+                <if cond="shangji">
+                    <goto next="#A1_other"/>
+                </if>
+                <!--返回主菜单-->
+                <if cond="toindex and input=='null'">
+                    <goto next="#A1"/>
+                </if>
+                <!--进入营销系统-->
+                <if cond="input.dm_root=='marketingSys'">
+                    <goto next="marketingSys.vxml#A1_1"/>
+                </if>
+                <!--生产系统-->
+                <if cond="input.dm_root=='productionSys'">
+                    <goto next="productionSys.vxml#A1_2"/>
+                </if>
+                <!--物资系统-->
+                <if cond="input.dm_root=='materialSys'">
+                    <goto next="materialSys.vxml#A1_3"/>
+                </if>
+                <!--基建系统-->
+                <if cond="input.dm_root=='capitalSys'">
+                    <goto next="capitalSys.vxml#A1_4"/>
+                </if>
+                <!--项目管理-->
+                <if cond="input.dm_root=='projectManager'">
+                    <goto next="projectManager.vxml#A1_5"/>
+                </if>
+                <!--O A K-->
+                <if cond="input.dm_root=='oakSys'">
+                    <goto next="oakSys.vxml#A1_7"/>
+                </if>
+                <!--G I S-->
+                <if cond="input.dm_root=='gisSys'">
+                    <goto next="gisSys.vxml#A1_8"/>
+                </if>
+                <!--4A-->
+                <if cond="input.dm_root=='4aSys'">
+                    <goto next="a4Sys.vxml#A1_9"/>
+                </if>
+                <!--电子商务-->
+                <if cond="input.dm_root=='ecSys'">
+                    <goto next="ecSys.vxml#A1_11"/>
+                </if>
+                <!--投资计划-->
+                <if cond="input.dm_root=='investmentPlanSys'">
+                    <goto next="investmentPlanSys.vxml#A1_12"/>
+                </if>
+
+                <prompt>
+                    <value expr="inputError"/>
+                </prompt>
+                <goto next="#A1_other2"/>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputInvalid"/>
+                    <value expr="A1_other2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputInvalid"/>
+                    <value expr="A1_other2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputInvalid"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--转人工-->
+    <form id="transfer">
+        <transfer name="call" dest="1000" bridge="false">
+            <prompt>正在为您转接,请稍后</prompt>
+            <filled>
+                <prompt>
+                    <value expr="call"/>
+                </prompt>
+                <if cond="call=='noanswer'">
+                    <prompt>话务员无法接听你的电话</prompt>
+                    <disconnect/>
+                    <exit/>                </if>
+            </filled>
+        </transfer>
+    </form>
+</vxml>

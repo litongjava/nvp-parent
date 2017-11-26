@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN"
+    version="1.0"
+    xmlns="http://www.w3.org/2001/06/grammar"
+    tag-format="swi-semantics/1.0"
+    mode="dtmf"
+    root="_fallback">
+
+    <meta name="interdigittimeout" content="2000"/>
+    
+    <rule id="_fallback" scope="public">
+        <one-of>
+            <item>
+                *
+                <tag>
+                    SWI_meaning='mainMenu'; dm_root='mainMenu'; app_tag='mainMenu';
+                </tag>
+            </item>
+            <item>
+                #
+                <tag>
+                    SWI_meaning='contacts'; dm_root='contacts'; app_tag='contacts';
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

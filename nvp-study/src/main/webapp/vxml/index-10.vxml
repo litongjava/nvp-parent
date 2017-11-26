@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <property name="recordutterance" value="true"/>
+    <form id="main">
+        <field name="input" type="digits?language=zh_CN;length=1">
+            <prompt>
+                说一句话
+            </prompt>
+            <grammar src="../grammars/test2.grxml"/>
+            <filled>
+                <prompt>
+                    <value expr="application.lastresult$.interpretation.SWI_literal"/>
+                    <value expr="input$.interpretation.SWI_literal"/>
+                </prompt>
+                <var name="audio1" expr="input$.recording"/>
+                <prompt><value expr="audio1"/></prompt>
+                <goto next="#main"/>
+            </filled>
+
+        </field>
+    </form>
+</vxml>

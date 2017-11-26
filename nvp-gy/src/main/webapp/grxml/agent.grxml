@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar mode="voice" root="_agent" version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar">
+	<meta content="1500" name="incompletetimeout"/>
+	<meta content="7000" name="maxspeechtimeout"/>
+	<rule id="_agent" scope="public">
+		<one-of>
+			<item>
+				<ruleref uri="#agent"/>
+				<tag>SWI_meaning='agent'; dm_root='agent'; app_tag='agent';</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="agent" scope="private">
+		<!-- 座席/专员/人工/客服/人工客服/人/真人/业务员/活人/我找别人/你们解决不了 -->
+		<one-of>
+			<item>座席</item>
+			<item>专员</item>
+			<item>人工</item>
+			<item>客服</item>
+			<item>人工 客服</item>
+			<item>人</item>
+			<item>真人</item>
+			<item>业务员</item>
+			<item>活人</item>
+			<item>我 找 别人</item>
+			<item>你们 解决 不了</item>
+			<item>没有 真人 吗</item>
+			<item>话务员</item>
+		</one-of>
+	</rule>
+</grammar>

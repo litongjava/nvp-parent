@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <!--指定端口好号和文件部署位置-->
+    <var name="filename" expr="'8090/study/vxml/index.vxml'"/>
+    <!--请求正确后返回执行的formid-->
+    <var name="formid1" expr="'#end1'"/>
+    <!--请求失败后返回执行的formid-->
+    <var name="formid2" expr="'#end2'"/>
+    <!--请求问题变量的名称-->
+    <var name="qname" expr="''"/>
+
+    <form id="main">
+        <field name="main" type="digits">
+            <prompt>
+                请输入8位数字,按井号键结束
+            </prompt>
+            <filled>
+                <assign name="qname" expr="'main'"/>
+                <submit next="http://192.168.29.178:8081/recive/test2.do" namelist="qname main filename formid1 formid2"/>
+            </filled>
+
+            <catch event="noinput nomatch">
+                <goto next="#end1"/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="end1">
+        <block>
+            请求成功
+        </block>
+    </form>
+
+    <form id="end2">
+        <block>
+            请求失败
+        </block>
+    </form>
+</vxml>

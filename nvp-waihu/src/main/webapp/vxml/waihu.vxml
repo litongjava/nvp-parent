@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+    <property name="maxspeechtimeout" value="10s"/>
+    <property name="sensitivity" value="0.50"/>
+    <property name="incompletetimeout" value="1s"/>
+    <property name="confidencelevel" value="0.15"/>
+    <property name="timeout" value="3s"/>
+    <!--<property name="swirec.swiep_in_prompt_sensitivity_percent" value="20" /> -->
+    <property name="bargein" value="false"/>
+    <var name="nishishei" expr="''"/>
+
+
+    <form id="who2u">
+
+
+        <block>
+            <assign name="nishishei" expr="session.connection.remote.uri"/>
+            <if cond="nishishei=='sip:13916201791@xiaoi.com'"><!-- 1 -->
+                <prompt>
+                    <audio src="../audios/HELLO_Z.wav"/>
+                </prompt>
+                <goto next="#A2"/>
+            </if>
+            <if cond="nishishei=='sip:13501695900@xiaoi.com'"><!-- 1 -->
+                <prompt>
+                    <audio src="../audios/HELLO_W.wav"/>
+                </prompt>
+                <goto next="#A2"/>
+            </if>
+            <if cond="nishishei=='sip:18918973540@xiaoi.com'"><!-- 1 -->
+                <prompt>
+                    <audio src="../audios/HELLO_X.wav"/>
+                </prompt>
+                <goto next="#A2"/>
+            </if>
+            <goto next="#A1"/>
+        </block>
+
+    </form>
+
+
+    <form id="A1">
+        <field name="A1">
+            <prompt>
+                <audio src="../audios/A1.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A1.dm_root=='rej'">
+                    <goto next="#A2"/>
+                    <else/>
+                    <goto next="#A2"/>
+                </if>
+                <goto next="#A2"/>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch">
+            <goto next="#A2"/>
+        </catch>
+
+    </form>
+
+    <form id="A2">
+        <field name="A2">
+            <prompt>
+                <audio src="../audios/A2.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A2.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A4"/>
+                </if>
+                <if cond="A2.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A3"/>
+                </if>
+                <if cond="A2.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A2.dm_root=='price'"> <!-- 4 -->
+
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A2.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A2.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A2.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A2.dm_root=='yes'"> <!--6-->
+                    <goto next="#A3"/>
+                </if>
+                <if cond="A2.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A3"/>
+                </if>
+                <if cond="A2.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+                <prompt>标签是
+                    <value expr="A2.dm_root"/>
+                </prompt>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A3"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A3">
+        <field name="A3">
+            <prompt>
+                <audio src="../audios/A3.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A3.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A4"/>
+                </if>
+                <if cond="A3.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A3.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A3.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A3.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A3.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A3.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A3.dm_root=='yes'"> <!--6-->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A3.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A3.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A5"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A4">
+        <field name="A4">
+            <prompt>
+                <audio src="../audios/A4.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A4.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A11"/>
+                </if>
+                <if cond="A4.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A4.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A4.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A4.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A4.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A4.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A4.dm_root=='yes'"> <!--6-->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A4.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A4.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A5"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A5">
+        <field name="A5">
+            <prompt>
+                <audio src="../audios/A5.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A5.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A5.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A5.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A5.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A5.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A5.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A5.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A5.dm_root=='yes'"> <!--6-->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A5.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A12"/>
+                </if>
+                <if cond="A5.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A7"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A6">
+        <field name="A6">
+            <prompt>
+                <audio src="../audios/A6.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A6.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A11"/>
+                </if>
+                <if cond="A6.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A6.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A6.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A6.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A6.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A6.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A6.dm_root=='yes'"> <!--6-->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A6.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A6.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A7"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A7">
+        <field name="A7">
+            <prompt>
+                <audio src="../audios/A7.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A7.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A11"/>
+                </if>
+                <if cond="A7.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A7.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A8"/>
+                </if>
+
+                <if cond="A7.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A7.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A7.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A7.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A7.dm_root=='yes'"> <!--6-->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A7.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A7.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A8"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A9"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A8">
+        <field name="A8">
+            <prompt>
+                <audio src="../audios/A8.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A8.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A11"/>
+                </if>
+                <if cond="A8.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A8.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A8.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A8.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A8.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A8.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A8.dm_root=='yes'"> <!--6-->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A8.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A8.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A9"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A9">
+        <block>
+            <prompt timeout="2s">
+                <audio src="../audios/A9.wav"/>
+            </prompt>
+        </block>
+    </form>
+
+
+    <form id="A10">
+        <field name="A10">
+            <prompt>
+                <audio src="../audios/A10.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A10.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A4"/>
+                </if>
+                <if cond="A10.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A10.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A10.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A10.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A10.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A10.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A10.dm_root=='yes'"> <!--6-->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A10.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A10.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A5"/>
+        </catch>
+
+    </form>
+
+
+    <form id="A11">
+        <block>
+            <prompt timeout="2s">
+                <audio src="../audios/A11.wav"/>
+            </prompt>
+        </block>
+    </form>
+
+    <form id="A12">
+        <field name="A12">
+            <prompt>
+                <audio src="../audios/A12.wav"/>
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A12.dm_root=='rej'"><!-- 1 -->
+                    <goto next="#A11"/>
+                </if>
+                <if cond="A12.dm_root=='intro'"> <!-- 2 -->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A12.dm_root=='later'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="A12.dm_root=='price'"> <!-- 4 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A12.dm_root=='address'"> <!-- 4 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A12.dm_root=='neighborhood'"> <!-- 4 -->
+                    <goto next="#A10"/>
+                </if>
+
+                <if cond="A12.dm_root=='check'"> <!-- 4 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A12.dm_root=='yes'"> <!--6-->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A12.dm_root=='no'"> <!-- 7 -->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A12.dm_root=='time'"> <!-- 8 -->
+                    <goto next="#A9"/>
+                </if>
+            </filled>
+        </field>
+
+        <catch event="noinput nomatch"> <!-- 5 -->
+            <goto next="#A9"/>
+        </catch>
+
+    </form>
+
+
+</vxml>
+

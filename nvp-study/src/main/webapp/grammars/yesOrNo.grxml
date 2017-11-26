@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- root="_ROOT_":指定入口 -->
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0" root="_ROOT_">
+    <!-- 声明meta -->
+    <meta name="swirec_compile_parser" content="1"/>
+    <!-- 入口在这里 -->
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    //disallow:不接受
+                    //NR语音识别,SWI_vars是NR是从流程中传进来的
+                    //你看到的js有2个功能
+                    //流程应用给NR传给了一个列表 哪些内容是需要拒识的 然后即使说了对应的句子也返回拒识
+                    //下面都是返回给应用的变量
+                    //取出其中拒识变量
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="vocab" scope="public">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='yes'</tag>
+                <one-of>
+                    <!--我想查一下北京的天气信息-->
+                    <item>是</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='no'</tag>
+                <one-of>
+                    <!--我想查一下北京的天气信息-->
+                    <item>不是</item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

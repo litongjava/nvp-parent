@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar mode="voice" root="_otherService" version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar">
+	<meta content="1500" name="incompletetimeout"/>
+	<meta content="7000" name="maxspeechtimeout"/>
+	<rule id="_otherService" scope="public">
+		<one-of>
+			<item>
+				<ruleref uri="#no"/>
+				<tag>SWI_meaning='no'; dm_root='no'; app_tag='no';</tag>
+			</item>
+			<item>
+				<ruleref uri="#yes"/>
+				<tag>SWI_meaning='yes'; dm_root='yes'; app_tag='yes';</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="yes" scope="private">
+		<!-- 需要/要的/需要的/还有/还有的/还有问题/还有别的问题/有的/有/对的/对 -->
+		<one-of>
+			<item>需要</item>
+			<item>要的</item>
+			<item>需要的</item>
+			<item>还有</item>
+			<item>还有的</item>
+			<item>还有 问题</item>
+			<item>还有 别的 问题</item>
+			<item>有的</item>
+			<item>有</item>
+			<item>对的</item>
+			<item>对</item>
+			<item>我 还有 别的 问题</item>
+		</one-of>
+	</rule>
+	<rule id="no" scope="private">
+		<!-- 不需要/不要了/没有了/没有/没了/暂时没有/先这样/应该没有了/以后再说/先看看再说/不清楚/我也不知道/ -->
+		<one-of>
+			<item>不需要</item>
+			<item>不要了</item>
+			<item>没有了</item>
+			<item>没有</item>
+			<item>没了</item>
+			<item>暂时 没有</item>
+			<item>先这样</item>
+			<item>应该 没有了</item>
+			<item>以后 再说</item>
+			<item>先 看看 再说</item>
+			<item>不清楚</item>
+			<item>我 也 不知道</item>
+			<item>不用了 谢谢</item>
+			<item>我 没 别的 问题 了 谢谢</item>
+		</one-of>
+	</rule>
+</grammar>

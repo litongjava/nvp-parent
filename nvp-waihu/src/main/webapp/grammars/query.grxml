@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ************************************************************
+      Copyright C 1995-2017 by Nuance Communications. All rights reserved.
+      Nuance Communications provides this document without representation or
+      warranty of any kind. Nuance Communications reserves the right to revise this
+      document and to change the information contained in this document without
+      further notice.
+
+      Generated from
+ -->
+
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning};
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+
+    <rule id="vocab" scope="public">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='yes';</tag>
+                <one-of>
+                    <!-- [嗯] [我] ((知道[的]) | ((晓得 [了])) | (听说 过)) -->
+                    <item>
+                        <tag></tag>
+                        <item repeat="0-1">嗯</item>
+                        <item repeat="0-1">我</item>
+                        <one-of>
+                            <item>知道
+                                <item repeat="0-1">的</item>
+                            </item>
+                            <item>晓得
+                                <item repeat="0-1">了</item>
+                            </item>
+                            <item>听说 过</item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='time';</tag>
+                <one-of>
+
+                    <!-- [(这 两天) | 最近 | 明后天] [我] ((比较 忙) | 没时间 | (要 上班) | (没有 时间)) [[过两天 | 下周 | 周末] [可以 | 行] [吗 | 吧]] -->
+                    <item>
+                        <tag></tag>
+                        <item repeat="0-1">
+                            <one-of>
+                                <item>这 两天</item>
+                                <item>最近</item>
+                                <item>明后天</item>
+                            </one-of>
+                        </item>
+                        <item repeat="0-1">我</item>
+                        <one-of>
+                            <item>比较 忙</item>
+                            <item>没时间</item>
+                            <item>要 上班</item>
+                            <item>没有 时间</item>
+                        </one-of>
+                        <item repeat="0-1">
+                            <item repeat="0-1">
+                                <one-of>
+                                    <item>过两天</item>
+                                    <item>下周</item>
+                                    <item>周末</item>
+                                </one-of>
+                            </item>
+                            <item repeat="0-1">
+                                <one-of>
+                                    <item>可以</item>
+                                    <item>行</item>
+                                </one-of>
+                            </item>
+                            <item repeat="0-1">
+                                <one-of>
+                                    <item>吗</item>
+                                    <item>吧</item>
+                                </one-of>
+                            </item>
+                        </item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='intro';</tag>
+                <one-of>
+
+                    <!-- ([嗯 | 诶 | 哦][[那 还] (可以 | 行)](((可以 [(考虑 | 了解)[下]])) | 好的)[介绍 [一][下]][吧]) | ((卖 房子的 [呢 | 是吧 | 吧])) -->
+                    <item>
+                        <tag></tag>
+                        <one-of>
+                            <item>
+                                <item repeat="0-1">
+                                    <one-of>
+                                        <item>嗯</item>
+                                        <item>诶</item>
+                                        <item>哦</item>
+                                    </one-of>
+                                </item>
+                                <item repeat="0-1">
+                                    <item repeat="0-1">那 还</item>
+                                    <one-of>
+                                        <item>可以</item>
+                                        <item>行</item>
+                                    </one-of>
+                                </item>
+                                <one-of>
+                                    <item>可以
+                                        <item repeat="0-1">
+                                            <one-of>
+                                                <item>考虑</item>
+                                                <item>了解</item>
+                                            </one-of>
+                                            <item repeat="0-1">下</item>
+                                        </item>
+                                    </item>
+                                    <item>好的</item>
+                                </one-of>
+                                <item repeat="0-1">介绍
+                                    <item repeat="0-1">一</item>
+                                    <item repeat="0-1">下</item>
+                                </item>
+                                <item repeat="0-1">吧</item>
+                            </item>
+                            <item>卖 房子的
+                                <item repeat="0-1">
+                                    <one-of>
+                                        <item>呢</item>
+                                        <item>是吧</item>
+                                        <item>吧</item>
+                                    </one-of>
+                                </item>
+                            </item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='later';</tag>
+                <one-of>
+
+                    <!-- (我 现在 忙) | (我 在 忙) | (等下 可以吗) | (可以 稍候 联系 吗) -->
+                    <item>
+                        <tag></tag>
+                        <one-of>
+                            <item>我 现在 忙</item>
+                            <item>我 在 忙</item>
+                            <item>等下 可以吗</item>
+                            <item>可以 稍候 联系 吗</item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='no';</tag>
+                <one-of>
+
+                    <!-- [我] (不知道 | (没 听说过)) [没去过] -->
+                    <item>
+                        <tag></tag>
+                        <item repeat="0-1">我</item>
+                        <one-of>
+                            <item>不知道</item>
+                            <item>没 听说过</item>
+                        </one-of>
+                        <item repeat="0-1">没去过</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='rej';</tag>
+                <one-of>
+
+                    <!-- [卖房子 是吧]([暂时](不用 | 不需要 | (([太远了 | 太贵了] 不要)) | ([我] 不考虑) | ([我] 没兴趣) | ([我] 不感兴趣))) -->
+                    <item>
+                        <tag></tag>
+                        <item repeat="0-1">卖房子 是吧</item>
+                        <item repeat="0-1">暂时</item>
+                        <one-of>
+                            <item>不用</item>
+                            <item>不需要</item>
+                            <item>
+                                <item repeat="0-1">
+                                    <one-of>
+                                        <item>太远了</item>
+                                        <item>太贵了</item>
+                                    </one-of>
+                                </item>
+                                不要
+                            </item>
+                            <item>
+                                <item repeat="0-1">我</item>
+                                不考虑
+                            </item>
+                            <item>
+                                <item repeat="0-1">我</item>
+                                没兴趣
+                            </item>
+                            <item>
+                                <item repeat="0-1">我</item>
+                                不感兴趣
+                            </item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='check';</tag>
+                <one-of>
+
+                    <!-- (([诶] [那] [我] 怎么 [过去 | 去 | 到现场] [看 | 考查] [呢])) | (((能不能 看看房) | (能 看房 吗))) -->
+                    <item>
+                        <tag></tag>
+                        <one-of>
+                            <item>
+                                <item repeat="0-1">诶</item>
+                                <item repeat="0-1">那</item>
+                                <item repeat="0-1">我</item>
+                                怎么
+                                <item repeat="0-1">
+                                    <one-of>
+                                        <item>过去</item>
+                                        <item>去</item>
+                                        <item>到现场</item>
+                                    </one-of>
+                                </item>
+                                <item repeat="0-1">
+                                    <one-of>
+                                        <item>看</item>
+                                        <item>考查</item>
+                                    </one-of>
+                                </item>
+                                <item repeat="0-1">呢</item>
+                            </item>
+                            <item>
+                                <one-of>
+                                    <item>能不能 看看房</item>
+                                    <item>能 看房 吗</item>
+                                </one-of>
+                            </item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='address';</tag>
+                <one-of>
+
+                    <!-- [哦][那还 可以]((([诶] 那 你们 这个 [楼]盘 在 哪)) | (([啊] [那] [你 跟我 说的] 这个 [具体] 在 什么 地方 [呢])) | (([嗯][听上去 (不错 | 还可以 | 还行)] [可不可以] 告诉 我 具体 地址)) | (([那] [具体] 位置 [是] 在 (哪 | 哪里) [啊]))) -->
+                    <item>
+                        <tag></tag>
+                        <item repeat="0-1">哦</item>
+                        <item repeat="0-1">那还 可以</item>
+                        <one-of>
+                            <item>
+                                <item repeat="0-1">诶</item>
+                                那 你们 这个
+                                <item repeat="0-1">楼</item>
+                                盘 在 哪
+                            </item>
+                            <item>
+                                <item repeat="0-1">啊</item>
+                                <item repeat="0-1">那</item>
+                                <item repeat="0-1">你 跟我 说的</item>
+                                这个
+                                <item repeat="0-1">具体</item>
+                                在 什么 地方
+                                <item repeat="0-1">呢</item>
+                            </item>
+                            <item>
+                                <item repeat="0-1">嗯</item>
+                                <item repeat="0-1">听上去
+                                    <one-of>
+                                        <item>不错</item>
+                                        <item>还可以</item>
+                                        <item>还行</item>
+                                    </one-of>
+                                </item>
+                                <item repeat="0-1">可不可以</item>
+                                告诉 我 具体 地址
+                            </item>
+                            <item>
+                                <item repeat="0-1">那</item>
+                                <item repeat="0-1">具体</item>
+                                位置
+                                <item repeat="0-1">是</item>
+                                在
+                                <one-of>
+                                    <item>哪</item>
+                                    <item>哪里</item>
+                                </one-of>
+                                <item repeat="0-1">啊</item>
+                            </item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='price';</tag>
+                <one-of>
+
+                    <!-- ((多少钱 一平)) | (([诶] [能] 再 (说下 | 讲下) 价格 [吧 | 吗])) | (([那] (价格 | 均价) 怎么样 [呢])) | (([那] (价格 | 均价) [多少] [呢])) -->
+                    <item>
+                        <tag></tag>
+                        <one-of>
+                            <item>多少钱 一平</item>
+                            <item>
+                                <item repeat="0-1">诶</item>
+                                <item repeat="0-1">能</item>
+                                再
+                                <one-of>
+                                    <item>说下</item>
+                                    <item>讲下</item>
+                                </one-of>
+                                价格
+                                <item repeat="0-1">
+                                    <one-of>
+                                        <item>吧</item>
+                                        <item>吗</item>
+                                    </one-of>
+                                </item>
+                            </item>
+                            <item>
+                                <item repeat="0-1">那</item>
+                                <one-of>
+                                    <item>价格</item>
+                                    <item>均价</item>
+                                </one-of>
+                                怎么样
+                                <item repeat="0-1">呢</item>
+                            </item>
+                            <item>
+                                <item repeat="0-1">那</item>
+                                <one-of>
+                                    <item>价格</item>
+                                    <item>均价</item>
+                                </one-of>
+                                <item repeat="0-1">多少</item>
+                                <item repeat="0-1">呢</item>
+                            </item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='neighborhood';</tag>
+                <one-of>
+
+                    <!-- (([诶] 那 你们 这个 [楼]盘 [周边] 配套 (怎么样 | 如何))) | (([啊] [那] [你 跟我 说的] 这个 附近 有 ([菜场] | [商场] | [学校]) 之类 的 吗)) | (([嗯][听上去 (不错 | 还可以 | 还行)] [可不可以] 告诉 我 周围 [环境] 怎么样)) -->
+                    <item>
+                        <tag></tag>
+                        <one-of>
+                            <item>
+                                <item repeat="0-1">诶</item>
+                                那 你们 这个
+                                <item repeat="0-1">楼</item>
+                                盘
+                                <item repeat="0-1">周边</item>
+                                配套
+                                <one-of>
+                                    <item>怎么样</item>
+                                    <item>如何</item>
+                                </one-of>
+                            </item>
+                            <item>
+                                <item repeat="0-1">啊</item>
+                                <item repeat="0-1">那</item>
+                                <item repeat="0-1">你 跟我 说的</item>
+                                这个 附近 有
+                                <one-of>
+                                    <item>
+                                        <item repeat="0-1">菜场</item>
+                                    </item>
+                                    <item>
+                                        <item repeat="0-1">商场</item>
+                                    </item>
+                                    <item>
+                                        <item repeat="0-1">学校</item>
+                                    </item>
+                                </one-of>
+                                之类 的 吗
+                            </item>
+                            <item>
+                                <item repeat="0-1">嗯</item>
+                                <item repeat="0-1">听上去
+                                    <one-of>
+                                        <item>不错</item>
+                                        <item>还可以</item>
+                                        <item>还行</item>
+                                    </one-of>
+                                </item>
+                                <item repeat="0-1">可不可以</item>
+                                告诉 我 周围
+                                <item repeat="0-1">环境</item>
+                                怎么样
+                            </item>
+                        </one-of>
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

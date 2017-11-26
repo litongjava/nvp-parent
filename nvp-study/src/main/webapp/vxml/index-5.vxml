@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <form id="queryProductCode">
+        <field name="productCode" type="digits">
+            <prompt>请输入产品代码</prompt>
+        </field>
+
+        <filled>
+            <submit next="http://192.168.29.178:8081/recive/test1.do" namelist="productCode,filename.formid"/>
+
+            <goto next="#end1"/>
+        </filled>
+    </form>
+    <form id="end1">
+        <block>
+            结束
+        </block>
+    </form>
+</vxml>

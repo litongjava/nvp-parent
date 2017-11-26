@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml">
+    <form>
+        <field name="inputitem">
+            <prompt>
+                用户您好。请选择明建为您提供的服务：
+                1 天气预报 2 股票市场
+            </prompt>
+            <grammar mode="voice" root="item1">
+                <rule id="item1">
+                    <one-of>
+                        <item>天气预报</item>
+                        <item>股票市场</item>
+                    </one-of>
+                </rule>
+            </grammar>
+            <grammar mode="dtmf" root="item2">
+                <rule id="item2">
+                    <one-of>
+                        <item>1</item>
+                        <item>2</item>
+                    </one-of>
+                </rule>
+            </grammar>
+            <filled>
+                <if cond="inputitem == '天气预报'">
+                    <prompt>天气预报</prompt>
+                    <else/>
+                    <prompt>股票市场</prompt>
+                </if>
+            </filled>
+        </field>
+    </form>
+</vxml>

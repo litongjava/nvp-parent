@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='matchZero'</tag>
+                <one-of>
+                    <item>零</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchOne'</tag>
+                <one-of>
+                    <item>一</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchTwo'</tag>
+                <one-of>
+                    <item>二</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchThree'</tag>
+                <one-of>
+                    <item>三</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchFour'</tag>
+                <one-of>
+                    <item>四</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchFive'</tag>
+                <one-of>
+                    <item>五</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchSix'</tag>
+                <one-of>
+                    <item>六</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchSeven'</tag>
+                <one-of>
+                    <item>七</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchEight'</tag>
+                <one-of>
+                    <item>八</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchNine'</tag>
+                <one-of>
+                    <item>九</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='manualSys'</tag>
+                <one-of>
+                    <item>人工
+                        <item repeat="0-1">系统</item>
+                        <item repeat="0-1">服务</item>
+                    </item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='aiSys'</tag>
+                <one-of>
+                    <item>智能
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='otherSys'</tag>
+                <one-of>
+                    <item>
+                        其它
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+
+        </one-of>
+    </rule>
+</grammar>

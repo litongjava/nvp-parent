@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--人工服务-->
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+    <var name="A1P" expr="'请直接说出你的问题,或选择以下服务,
+                营销系统请按1,
+                项目管理请按2,'"/>
+    <!--人工系统-->
+    <form id="A1">
+
+        <field name="A1" type="digits?language=zh-CN;length=1">
+            <prompt>
+                <value expr="A1P"/>
+            </prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--进入营销系统-->
+                <if cond="A1==1 || A1.dm_root=='matchOne' || A1.dm_root=='marketingSys'">
+                    <goto next="#A1_1"/>
+                </if>
+                <!--项目管理-->
+                <if cond="A1==2 || A1.dm_root=='matchTwo' || A1.dm_root=='projectManager'">
+                    <goto next="#A1_2"/>
+                </if>
+                <prompt>
+                    <value expr="inputInvalid"/>
+                </prompt>
+                <goto next="#A1"/>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--营销系统-->
+    <var name="A1_1P" expr="'是否选择营销系统坐席为您服务'"/>
+
+    <form id="A1_1">
+        <field name="A1_1" type="digits?language=zh-CN;length=1">
+            <prompt>
+                <value expr="A1_1P"/>
+            </prompt>
+            <grammar src="../grammars/confirm.grxml"/>
+            <filled>
+                <log expr="A1_1.dm_root"/>
+                <prompt>
+                    <value expr="A1_1.dm_root"/>
+                </prompt>
+                <if cond="A1_1.dm_root=='answerYes' || A1_1==1">
+                    <goto next="#transfer"/>
+                </if>
+                <if cond="A1_1.dm_root=='answerNo' || A1_1==2">
+                    <goto next="#A1"/>
+                </if>
+                <prompt>
+                    <value expr="inputInvalid"/>
+                </prompt>
+                <goto next="#A1_1"/>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1_1P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1_1P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--项目管理-->
+    <var name="A2_2P" expr="'是否选择项目管理坐席为您服务'"/>
+    <form id="A1_2">
+        <field name="A2_2" type="digits?language=zh-CN;length=1">
+            <prompt>
+                <value expr="A2_2P"/>
+            </prompt>
+            <grammar src="../grammars/confirm.grxml"/>
+            <filled>
+                <log expr="A2_2.dm_root"/>
+                <if cond="A2_2.dm_root=='answerYes' || A2_2==1">
+                    <goto next="#transfer"/>
+                </if>
+                <if cond="A2_2.dm_root=='answerNo' || A2_2==2">
+                    <goto next="#A2"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A2_2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A2_2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+</vxml>

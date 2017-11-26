@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar mode="voice" root="_confirm" version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar">
+	<meta content="1500" name="incompletetimeout"/>
+	<meta content="7000" name="maxspeechtimeout"/>
+	<rule id="_confirm" scope="public">
+		<one-of>
+			<item>
+				<ruleref uri="#yes"/>
+				<tag>SWI_meaning='yes'; dm_root='yes'; app_tag='yes';</tag>
+			</item>
+			<item>
+				<ruleref uri="#no"/>
+				<tag>SWI_meaning='no'; dm_root='no'; app_tag='no';</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="yes" scope="private">
+		<!-- 是/对/对的/是的/没错/恩/正确/就是这个 -->
+		<one-of>
+			<item>是</item>
+			<item>是的</item>
+			<item>对</item>
+			<item>对的</item>
+			<item>正确</item>
+			<item>没错</item>
+			<item>恩</item>
+			<item>就是 这个</item>
+			<!-- VUI流程测试 bugs fixed -->
+			<item>是啊</item>
+			<item>是呀</item>
+			<item>对呀</item>
+			<item>对啊</item>
+		</one-of>
+	</rule>
+	<rule id="no" scope="private">
+		<!-- 不是/不对/错了/错/不正确/不是的/别的/是别的/不能肯定/不确定 -->
+		<one-of>
+			<item>错误</item>
+			<item>不对</item>
+			<item>不是</item>
+			<item>不</item>
+			<item>错了</item>
+			<item>错</item>
+			<item>不正确</item>
+			<item>不是的</item>
+			<item>别的</item>
+			<item>是别的</item>
+			<item>不能肯定</item>
+			<item>不确定</item>
+		</one-of>
+	</rule>
+</grammar>

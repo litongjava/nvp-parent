@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SSMTraining version="1.0.0" xml:lang="zh-cn">
+    <!--包含组成SSM的字 必须包含所有出现在训练数据中的字 可以从SLM的<vocab>列表直接取用-->
+    <features>
+        <word> 营销 </word>
+        <word> 生产 </word>
+        <word> 基建 </word>
+    </features>
+    <semantic_models>
+        <SSM> <!--列出SSM所返回的语义值-->
+            <meaning prior="0.0">
+                <slot name="route"> sys </slot>
+            </meaning>
+        </SSM>
+    </semantic_models>
+    <!--封装语义标签-->
+    <meaning prior="0.0">
+        <slot name="route"> sys </slot>
+    </meaning>
+    <!--定义用户可能说到的语句-->
+    <training>
+        <sentence count="1">
+            <semantice> <!--用来设置语句的语义-->
+                <slot name="route"> sys </slot>
+            </semantice>
+            我想 去 营销 系统
+        </sentence>
+    </training>
+    <test>
+        <sentence count="1">
+            <semantice>
+                <slot name="route"> seniors </slot>
+            </semantice>
+            我想 去 生产 系统
+        </sentence>
+    </test>
+</SSMTraining>

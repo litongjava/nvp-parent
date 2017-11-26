@@ -1,0 +1,2316 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+	 <property name="maxspeechtimeout" value="20s" />
+	 <property name="sensitivity" value="0.50" /> 
+	 <property name="incompletetimeout" value="1.5s" />
+	 <property name="confidencelevel" value="0.008" />
+	 <property name="swirec.swiep_in_prompt_sensitivity_percent" value="20" />
+	 <property name="bargein" value="1"/>
+	 <var name="tempvalue" expr="''"/>
+	 <var name="threshold_val" expr="'0'"/><!-- 置信度分数 -->
+	 <var name="noinput_count" expr="'0'"/>
+	 <var name="nomacth_count" expr="'0'"/>
+	 <var name="disambig_count" expr="0"/>
+	 <var name="fault_count" expr="0"/>
+	 <var name="tempFaultCount" expr="0"/>
+	 <var name="error2_count" expr="0"/>
+	 <var name="abcd" expr="0"/>
+
+
+	<script>
+		//置信度分数比较
+		function needConfirm(param){
+			param = parseFloat(param);
+			if(param &gt;= 50)
+				return 1;
+			else if(param &gt;= 19)
+				return 0;
+			else
+				return -1;
+		}
+	  </script>
+
+	  <script>
+		//生成随机数
+		function randomNumber(){
+			var num = Math.floor(Math.random()*4);
+			return num;
+		}
+	  </script>
+
+	  <form id="main">
+		
+		<block>
+		  <prompt bargein="false">
+			<audio src="../audio/GY1_1.wav"/>
+			<audio src="../audio/GY2_1_a.wav"/>
+		  </prompt>
+			<goto next="#mains"/>
+		   
+		</block>
+	 </form>
+	 
+	<!-- 收集用户意图 -->
+	 <form id="mains">
+		
+		<field name="mains">
+			<grammar src="../grxml/guiyang_chinese.gram" />
+			<grammar src="../grxml/agent.grxml "/>
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+		<!--	<assign name="threshold_val" expr="application.lastresult$.interpretation.ssmScore"/> -->	
+
+				<if cond="tempvalue!=mains.SWI_meaning">
+					<assign name="disambig_count" expr="0"/>
+				<elseif cond="tempvalue=='FoodMed'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='TeleServ'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Prices'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Tax'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Cigar'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='QualityID'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='House'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Taxi'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='PySales'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Status'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Online'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Vehicle'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Clothes'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='TeleProd'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Post'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Sales'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='OtherProd'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='OtherServ'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='OtherPrice'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='ComplainV'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='EnquireV'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='ReportV'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='Others'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='QualityV'"/>
+					<goto next="#menu_backs"/>
+				<elseif cond="tempvalue=='ServiceV'"/>
+					<goto next="#menu_backs"/>
+				</if>
+			
+				<assign name="tempFaultCount" expr="0"/>
+				<assign name="tempvalue" expr="mains.SWI_meaning"/>
+				
+				
+				<assign name="threshold_val" expr="needConfirm(application.lastresult$.interpretation.ssmScore)"/>
+
+
+				<if cond="threshold_val==-1">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<assign name="abcd" expr="randomNumber()"/>
+					<if cond="fault_count==1">
+						
+							<if cond="abcd==0">	
+								<audio src="../audio/GY_nomatch_01_a.wav"/>
+								<goto next="#mains"/>
+							<elseif cond="abcd==1"/>
+								<audio src="../audio/GY_nomatch_01_b.wav"/>
+								<goto next="#mains"/>
+							<elseif cond="abcd==2"/>
+								<audio src="../audio/GY_nomatch_01_c.wav"/>
+								<goto next="#mains"/>
+							<else/>
+								<audio src="../audio/GY_nomatch_01_d.wav"/>
+								<goto next="#mains"/>
+							</if>
+					</if>
+					<if cond="fault_count==2">
+						<audio src="../audio/GY_nomatch_02.wav"/>
+						<goto next="#menu_backs"/>
+					</if>
+				</if>
+			
+
+
+
+				<if cond="mains.SWI_meaning=='FoodMed'"><!-- 食品药品 -->
+					<if cond="threshold_val==0">
+						<goto next="#FoodMed_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#FoodMed"/>
+					</if>
+				</if>
+
+			<!--	<if cond="mains.SWI_meaning=='TeleServ'"> 通信服务 
+					<if cond="threshold_val==0">
+						<goto next="#TeleServ_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#TeleServ"/>
+					</if>
+				</if>
+			-->
+				<if cond="mains.SWI_meaning=='Prices'"><!-- 物价 -->
+					<if cond="threshold_val==0">
+						<goto next="#Prices_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Prices"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='Tax'"><!-- 税务 -->
+					<if cond="threshold_val==0">
+						<goto next="#Tax_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Tax"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='Cigar'"><!-- 烟草	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Cigar_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Cigar"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='QualityID'"><!-- 质量鉴定	 -->
+					<if cond="threshold_val==0">
+						<goto next="#QualityID_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#QualityID"/>
+					</if>
+				</if>
+
+			
+
+				<if cond="mains.SWI_meaning=='House'"><!-- 房屋	 -->
+					<if cond="threshold_val==0">
+						<goto next="#House_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#House"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='Taxi'"><!-- 出租车	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Taxi_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Taxi"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='PySales'"><!-- 出租车	 -->
+					<if cond="threshold_val==0">
+						<goto next="#PySales_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#PySales"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='Status'"><!-- 案件进度	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Status_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Status"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='Online'"><!-- 网络购物	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Online_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Online"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='Vehicle'"><!-- 交通工具 -->
+					<if cond="threshold_val==0">
+						<goto next="#Vehicle_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Vehicle"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='Clothes'"><!-- 服装鞋帽 -->
+					<if cond="threshold_val==0">
+						<goto next="#Clothes_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Clothes"/>
+					</if>
+				</if>
+				
+				<if cond="mains.SWI_meaning=='Sales'"><!-- 销售服务 -->
+					<if cond="threshold_val==0">
+						<goto next="#Sales_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Sales"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='TeleProd'"><!-- 通讯产品 -->
+					<if cond="threshold_val==0">
+						<goto next="#TeleProd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#TeleProd"/>
+					</if>
+				</if>
+				
+
+				<if cond="mains.SWI_meaning=='Post'"><!-- 邮政快递 -->
+					<if cond="threshold_val==0">
+						<goto next="#Post_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Post"/>
+					</if>
+				</if>
+
+				
+
+				<if cond="mains.SWI_meaning=='OtherProd'"><!-- 其他商品质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#OtherProd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#OtherProd"/>
+					</if>
+				</if>
+				
+				<if cond="mains.SWI_meaning=='OtherServ'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#OtherServ_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#OtherServ"/>
+					</if>
+				</if>
+
+				<!--<if cond="mains.SWI_meaning=='ComplainV'"> 其他服务质量 
+					<assign name="error2_count" expr="error2_count+1"/>
+						<goto next="#mains"/>
+					
+				</if>
+				-->
+				<if cond="mains.SWI_meaning=='OtherPrice'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#OtherPrice_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#OtherPrice"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='ComplainV'"><!-- 其他服务质量 -->
+					
+					<if cond="threshold_val==0">
+						<goto next="#ComplainV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#ComplainV"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='EnquireV'"><!-- 其他服务质量 -->
+					
+					<if cond="threshold_val==0">
+						<goto next="#EnquireV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#EnquireV"/>
+					</if>
+				</if>
+
+				<if cond="mains.SWI_meaning=='ReportV'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#ReportV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#ReportV"/>
+					</if>	
+				</if>
+
+
+				<if cond="mains.SWI_meaning=='QualityV'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#QualityV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#QualityV"/>
+					</if>	
+				</if>
+
+				<if cond="mains.SWI_meaning=='ServiceV'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#ServiceV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#ServiceV"/>
+					</if>	
+				</if>
+
+			<!--	<if cond="mains.SWI_meaning=='QualityV'"> 其他服务质量 
+					<goto next="#QualityV_confirm"/>
+
+				</if>
+				-->
+				<!--<if cond="mains.SWI_meaning=='ServiceV'"> 其他服务质量
+					<goto next="#ServiceV_confirm"/>
+
+				</if>		
+ -->
+				<if cond="mains.SWI_meaning=='Others'"><!-- 其他服务质量 -->
+					<goto next="#Others"/>
+
+				</if>		
+				
+
+				
+				<if cond="mains.SWI_meaning=='Greetings'"><!-- 其他服务质量 -->
+					<audio src="../audio/GY_greetings_01.wav"/>
+					<goto next="#mains"/>
+
+				</if>
+			</filled>
+		</field>
+		
+		
+		<nomatch count="1">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<assign name="abcd" expr="randomNumber()"/>
+			<if cond="fault_count==1">
+				<if cond="error2_count==0">
+					
+						<if cond="abcd==0">	
+							<audio src="../audio/GY_nomatch_01_a.wav"/>
+						<elseif cond="abcd==1"/>
+							<audio src="../audio/GY_nomatch_01_b.wav"/>
+						<elseif cond="abcd==2"/>
+							<audio src="../audio/GY_nomatch_01_c.wav"/>
+						<else/>
+							<audio src="../audio/GY_nomatch_01_d.wav"/>
+						</if>
+				<else/>
+					<prompt bargein="true">
+					<audio src="../audio/fallbackMenu_01_test.wav"/>
+					</prompt>
+					<goto next="#menu_back"/>
+				</if>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/GY_nomatch_02.wav"/>
+				<goto next="#menu_backs"/>
+			</if>
+		</nomatch>
+		<nomatch count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="../audio/GY_nomatch_02.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/GY_nomatch_02.wav"/>
+				<goto next="#menu_backs"/>
+			</if>
+		</nomatch>
+
+		<noinput count="1"> 
+			<assign name="fault_count" expr="fault_count+1"/>
+			<assign name="abcd" expr="randomNumber()"/>
+			<if cond="fault_count==1">
+				<if cond="error2_count==0">
+					
+						<if cond="abcd==0">	
+							<audio src="../audio/GY_nomatch_01_a.wav"/>
+						<elseif cond="abcd==1"/>
+							<audio src="../audio/GY_nomatch_01_b.wav"/>
+						<elseif cond="abcd==2"/>
+							<audio src="../audio/GY_nomatch_01_c.wav"/>
+						<else/>
+							<audio src="../audio/GY_nomatch_01_d.wav"/>
+						</if>
+				<else/>
+					<prompt bargein="true">
+					<audio src="../audio/fallbackMenu_01_test.wav"/>
+					</prompt>
+					<goto next="#menu_back"/>
+				</if>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/GY_noinput_02.wav"/>
+				<goto next="#menu_backs"/>
+			</if>	
+	     </noinput>
+		<noinput count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				
+				<audio src="../audio/GY_noinput_02.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/GY_noinput_02.wav"/>
+				<goto next="#menu_backs"/>
+			</if>
+	     </noinput>
+	 </form>
+	 
+	 
+	 
+	 
+	 
+	 
+	
+	
+
+
+	 <!-- 食品药品 -->
+	 <form id="FoodMed_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="FoodMed_confirm">
+			<audio src="../audio/cfmPromptClt_1.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<if cond="FoodMed_confirm.SWI_meaning=='yes'">
+					<goto next="#FoodMed"/>
+				</if>
+				<if cond="FoodMed_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<if cond="error2_count==0">
+				<audio src="../audio/cfmRetryClt_1.wav"/>
+				<else/>
+				<audio src="../audio/cfmRetryRefine_1.wav"/>
+				</if>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+		
+	
+	 <!-- 物价确认 -->
+	 <form id="Prices_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Prices_confirm">
+			<audio src="../audio/cfmPromptClt_3.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<if cond="Prices_confirm.SWI_meaning=='yes'">
+					<goto next="#Prices"/>
+				</if>
+				<if cond="Prices_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_3.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+	
+
+	 <!-- 税务确认 -->
+	 <form id="Tax_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Tax_confirm">
+			<audio src="../audio/cfmPromptClt_4.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<if cond="Tax_confirm.SWI_meaning=='yes'">
+					<goto next="#Tax"/>
+				</if>
+				<if cond="Tax_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_4.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	  <!-- 烟草 -->
+	 <form id="Cigar_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Cigar_confirm">
+			<audio src="../audio/cfmPromptClt_5.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="Cigar_confirm.SWI_meaning=='yes'">
+					<goto next="#Cigar"/>
+				</if>
+				<if cond="Cigar_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_5.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+	
+	 <!-- 质量鉴定 -->
+	 <form id="QualityID_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="QualityID_confirm">
+			<audio src="../audio/cfmPromptClt_6.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="QualityID_confirm.SWI_meaning=='yes'">
+					<goto next="#QualityID"/>
+				</if>
+				<if cond="QualityID_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_6.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	  <!-- 房屋 -->
+	 <form id="House_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="House_confirm">
+			<audio src="../audio/cfmPromptClt_7.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+			<!--	<if cond="error2_count==0">
+					<audio src="../audio/cfmPromptClt_7.wav"/>
+				<else/>
+					<audio src="../audio/cfmPromptRefine_7.wav"/>
+				</if>
+				-->
+				<if cond="House_confirm.SWI_meaning=='yes'">
+					<goto next="#House"/>
+				</if>
+				<if cond="House_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_7.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	   <!-- 出租车 -->
+	 <form id="Taxi_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Taxi_confirm">
+			<audio src="../audio/cfmPromptClt_8.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<if cond="Taxi_confirm.SWI_meaning=='yes'">
+					<goto next="#Taxi"/>
+				</if>
+				<if cond="Taxi_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_8.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	   <!-- 传销 -->
+	 <form id="PySales_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="PySales_confirm">
+			<audio src="../audio/cfmPromptClt_9.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<if cond="PySales_confirm.SWI_meaning=='yes'">
+					<goto next="#PySales"/>
+				</if>
+				<if cond="PySales_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_9.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	    <!-- 案件经度 -->
+	 <form id="Status_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Status_confirm">
+			<audio src="../audio/cfmPromptClt_10.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="Status_confirm.SWI_meaning=='yes'">
+					<goto next="#Status"/>
+				</if>
+				<if cond="Status_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_10.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	   <!-- 网络购物 -->
+	 <form id="Online_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Online_confirm">
+			<audio src="../audio/cfmPromptClt_11.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="Online_confirm.SWI_meaning=='yes'">
+					<goto next="#Online"/>
+				</if>
+				<if cond="Online_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_11.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	   <!-- 交通工具 -->
+	 <form id="Vehicle_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Vehicle_confirm">
+			<audio src="../audio/cfmPromptClt_12.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="Vehicle_confirm.SWI_meaning=='yes'">
+					<goto next="#Vehicle"/>
+				</if>
+				<if cond="Vehicle_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_12.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	   <!-- 服装鞋帽 -->
+	 <form id="Clothes_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Clothes_confirm">
+			<audio src="../audio/cfmPromptClt_13.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="Clothes_confirm.SWI_meaning=='yes'">
+					<goto next="#Clothes"/>
+				</if>
+				<if cond="Clothes_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_13.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+	
+	  <!-- 通讯产品 -->
+	 <form id="TeleProd_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="TeleProd_confirm">
+			<audio src="../audio/cfmPromptClt_14.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<if cond="TeleProd_confirm.SWI_meaning=='yes'">
+					<goto next="#TeleProd"/>
+				</if>
+				<if cond="TeleProd_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_14.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	   <!-- 邮政快递 -->
+	 <form id="Post_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Post_confirm">
+			<audio src="../audio/cfmPromptClt_15.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<if cond="Post_confirm.SWI_meaning=='yes'">
+					<goto next="#Post"/>
+				</if>
+				<if cond="Post_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_15.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	    <!-- 销售服务确认 -->
+	 <form id="Sales_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="Sales_confirm">
+			<audio src="../audio/cfmPromptClt_16.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="Sales_confirm.SWI_meaning=='yes'">
+					<goto next="#Sales"/>
+				</if>
+				<if cond="Sales_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_16.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	  <!-- 其他商品质量 -->
+	 <form id="OtherProd_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="OtherProd_confirm">
+			<audio src="../audio/cfmPromptClt_17.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="OtherProd_confirm.SWI_meaning=='yes'">
+					<goto next="#OtherProd"/>
+				</if>
+				<if cond="OtherProd_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_17.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+
+	  <!-- 其他服务质量 -->
+	 <form id="OtherServ_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="OtherServ_confirm">
+			<audio src="../audio/cfmPromptClt_18.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="OtherServ_confirm.SWI_meaning=='yes'">
+					<goto next="#OtherServ"/>
+				</if>
+				<if cond="OtherServ_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_18.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 其他服务费用 -->
+	 <form id="OtherPrice_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="OtherPrice_confirm">
+			<audio src="../audio/cfmPromptClt_19.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="OtherPrice_confirm.SWI_meaning=='yes'">
+					<goto next="#OtherPrice"/>
+				</if>
+				<if cond="OtherPrice_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_19.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	  <!-- 投诉宽泛 -->
+	 <form id="ComplainV_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="ComplainV_confirm">
+			<audio src="../audio/cfmPromptClt_20.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="ComplainV_confirm.SWI_meaning=='yes'">
+					<goto next="#ComplainV"/>
+				</if>
+				<if cond="ComplainV_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_20.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	<form id="ComplainV">
+		<block>
+			<audio src="../audio/refineprompt_complainVague.wav"/>
+			<assign name="error2_count" expr="error2_count+1"/>
+			<goto next="#mains"/>
+		</block>
+	 </form>
+
+	   <!-- 咨询宽泛 -->
+	 <form id="EnquireV_confirm">
+		<property name="confidencelevel" value="0.5" />
+		<field name="EnquireV_confirm">
+			<audio src="../audio/cfmPromptClt_21.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				
+				<if cond="EnquireV_confirm.SWI_meaning=='yes'">
+					<goto next="#EnquireV"/>
+				</if>
+				<if cond="EnquireV_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_21.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <form id="EnquireV">
+		<block>
+			<audio src="../audio/refineprompt_enquireVague.wav"/>
+			<assign name="error2_count" expr="error2_count+1"/>
+			<goto next="#mains"/>
+		</block>
+	 </form>
+
+	   <!-- 销售服务确认 -->
+	 <form id="ReportV_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="ReportV_confirm">
+			<audio src="../audio/cfmPromptClt_22.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+			
+				<if cond="ReportV_confirm.SWI_meaning=='yes'">
+					<goto next="#ReportV"/>
+				</if>
+				<if cond="ReportV_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_22.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <form id="ReportV">
+		<block>
+			<audio src="../audio/refineprompt_reportVague.wav"/>
+			<assign name="error2_count" expr="error2_count+1"/>
+			<goto next="#mains"/>
+		</block>
+	 </form>
+
+	  <form id="QualityV_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="QualityV_confirm">
+			<audio src="../audio/cfmPromptClt_25.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+			
+				<if cond="QualityV_confirm.SWI_meaning=='yes'">
+					<goto next="#QualityV"/>
+				</if>
+				<if cond="QualityV_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_25.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	  <form id="ServiceV_confirm">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="ServiceV_confirm">
+			<audio src="../audio/cfmPromptClt_26.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+			
+				<if cond="ServiceV_confirm.SWI_meaning=='yes'">
+					<goto next="#ServiceV"/>
+				</if>
+				<if cond="ServiceV_confirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<assign name="error2_count" expr="error2_count+1"/>
+					<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单 -->
+					<if cond="disambig_count==2">
+						<goto next="#menu_backs"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/GY3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2"><!--   小于2  -->
+				<audio src="../audio/cfmRetryClt_26.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	  <!-- 销售服务确认 -->
+	 <form id="QualityV">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="QualityV">
+			<audio src="../audio/menuDisambig_QualityV_01.wav"/>
+			<grammar src="../grxml/QualityV.grxml"/>
+			<grammar src="../grxml/QualityV_dtmf.grxml" />
+			<filled>
+				<if cond="QualityV.SWI_meaning=='FoodMed'"><!-- 质量鉴定 -->
+					<goto next="#FoodMed"/>
+				</if>
+				<if cond="QualityV.SWI_meaning=='one'"><!-- 质量鉴定 -->
+					<goto next="#FoodMed"/>
+				</if>
+				<if cond="QualityV.SWI_meaning=='Cigar'"><!-- 房屋 -->
+					<goto next="#Cigar"/>
+				</if>
+				<if cond="QualityV.SWI_meaning=='two'"><!-- 房屋 -->
+					<goto next="#Cigar"/>
+				</if>
+				<if cond="QualityV.SWI_meaning=='OtherProd'"><!-- 出租车 -->
+					<goto next="#OtherProd"/>
+				</if>
+				<if cond="QualityV.SWI_meaning=='three'"><!-- 出租车 -->
+					<goto next="#OtherProd"/>
+				</if>
+				
+				<if cond="QualityV.SWI_meaning=='QualityID'"><!-- 其他 -->
+					<goto next="#QualityID"/>
+				
+				</if>
+				<if cond="QualityV.SWI_meaning=='four'"><!-- 其他 -->
+					<goto next="#QualityID"/>
+				
+				</if>
+			
+				
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+		
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			
+		</catch>
+	 </form>
+
+
+	  <form id="ServiceV">
+		<property name="confidencelevel" value="0.5" />
+		
+		<field name="ServiceV">
+			<audio src="../audio/menuDisambig_ServiceV_01.wav"/>
+			<grammar src="../grxml/ServiceV.grxml" />
+			<grammar src="../grxml/ServiceV_dtmf.grxml" />
+			<filled>
+				<if cond="ServiceV.SWI_meaning=='Sales'"><!-- 质量鉴定 -->
+					<goto next="#Sales"/>
+				</if>
+				<if cond="ServiceV.SWI_meaning=='one'"><!-- 质量鉴定 -->
+					<goto next="#Sales"/>
+				</if>
+				<if cond="ServiceV.SWI_meaning=='Post'"><!-- 房屋 -->
+					<goto next="#Post"/>
+				</if>
+				<if cond="ServiceV.SWI_meaning=='two'"><!-- 房屋 -->
+					<goto next="#Post"/>
+				</if>
+			
+				<if cond="ServiceV.SWI_meaning=='OtherServ'"><!-- 其他 -->
+					<goto next="#OtherServ"/>
+				
+				</if>
+			
+				
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<audio src="../audio/GY_Error_01.wav"/>
+				<goto next="#rgfw"/>
+			
+		</catch>
+	 </form>
+
+
+
+
+			<!-- 食品药品 -->
+	   <form id="FoodMed">
+			<property name="confidencelevel" value="0.5" />
+			<property name="timeout" value="2s" />
+			
+		<field name="FoodMed">
+			<prompt bargein="false">
+			<audio src="../audio/routingMsg_1.wav"/>
+			</prompt>
+			<grammar src="../grxml/repeat.grxml"/>
+			<filled>
+				
+				
+				
+				<if cond="'repeat'==FoodMed.SWI_meaning">
+						<goto next="#FoodMed2"/>
+				<else/>
+						<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<goto next="#end"/>
+				
+				
+		</catch>
+      </form> 
+
+	  <form id="FoodMed2">
+	  <block>
+			
+			<goto next="#FoodMed"/>
+	  </block>
+
+	  </form>
+
+<!-- 物价 -->
+	    <form id="Prices">
+			<property name="confidencelevel" value="0.5" />
+			<property name="timeout" value="2s" />
+			
+		<field name="Prices">
+			<prompt bargein="false">
+			<audio src="../audio/routingMsg_3.wav"/>
+			</prompt>
+			<grammar src="../grxml/repeat.grxml"/>
+			<filled>
+				
+				
+				
+				<if cond="'repeat'==Prices.SWI_meaning">
+						<goto next="#Prices2"/>
+				<else/>
+						<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<goto next="#end"/>
+				
+				
+		</catch>
+      </form> 
+
+	 <form id="Prices2">
+	  <block>
+			
+			<goto next="#Prices"/>
+	  </block>
+
+	  </form>
+
+	  <!-- 税务 -->
+
+	   <form id="Tax">
+			<property name="confidencelevel" value="0.5" />
+			<property name="timeout" value="2s" />
+			
+		<field name="Tax">
+			<prompt bargein="false">
+			<audio src="../audio/routingMsg_4.wav"/>
+			</prompt>
+			<grammar src="../grxml/repeat.grxml"/>
+			<filled>
+				
+				
+				
+				<if cond="'repeat'==Tax.SWI_meaning">
+						<goto next="#Tax2"/>
+				<else/>
+						<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<goto next="#end"/>
+				
+				
+		</catch>
+      </form> 
+
+	  <form id="Tax2">
+	  <block>
+			
+			<goto next="#Tax"/>
+	  </block>
+
+	  </form>
+
+	   <!-- 香烟 -->
+
+	   <form id="Cigar">
+			<property name="confidencelevel" value="0.5" />
+			<property name="timeout" value="2s" />
+			
+		<field name="Cigar">
+		<prompt bargein="false">
+		<audio src="../audio/routingMsg_5.wav"/>
+		</prompt>
+			<grammar src="../grxml/repeat.grxml"/>
+			<filled>
+				
+				
+				
+				<if cond="'repeat'==Cigar.SWI_meaning">
+						<goto next="#Cigar2"/>
+				<else/>
+						<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<goto next="#end"/>
+				
+				
+		</catch>
+      </form> 
+
+	  <form id="Cigar2">
+	  <block>
+			
+			<goto next="#Cigar"/>
+	  </block>
+
+	  </form>
+
+
+	  <!-- 质量鉴定 -->
+
+	   <form id="QualityID">
+		<property name="confidencelevel" value="0.5" />
+		<property name="timeout" value="2s" />
+		
+		<field name="QualityID">
+		<prompt bargein="false">
+		<audio src="../audio/routingMsg_6.wav"/>
+		</prompt>
+			<grammar src="../grxml/repeat.grxml"/>
+			<filled>
+				
+				
+				
+				<if cond="'repeat'==QualityID.SWI_meaning">
+						<goto next="#QualityID2"/>
+				<else/>
+						<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<goto next="#end"/>
+				
+				
+		</catch>
+      </form> 
+
+	  <form id="QualityID2">
+	  <block>
+			
+			<goto next="#QualityID"/>
+	  </block>
+
+	  </form>
+
+	    <!-- 房屋 -->
+
+	   <form id="House">
+	   <property name="confidencelevel" value="0.5" />
+		<property name="timeout" value="2s" />
+		
+		<field name="House">
+		<prompt bargein="false">
+		<audio src="../audio/routingMsg_7.wav"/>
+		</prompt>
+			<grammar src="../grxml/repeat.grxml"/>
+			<filled>
+				
+				
+				
+				<if cond="'repeat'==House.SWI_meaning">
+						<goto next="#House2"/>
+				<else/>
+						<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<goto next="#end"/>
+				
+				
+		</catch>
+      </form> 
+
+	  <form id="House2">
+	  <block>
+			
+			<goto next="#House"/>
+	  </block>
+
+	  </form>
+	
+
+	  <!-- 出租车 -->
+
+	   <form id="Taxi">
+	   <property name="confidencelevel" value="0.5" />
+		<property name="timeout" value="2s" />
+		
+		<field name="Taxi">
+		<prompt bargein="false">
+		<audio src="../audio/routingMsg_8.wav"/>
+		</prompt>
+			<grammar src="../grxml/repeat.grxml"/>
+			<filled>
+				
+				
+				
+				<if cond="'repeat'==Taxi.SWI_meaning">
+						<goto next="#Taxi2"/>
+				<else/>
+						<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+				<goto next="#end"/>
+				
+				
+		</catch>
+      </form> 
+
+	  <form id="Taxi2">
+	  <block>
+			
+			<goto next="#Taxi"/>
+	  </block>
+
+	  </form>
+		
+	 <form id="PySales">
+	 	<block>
+			<audio src="../audio/routingMsg_9.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <form id="Status">
+	 	<block>
+			<audio src="../audio/routingMsg_10.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <form id="Online">
+	 	<block>
+			<audio src="../audio/routingMsg_11.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	  <form id="Vehicle">
+	 	<block>
+			<audio src="../audio/routingMsg_12.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	  <form id="Clothes">
+	 	<block>
+			<audio src="../audio/routingMsg_13.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+	
+	 <form id="TeleProd">
+	 	<block>
+			<audio src="../audio/routingMsg_14.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	  <form id="Post">
+	 	<block>
+			<audio src="../audio/routingMsg_15.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <form id="Sales">
+	 	<block>
+			<audio src="../audio/routingMsg_16.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	  <form id="OtherProd">
+	 	<block>
+			<audio src="../audio/routingMsg_17.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <form id="OtherServ">
+	 	<block>
+			<audio src="../audio/routingMsg_18.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <form id="OtherPrice">
+	 	<block>
+			<audio src="../audio/routingMsg_19.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <form id="Others">
+	 	<block>
+			<audio src="../audio/routingMsg_23.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+
+
+
+	  
+	  
+
+	  
+
+	  
+
+	
+
+	   
+
+	<!--  后备菜单 -->
+	 <form id="menu_backs">
+	
+		<block>
+			 <prompt bargein="true">
+			<audio src="../audio/menuDisambig_fallback_01.wav"/>
+			</prompt>
+			<assign name="fault_count" expr="0"/>
+			<goto next="#menu_back"/>
+		</block>
+	 </form>
+	 
+	 
+
+
+	 <!-- 后备菜单 1  -->
+	 <form id="menu_back">
+		
+			
+		
+		
+		<field name="menu_back">
+			
+			<grammar src="../grxml/fallback1.grxml" />
+			<grammar src="../grxml/fallback1_dtmf.grxml" />
+			<filled>
+				<assign name="fault_count" expr="0"/>
+				<assign name="tempvalue" expr="menu_back.SWI_meaning"/>
+				<if cond="menu_back.SWI_meaning=='FoodMed'"><!-- 食品药品 -->
+					<goto next="#FoodMed"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='1'"><!-- 食品药品 -->
+					<goto next="#FoodMed"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='Tax'"><!-- 税务 -->
+					<goto next="#Tax"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='2'"><!-- 税务 -->
+					<goto next="#Tax"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='Prices'"><!-- 物价 -->
+					<goto next="#Prices"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='3'"><!-- 物价 -->
+					<goto next="#Prices"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='Cigar'"><!-- 香烟 -->
+					<goto next="#Cigar"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='4'"><!-- 香烟 -->
+					<goto next="#Cigar"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='NoneOfThem'"><!--  -->
+					<goto next="#menu_backs2"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='5'"><!-- -->
+					<goto next="#menu_backs2"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='QualityID'"><!-- 额度调整 -->
+					<goto next="#QualityID"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='House'"><!-- 额度调整 -->
+					<goto next="#House"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='Taxi'"><!-- 额度调整 -->
+					<goto next="#Taxi"/>
+				</if>
+				
+			
+
+	
+		</filled>
+		</field>
+		
+
+		<catch event="noinput nomatch">
+			
+			
+				<goto next="#menu_backs2"/>
+			
+			
+		</catch>
+		 </form>
+	 
+
+	  <!-- 后备菜单 2  -->
+	 <form id="menu_backs2">
+		
+		<field name="menu_backs2">
+		<audio src="../audio/menuDisambig_fallback_02.wav"/><!--后备菜单语音播报-->
+
+			<grammar src="../grxml/fallback2.grxml" />
+			<grammar src="../grxml/fallback2_dtmf.grxml" />
+			<filled>
+				
+			
+				<if cond="menu_backs2.SWI_meaning=='QualityID'"><!-- 质量鉴定 -->
+					<goto next="#QualityID"/>
+				</if>
+				<if cond="menu_backs2.SWI_meaning=='1'"><!-- 质量鉴定 -->
+					<goto next="#QualityID"/>
+				</if>
+				<if cond="menu_backs2.SWI_meaning=='House'"><!-- 房屋 -->
+					<goto next="#House"/>
+				</if>
+				<if cond="menu_backs2.SWI_meaning=='2'"><!-- 房屋 -->
+					<goto next="#House"/>
+				</if>
+				<if cond="menu_backs2.SWI_meaning=='TaxiService'"><!-- 出租车 -->
+					<goto next="#TaxiService"/>
+				</if>
+				<if cond="menu_backs2.SWI_meaning=='3'"><!-- 出租车 -->
+					<goto next="#TaxiService"/>
+				</if>
+				
+				<if cond="menu_backs2.SWI_meaning=='Others'"><!-- 其他 -->
+					<goto next="#Others"/>
+				
+				</if>
+				<if cond="menu_backs2.SWI_meaning=='4'"><!-- 出租车 -->
+					<goto next="#rgfw"/>
+				</if>
+				
+
+	
+		</filled>
+		</field>
+		
+
+		<catch event="noinput nomatch">
+			<audio src="../audio/GY_Error_01.wav"/>
+		    <goto next="#rgfw"/>
+		</catch>
+		 </form>
+
+
+
+	 <form id="end">
+		<block>
+			<audio src="../audio/GY6_2.wav"/>
+			<assign name="fault_count" expr="0"/>
+			<assign name="error2_count" expr="0"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+
+	 <!-- 业务结束-->
+	 <form id="ends">
+	
+		<field name="ends">
+			
+			<grammar src="../grxml/otherService.grxml"/>
+			<grammar src="../grxml/guiyang_chinese.gram" />
+			<grammar src="../grxml/agent.grxml"/>
+			<grammar src="../grxml/menu.grxml" />
+			<filled>
+				<assign name="disambig_count" expr="0"/>
+				<assign name="tempFaultCount" expr="0"/>
+				<assign name="tempvalue" expr="ends.SWI_meaning"/>
+
+				<assign name="threshold_val" expr="needConfirm(application.lastresult$.interpretation.ssmScore)"/>
+				
+				<if cond="ends.SWI_meaning=='Sales'"><!-- 销售服务 -->
+					<if cond="threshold_val==0">
+						<goto next="#Sales_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Sales"/>
+					</if>
+				</if>
+
+
+				<if cond="ends.SWI_meaning=='FoodMed'"><!-- 食品药品 -->
+					<if cond="threshold_val==0">
+						<goto next="#FoodMed_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#FoodMed"/>
+					</if>
+				</if>
+
+		<!--		<if cond="ends.SWI_meaning=='TeleServ'"> 通信服务 
+					<if cond="threshold_val==0">
+						<goto next="#TeleServ_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#TeleServ"/>
+					</if>
+				</if>
+			-->
+				<if cond="ends.SWI_meaning=='Prices'"><!-- 物价 -->
+					<if cond="threshold_val==0">
+						<goto next="#Prices_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Prices"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='Tax'"><!-- 税务 -->
+					<if cond="threshold_val==0">
+						<goto next="#Tax_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Tax"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='Cigar'"><!-- 烟草	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Cigar_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Cigar"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='QualityID'"><!-- 质量鉴定	 -->
+					<if cond="threshold_val==0">
+						<goto next="#QualityID_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#QualityID"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='House'"><!-- 房屋	 -->
+					<if cond="threshold_val==0">
+						<goto next="#House_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#House"/>
+					</if>
+				</if>
+
+			
+
+				<if cond="ends.SWI_meaning=='Taxi'"><!-- 出租车	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Taxi_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Taxi"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='PySales'"><!-- 出租车	 -->
+					<if cond="threshold_val==0">
+						<goto next="#PySales_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#PySales"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='Status'"><!-- 案件进度	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Status_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Status"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='Online'"><!-- 网络购物	 -->
+					<if cond="threshold_val==0">
+						<goto next="#Online_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Online"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='Vehicle'"><!-- 交通工具 -->
+					<if cond="threshold_val==0">
+						<goto next="#Vehicle_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Vehicle"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='Clothes'"><!-- 服装鞋帽 -->
+					<if cond="threshold_val==0">
+						<goto next="#Clothes_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Clothes"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='TeleProd'"><!-- 通讯产品 -->
+					<if cond="threshold_val==0">
+						<goto next="#TeleProd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#TeleProd"/>
+					</if>
+				</if>
+				
+
+				<if cond="ends.SWI_meaning=='Post'"><!-- 邮政快递 -->
+					<if cond="threshold_val==0">
+						<goto next="#Post_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#Post"/>
+					</if>
+				</if>
+
+					<if cond="ends.SWI_meaning=='OtherProd'"><!-- 其他商品质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#OtherProd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#OtherProd"/>
+					</if>
+				</if>
+				
+				<if cond="ends.SWI_meaning=='OtherServ'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#OtherServ_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#OtherServ"/>
+					</if>
+				</if>
+
+				<!--<if cond="mains.SWI_meaning=='ComplainV'"> 其他服务质量 
+					<assign name="error2_count" expr="error2_count+1"/>
+						<goto next="#mains"/>
+					
+				</if>
+				-->
+				<if cond="ends.SWI_meaning=='OtherPrice'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#OtherPrice_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#OtherPrice"/>
+					</if>
+				</if>
+
+			<if cond="ends.SWI_meaning=='ComplainV'"><!-- 其他服务质量 -->
+					
+					<if cond="threshold_val==0">
+						<goto next="#ComplainV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#ComplainV"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='EnquireV'"><!-- 其他服务质量 -->
+					
+					<if cond="threshold_val==0">
+						<goto next="#EnquireV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#EnquireV"/>
+					</if>
+				</if>
+
+				<if cond="ends.SWI_meaning=='ReportV'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#ReportV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#ReportV"/>
+					</if>	
+				</if>
+
+				<if cond="ends.SWI_meaning=='QualityV'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#QualityV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#QualityV"/>
+					</if>	
+				</if>
+
+				<if cond="ends.SWI_meaning=='ServiceV'"><!-- 其他服务质量 -->
+					<if cond="threshold_val==0">
+						<goto next="#ServiceV_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#ServiceV"/>
+					</if>	
+				</if>
+
+			<!--	<if cond="mains.SWI_meaning=='QualityV'"> 其他服务质量 
+					<goto next="#QualityV_confirm"/>
+
+				</if>
+				-->
+				<!--<if cond="mains.SWI_meaning=='ServiceV'"> 其他服务质量
+					<goto next="#ServiceV_confirm"/>
+
+				</if>		
+ -->
+				
+
+				
+			
+				<if cond="ends.SWI_meaning=='Greetings'"><!-- 其他服务质量 -->
+					<audio src="../audio/GY_greetings_01.wav"/>
+					<goto next="#mains"/>
+
+				</if>
+
+				<if cond="ends.SWI_meaning=='Others'"><!-- 其他服务质量 -->
+					<goto next="#Others"/>
+
+				</if>		
+				
+				<if cond="ends.SWI_meaning=='no'">
+					<audio src="../audio/GY6_3.wav"/>
+					<exit/>
+				</if>
+				<if cond="ends.SWI_meaning=='yes'">
+					
+					<goto next="#end"/>
+				</if>
+
+			</filled>
+		</field>
+
+		<catch event="noinput nomatch">
+			<audio src="../audio/GY6_3.wav"/>
+			<goto next="#end"/>
+		</catch>
+		
+	 </form>
+ 
+	  <!-- 人工服务 -->
+	 <form id="rgfw">
+	 
+	 	<block>
+			<audio src="../audio/GY_Agent_01.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+
+   </vxml>

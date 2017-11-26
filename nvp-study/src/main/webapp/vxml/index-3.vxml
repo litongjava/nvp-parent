@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <menu id="QueryMenu">
+        <prompt>
+            1.播放声音1,2播放声音2,3抛出事件
+        </prompt>
+        <choice dtmf="1" next="#A1"/>
+        <choice dtmf="2" next="#A2"/>
+        <choice dtmf="3" event="A3"/>
+    </menu>
+    <!--catch标签只是捕捉到事件,不会进行跳转和结束会话-->
+    <catch event="A3">
+        <prompt>
+            捕捉到事件
+        </prompt>
+    </catch>
+    <form id="A1">
+        <block>
+            <prompt>这里是A1</prompt>
+        </block>
+    </form>
+    <form id="A2">
+        <block>
+            <prompt>这里是A2</prompt>
+        </block>
+    </form>
+    <form id="A3">
+        <block>
+            <prompt>这里是A3</prompt>
+        </block>
+    </form>
+</vxml>

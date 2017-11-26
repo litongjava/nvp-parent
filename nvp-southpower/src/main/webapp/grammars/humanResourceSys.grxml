@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入人资系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='humanRecourceSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        人资
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item> 人资 单 账 </item>
+                    <item> 维护 信息 内容 </item>
+                    <item> 自理 权限 看 </item>
+                    <item> 催 人 资 单 </item>
+                    <item> 考核 撤销 申请 </item>
+                    <item> 欧 维护 方法 </item>
+                    <item> 请假 状态 错误 </item>
+                    <item> 工 资 调整 异常 </item>
+                    <item> 缴费 基数 批 </item>
+                    <item> 工资 改 变化 </item>
+                    <item> 人资 入职 权限 </item>
+                    <item> 用户 员工 报错 </item>
+                    <item> 员工 权限 人资 菜单 </item>
+                    <item> 人资 休假 通过 状态 </item>
+                    <item> 人资 简历 乱码 </item>
+                    <item> 跳转 人资 超时 </item>
+                    <item> 人资 维护 状态 改变 </item>
+                    <item> 岗位 数据 清单 </item>
+                    <item> 人资 员工 显示 页面 </item>
+                    <item> 打 电话 四 </item>
+                    <item> 休假 系统 错误 </item>
+                    <item> 人资 时间 请假 记录 </item>
+                    <item> 人资 设置 岗位 决策 </item>
+                    <item> 人资 四 管理 设置 权限 </item>
+                    <item> 人资 登录 账号 错误 </item>
+                    <item> 四 管理 授权 填报 </item>
+                    <item> 人资 添加 权限 管理 找不到 </item>
+                    <item> 工资 发布 空指针 异常 </item>
+                    <item> 福利 统计 人数 多 人 </item>
+                    <item> 人资 请假单 提交 审批人 </item>
+                    <item> 登录 人资 提示 权限 </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

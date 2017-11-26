@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入生产系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='productionSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        生产
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        修改 会议 记录
+                    </item>
+                    <item>
+                        专网 开通 查询
+                    </item>
+                    <item>
+                        目录 调换 解锁
+                    </item>
+                    <item>
+                        台账 下载 失败
+                    </item>
+                    <item>
+                        申请 生产 账户
+                    </item>
+                    <item>
+                        工单 处理 意见
+                    </item>
+                    <item>
+                        运维 组 修改
+                    </item>
+                    <item>
+                        台账 整改 权限
+                    </item>
+                    <item>
+                        供电 附件 问题
+                    </item>
+                    <item>
+                        生产 环境 密码 重置
+                    </item>
+                    <item>
+                        作业 编制 配置
+                    </item>
+                    <item>
+                        维护 管理 计划 重复
+                    </item>
+                    <item>
+                        缺陷 显示 正确
+                    </item>
+                    <item>
+                        推送 生产 异常
+                    </item>
+                    <item>
+                        维护 管理 错误
+                    </item>
+                    <item>
+                        运行 规程 办理 到
+                    </item>
+                    <item>
+                        缺陷 打开 显示
+                    </item>
+                    <item>
+                        删除 电子 移交
+                    </item>
+                    <item>
+                        删除 单 工作 区
+                    </item>
+                    <item>
+                        缺陷 消缺 显示
+                    </item>
+                    <item>
+                        台账 工具 更 单
+                    </item>
+                    <item>
+                        台账 安装 基础 报错
+                    </item>
+                    <item>
+                        故障 管理 报障 流程
+                    </item>
+                    <item>
+                        安全 责任 书 废止
+                    </item>
+                    <item>
+                        缺陷 记录 显示
+                    </item>
+                    <item>
+                        主网 移交 出错
+                    </item>
+                    <item>
+                        检修 管理 执行 计划
+                    </item>
+                    <item>
+                        修改 作业 流程
+                    </item>
+                    <item>
+                        生产 主网 流程 错误
+                    </item>
+                    <item>
+                        生产 旧账号 迁移 新账号
+                    </item>
+                    <item>
+                        停电 待办 没有 显示
+                    </item>
+                    <item>
+                        台账 工具 正常 使用
+                    </item>
+                    <item>
+                        主网 变更单 退回 修改
+                    </item>
+                    <item>
+                        创建 工作 主网 变更单
+                    </item>
+                    <item>
+                        移交 台账 编辑 打开
+                    </item>
+                    <item>
+                        设备 档案 上报 错误
+                    </item>
+                    <item>
+                        生产 批量 修改 数据
+                    </item>
+                    <item>
+                        线路 管理 权限 之前 工作票
+                    </item>
+                    <item>
+                        生产 标准 是否 正常 显示
+                    </item>
+                    <item>
+                        资产 系统 开通 登录 权限
+                    </item>
+                    <item>
+                        台账 工单 数量 反应
+                    </item>
+                    <item>
+                        安全 目标 管理 问题
+                    </item>
+                    <item>
+                        生产 批量 异常
+                    </item>
+                    <item>
+                        主网 移交 通过
+                    </item>
+                    <item>
+                        配网 抢修 合并 拆分
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

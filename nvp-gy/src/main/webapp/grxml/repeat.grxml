@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar mode="voice" root="_repeat" version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar">
+	<meta content="1500" name="incompletetimeout"/>
+	<meta content="7000" name="maxspeechtimeout"/>
+	<rule id="_repeat" scope="public">
+		<one-of>
+			<item>
+				<ruleref uri="#repeat"/>
+				<tag>SWI_meaning='repeat'; dm_root='repeat'; app_tag='repeat';</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="repeat" scope="private">
+		<!-- 什么/没听清/再说一遍/重听/重说/再说一次/是多少/再报一遍/号码是多少/等下/没记下来 -->
+		<one-of>
+			<item>什么</item>
+			<item>没听清</item>
+			<item>再说 一遍</item>
+			<item>重听</item>
+			<item>重说</item>
+			<item>再说 一次</item>
+			<item>是多少</item>
+			<item>再 报 一遍</item>
+			<item>号码 是多少</item>
+			<item>等下</item>
+			<item>没 记下来</item>
+		</one-of>
+	</rule>
+</grammar>

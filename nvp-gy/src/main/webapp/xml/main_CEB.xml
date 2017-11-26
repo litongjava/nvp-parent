@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+	 <property name="maxspeechtimeout" value="20s" />
+	 <property name="sensitivity" value="0.50" /> 
+	 <property name="incompletetimeout" value="2.5s" />
+	 <property name="confidencelevel" value="0.01" />
+	 <property name="swirec.swiep_in_prompt_sensitivity_percent" value="20" />
+	 <var name="tempvalue" expr="''"/>
+	 <var name="threshold_val" expr="'0'"/><!-- 置信度分数 -->
+	 <var name="noinput_count" expr="'0'"/>
+	 <var name="nomacth_count" expr="'0'"/>
+	 <var name="disambig_count" expr="0"/>
+	 <var name="fault_count" expr="0"/>
+	 <var name="tempFaultCount" expr="0"/>
+	 <script>
+		//置信度分数比较
+		function needConfirm(param){
+			param = parseFloat(param);
+			if(param &gt;= 80)
+				return 1;
+			else if(param &gt;= 19)
+				return 0;
+			else
+				return -1;
+		}
+
+		function confidence(score,value){
+			score = parseFloat(score);
+			if(value == '交易密码修改'){
+				if (score &gt;= 93){
+					return 1;
+				} else if (score &lt; 93 &amp;&amp; score &gt;= 25){
+					return 0;
+				}
+			} else if(value == '信用卡还款'){
+				if (score &gt;= 89){
+					return 1;
+				} else if (score &lt; 89 &amp;&amp; score &gt;= 50){
+					return 0;
+				}
+			} else if(value == '可用取现额度查询'){
+				if (score &gt;= 89){
+					return 1;
+				} else if (score &lt; 89 &amp;&amp; score &gt;= 25){
+					return 0;
+				}
+			} else if(value == '可用额度查询'){
+				if (score &gt;= 89){
+					return 1;
+				} else if (score &lt; 89 &amp;&amp; score &gt;= 25){
+					return 0;
+				}
+			} else if(value == '开户行查询'){
+				if (score &gt;= 95){
+					return 1;
+				} else if (score &lt; 95 &amp;&amp; score &gt;= 25){
+					return 0;
+				}
+			} else if(value == '欠款查询'){
+				if (score &gt;= 95){
+					return 1;
+				} else if (score &lt; 95 &amp;&amp; score &gt;= 60){
+					return 0;
+				}
+			} else if(value == '申请进度查询'){
+				if (score &gt;= 93){
+					return 1;
+				} else if (score &lt; 95 &amp;&amp; score &gt;= 63){
+					return 0;
+				}
+			} else if(value == '账单日查询'){
+				if (score &gt;= 93){
+					return 1;
+				} else if (score &lt; 95 &amp;&amp; score &gt;= 25){
+					return 0;
+				}
+			} else if(value == '额度查询'){
+				if (score &gt;= 95){
+					return 1;
+				} else if (score &lt; 95 &amp;&amp; score &gt;= 45){
+					return 0;
+				}
+			}
+
+			return -1;
+		}
+	 </script>
+	 <!-- 首次进入光大银行-->
+	 <form id="main">
+		<block>
+			<!-- <prompt>欢迎进入光大银行，请问有什么可以帮您！</prompt> -->
+			<!-- 
+			<prompt>
+				<voice>1</voice>
+				<break time="2000ms"/>
+			</prompt>
+			<prompt><voice name="tom">2</voice>
+				<voice name="tom">3</voice>
+				<voice name="tom">4</voice></prompt> -->
+			<audio src="../audio/CEB1_1.wav"/>
+			<audio src="../audio/CEB2_1.wav"/>
+			<goto next="#mains"/>
+		</block>
+	 </form>
+	 
+	 <form id="mains">
+		<field name="mains">
+			<grammar src="../grxml/ceb_chinese.gram" />
+			<filled>
+				<assign name="threshold_val" expr="application.lastresult$.interpretation.ssmScore"/>
+				<if cond="tempvalue!=mains.SWI_meaning">
+					<assign name="disambig_count" expr="0"/>
+				</if>
+				<assign name="tempFaultCount" expr="0"/>
+				<assign name="tempvalue" expr="mains.SWI_meaning"/>
+				<prompt><value expr="mains.SWI_meaning"/></prompt>
+				<!--<prompt><value expr="threshold_val"/>分</prompt>-->
+				<assign name="threshold_val" expr="confidence(application.lastresult$.interpretation.ssmScore,mains.SWI_meaning)"/>
+				<!--<prompt><value expr="threshold_val"/></prompt>-->
+
+				<if cond="threshold_val==-1">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<if cond="fault_count==1">
+						<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+						<audio src="../audio/CEB_nomatch_01.wav"/>
+						<goto next="#mains"/>
+					</if>
+					<if cond="fault_count==2">
+						<audio src="../audio/CEB_nomatch_02.wav"/>
+						<goto next="#menu_back"/>
+					</if>
+				</if>
+				<!-- 第三版 -->
+				<if cond="mains.SWI_meaning=='欠款查询'"><!-- 欠款查询 -->
+					<goto next="#authentication"/>
+				</if>
+				<if cond="mains.SWI_meaning=='额度查询'"><!-- 额度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#edcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#edcx"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='可用额度查询'"><!-- 可用额度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#kyedcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#kyedcx"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='可用取现额度查询'"><!-- 可用取现额度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#kyqxedcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#kyqxedcx"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='申请进度查询'"><!-- 申请进度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#sqjdcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#sqjdcx"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='交易密码修改'"><!-- 交易密码修改 -->
+					<if cond="threshold_val==0">
+						<goto next="#jymmxg_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#jymmxg"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='信用卡还款'"><!-- 信用卡还款 -->
+					<if cond="threshold_val==0">
+						<goto next="#xykhk_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#xykhk"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='开户行查询'"><!-- 开户行查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#khhcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#khhcx"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='账单日查询'"><!-- 账单日查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#zdrcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#zdrcx"/>
+					</if>
+				</if>
+				<if cond="mains.SWI_meaning=='都不是'">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt> -->
+					<audio src="../audio/CEB3_1.wav"/>
+					<goto next="#mains"/>
+				<else/>
+					<assign name="fault_count" expr="fault_count+1"/>
+					<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt> -->
+					<audio src="../audio/CEB3_1.wav"/>
+					<goto next="#mains"/>
+				</if>
+			</filled>
+		</field>
+		
+		<catch event="unmatch">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+				<audio src="../audio/CEB_nomatch_01.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_nomatch_01.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+		</catch>
+		<nomatch count="1">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+				<audio src="../audio/CEB_nomatch_01.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_nomatch_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+		<nomatch count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="../audio/CEB_nomatch_02.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_nomatch_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+
+		<noinput count="1"> 
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听到您的声音。请简短的告诉我您来电的目的。</prompt> -->
+				<audio src="../audio/CEB_noinput_01.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_noinput_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>	
+	     </noinput>
+		<noinput count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>抱歉，还是没有听见。</prompt>-->
+				<audio src="../audio/CEB_noinput_02.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_noinput_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+	     </noinput>
+	 </form>
+	 
+	 <!-- 欠款查询确认 -->
+	 <form id="qkcx_confirm">
+		<field name="qkcxconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_1.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="qkcxconfirm.SWI_meaning=='yes'">
+					<goto next="#qkcx"/>
+				</if>
+				<if cond="qkcxconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_1.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 欠款查询 -->
+	 <form id="qkcx">
+		<block>
+			<goto next="#authentication"/>
+		</block>
+	 </form>
+
+	 <!-- 额度查询确认 -->
+	 <form id="edcx_confirm">
+		<field name="edcxconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_2.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="edcxconfirm.SWI_meaning=='yes'">
+					<goto next="#edcx"/>
+				</if>
+				<if cond="edcxconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_2.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	  <!-- 额度查询 -->
+	 <form id="edcx">
+		<block>
+			<goto next="#authentication"/>
+		</block>
+	 </form>
+	
+	 
+	 <!-- 可用额度查询确认 -->
+	 <form id="kyedcx_confirm">
+		<field name="kyedcxconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_3.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="kyedcxconfirm.SWI_meaning=='yes'">
+					<goto next="#kyedcx"/>
+				</if>
+				<if cond="kyedcxconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_3.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 可用额度查询 -->
+	 <form id="kyedcx">
+		<block>
+			<goto next="#authentication"/>
+		</block>
+	 </form>
+	 
+	 <!-- 可用额度查询确认 -->
+	 <form id="kyqxedcx_confirm">
+		<field name="kyqxedcxconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_4.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="kyqxedcxconfirm.SWI_meaning=='yes'">
+					<goto next="#kyqxedcx"/>
+				</if>
+				<if cond="kyqxedcxconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_4.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 可用取现额度查询 -->
+	 <form id="kyqxedcx">
+		<block>
+			<goto next="#authentication"/>
+		</block>
+	 </form>
+	 
+	 <!-- 申请进度查询确认 -->
+	 <form id="sqjdcx_confirm">
+		<field name="sqjdcxconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_5.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="sqjdcxconfirm.SWI_meaning=='yes'">
+					<goto next="#sqjdcx"/>
+				</if>
+				<if cond="sqjdcxconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_5.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 申请进度查询 -->
+	 <form id="sqjdcx">
+		<block>
+			<audio src="../audio/routingMsg_5.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+	 
+	  <!-- 交易密码修改 -->
+	 <form id="jymmxg_confirm">
+		<field name="jymmxgconfirm">
+			<audio src="../audio/cfmPromptClt_6.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="jymmxgconfirm.SWI_meaning=='yes'">
+					<goto next="#jymmxg"/>
+				</if>
+				<if cond="jymmxgconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_6.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 交易密码修改 -->
+	 <form id="jymmxg">
+		<block>
+			<audio src="../audio/routingMsg_6.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+	 
+	 <!-- 信用卡还款 确认 -->
+	 <form id="xykhk_confirm">
+		<field name="xykhkconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_7.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="xykhkconfirm.SWI_meaning=='yes'">
+					<goto next="#xykhk"/>
+				</if>
+				<if cond="xykhkconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_7.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 信用卡还款 -->
+	 <form id="xykhk">
+		<block>
+			<audio src="../audio/routingMsg_7.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+	 
+	 <!-- 开户行查询 确认 -->
+	 <form id="khhcx_confirm">
+		<field name="khhcxconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_8.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="khhcxconfirm.SWI_meaning=='yes'">
+					<goto next="#khhcx"/>
+				</if>
+				<if cond="khhcxconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_8.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 开户行查询 -->
+	 <form id="khhcx">
+		<block>
+			<audio src="../audio/routingMsg_8.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+	 
+	 <!-- 账单日查询 确认 -->
+	 <form id="zdrcx_confirm">
+		<field name="zdrcxconfirm">
+			<!-- <prompt>开卡，对吧？</prompt> -->
+			<audio src="../audio/cfmPromptClt_9.wav"/>
+			<grammar src="../grxml/confirm.grxml" />
+			<filled>
+				<if cond="zdrcxconfirm.SWI_meaning=='yes'">
+					<goto next="#zdrcx"/>
+				</if>
+				<if cond="zdrcxconfirm.SWI_meaning=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="../audio/CEB3_1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/cfmRetryClt_9.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <!-- 账单日查询 -->
+	 <form id="zdrcx">
+		<block>
+			<audio src="../audio/routingMsg_9.wav"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <!-- 后备菜单 -->
+	 <form id="menu_back">
+		<block><assign name="fault_count" expr="0"/></block>
+		<field name="menu_back">
+			<!-- <prompt>您需要查询的是下面哪一个呢? 本期账单 ,总欠款,额度 或者 都不是 .</prompt> -->
+			<audio src="../audio/menuDisambig_fallback_01.wav"/>
+			<grammar  src="../grxml/fallback.grxml"/>
+			<grammar  src="../grxml/fallback_dtmf.grxml"/>
+			<filled>
+				<assign name="tempvalue" expr="menu_back.SWI_meaning"/>
+				<!--<prompt><value expr="menu_back.SWI_meaning"/></prompt>-->
+				<if cond="menu_back.SWI_meaning=='PaymentMake'">
+					<goto next="#xykhk"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='OwingCheck'">
+					<goto next="#qkcx"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='CreditLimitCheck'">
+					<goto next="#edcx"/>
+				</if>
+				<if cond="menu_back.SWI_meaning=='None_of_those'">
+					<goto next="#rgfw2"/>
+				<else/>
+					<goto next="#rgfw2"/>
+				</if>
+			</filled>
+		</field>
+		
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="../audio/menuDisambig_fallback_02.wav"/>
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw2"/>
+			</if>
+		</catch>
+	 </form>
+
+	 <var name="faultAuthCount" expr="0"/>
+	 <var name="rightCardNum" expr="'false'"/>
+	 <var name="rightPINNum"  expr="'true'"/>
+	 <var name="cardNum" expr="''"/>
+	 <var name="PINNum" expr="''"/>
+	 <var name="number1" expr="''"/>
+	 <var name="number2" expr="''"/>
+	 <var name="number3" expr="''"/>
+	 <var name="number4" expr="''"/>
+	 <!-- 身份验证 -->
+	 <form id="authentication">
+		<block>
+			<if cond="rightCardNum=='true'">
+				<if cond="rightPINNum=='true'">
+					<goto next="#business"/>
+				<else/>
+					<goto next="#cardNumAuth"/>
+				</if>
+			<else/>
+				<goto next="#cardNumAuth"/>
+			</if>
+		</block>
+	 </form>
+	 <!-- 卡号输入 -->
+	 <form id="cardNumAuth">
+		<script><![CDATA[
+			//
+			function verifyCardNum(cardNum){
+				if(cardNum == '')
+					return 'false';
+				if(cardNum.length == 16)
+					return 'true';
+				return 'false';
+			}
+
+			function indexNumber(cardNum,index){
+				//index = 1;
+				cardNum = cardNum.substring(cardNum.length-index,cardNum.length-index+1);
+				return cardNum;
+			}
+		]]></script>
+		
+		<field name="cardNumber">
+			<audio src="../audio/CEB5_CardNum_01.wav"/>
+			<grammar src="../grxml/cardNumAuth.grxml" />
+			<grammar src="../grxml/cardNumAuth_dtmf.grxml" />
+			<filled>
+				<!-- <prompt>您输入的卡号是：<value expr="cardNumber.SWI_meaning"/></prompt>-->
+				<assign name="rightCardNum" expr="verifyCardNum(cardNumber.SWI_meaning)"/>
+				<if cond="rightCardNum=='true'">
+					<assign name="cardNum" expr="cardNumber.SWI_meaning"/>
+					<assign name="number1" expr="indexNumber(cardNumber.SWI_meaning,4)"/>
+					<assign name="number2" expr="indexNumber(cardNumber.SWI_meaning,3)"/>
+					<assign name="number3" expr="indexNumber(cardNumber.SWI_meaning,2)"/>
+					<assign name="number4" expr="indexNumber(cardNumber.SWI_meaning,1)"/>
+					<goto next="#business"/>
+				<else/>
+					 <assign name="faultAuthCount" expr="faultAuthCount+1"/>
+					<if cond="faultAuthCount&lt;=2">
+						<audio src="../audio/CEB5_CardNum_02.wav"/>
+					<else/>
+						<clear namelist="cardNumber"/>
+						<goto next="#rgfw"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="faultAuthCount" expr="faultAuthCount+1"/>
+			<if cond="faultAuthCount&lt;=2">
+				<audio src="../audio/CEB5_CardNum_02.wav"/>
+			<else/>
+				<clear namelist="cardNumber"/>
+				<goto next="#rgfw"/>
+			</if>
+        </catch>
+		</form>
+
+		<form id="PIN">
+			<script>
+				function verifyPIN(PIN){
+					if(PIN == '')
+						return 'false';
+					if(PIN.length == 6)
+						return 'true';
+					return 'false';
+				}
+			</script>
+			<field name="PIN">
+				<audio src="../audio/CEB5_PIN_01.wav"/>
+				<grammar src="../grxml/PINAuth_dtmf.grxml" />
+				<filled>
+					<!-- <prompt>您输入的密码是<value expr="PIN.SWI_meaning"/></prompt>-->
+					<assign name="rightPINNum" expr="verifyPIN(PIN.SWI_meaning)"/>
+					<if cond="rightPINNum=='true'">
+						<goto next="#business"/>
+					<else/>
+						 <assign name="faultAuthCount" expr="faultAuthCount+1"/>
+						<if cond="faultAuthCount&lt;=2">
+							<audio src="../audio/CEB5_PIN_02.wav"/>
+						<else/>
+							<clear namelist="PIN"/>
+							<goto next="#rgfw"/>
+						</if>
+					</if>
+				</filled>
+			</field>
+			<catch event="noinput nomatch">
+				<assign name="faultAuthCount" expr="faultAuthCount+1"/>
+				<if cond="faultAuthCount&lt;=2">
+					<audio src="../audio/CEB5_PIN_02.wav"/>
+				<else/>
+					<clear namelist="PIN"/>
+					<goto next="#rgfw"/>
+				</if>
+			</catch>
+	 </form>
+	 
+	 <!-- 业务查询 -->
+	 <form id="business">
+		<block>
+			<assign name="fault_count" expr="0"/>
+			<if cond="tempvalue=='欠款查询'||tempvalue=='OwingCheck'">
+				<audio src="../audio/routingMsg_1_1.wav"/>
+				<prompt><value expr="number1"/></prompt>
+				<prompt><value expr="number2"/></prompt>
+				<prompt><value expr="number3"/></prompt>
+				<prompt><value expr="number4"/></prompt>
+				<audio src="../audio/routingMsg_1_3.wav"/>
+				<goto next="#hk"/>
+			</if>
+			<if cond="tempvalue=='额度查询' || tempvalue=='CreditLimitCheck'||tempvalue=='CreditcardBalanceCheck'">
+				<audio src="../audio/routingMsg_2_1.wav"/>
+				<prompt><value expr="number1"/></prompt>
+				<prompt><value expr="number2"/></prompt>
+				<prompt><value expr="number3"/></prompt>
+				<prompt><value expr="number4"/></prompt>
+				<audio src="../audio/routingMsg_2_3.wav"/>
+			</if>
+			<if cond="tempvalue=='可用额度查询'">
+				<audio src="../audio/routingMsg_3_1.wav"/>
+				<prompt><value expr="number1"/></prompt>
+				<prompt><value expr="number2"/></prompt>
+				<prompt><value expr="number3"/></prompt>
+				<prompt><value expr="number4"/></prompt>
+				<audio src="../audio/routingMsg_3_3.wav"/>
+			</if>
+			<if cond="tempvalue=='可用取现额度查询'">
+				<audio src="../audio/routingMsg_4_1.wav"/>
+				<prompt><value expr="number1"/></prompt>
+				<prompt><value expr="number2"/></prompt>
+				<prompt><value expr="number3"/></prompt>
+				<prompt><value expr="number4"/></prompt>
+				<audio src="../audio/routingMsg_4_3.wav"/>
+			</if>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	 <form id="hk">
+		<field name="hk">
+			<audio src="../audio/CEB6_3.wav"/>
+			<grammar src="../grxml/makePayment.grxml"/>
+			<filled>
+				<if cond="hk.SWI_meaning=='yes'">
+					<goto next="#xykhk"/>
+				</if>
+				<if cond="hk.SWI_meaning=='no'">
+					<goto next="#end"/>
+				</if>
+			</filled>
+		</field>
+		
+		<!-- 
+		<catch event="noinput nomatch">
+			<goto next="#end"/>
+		</catch>
+		-->
+		 <nomatch count="1">
+			<!--
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="../audio/CEB_Error_01.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#end"/>
+			</if>
+			-->
+			<audio src="../audio/CEB_Error_01.wav"/>
+			<goto next="#end"/>
+		</nomatch>
+		 
+		<noinput count="1"> 
+			<audio src="../audio/CEB_Error_01.wav"/>
+			<goto next="#end"/>
+	    </noinput>
+		 
+	 </form>
+	
+	 <form id="end">
+		<block>
+			<assign name="fault_count" expr="0"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	 <!-- 业务结束-->
+	 <form id="ends">
+		<field name="end">
+			<audio src="../audio/CEB7_1.wav"/>
+			<grammar src="../grxml/otherService.grxml"/>
+			<grammar src="../grxml/ceb_chinese.gram" />
+			<filled>
+				<assign name="disambig_count" expr="0"/>
+				<assign name="tempFaultCount" expr="0"/>
+				<assign name="tempvalue" expr="end.SWI_meaning"/>
+				<assign name="threshold_val" expr="1"/>
+				<prompt><value expr="end.SWI_meaning"/></prompt>
+				<!--<prompt><value expr="threshold_val"/>分</prompt>-->
+				<assign name="threshold_val" expr="confidence(application.lastresult$.interpretation.ssmScore,end.SWI_meaning)"/>
+				<!--<prompt><value expr="threshold_val"/></prompt>-->
+				
+				<!-- 第三版 -->
+				<if cond="end.SWI_meaning=='欠款查询'"><!-- 欠款查询 -->
+					<goto next="#authentication"/>
+				</if>
+				<if cond="end.SWI_meaning=='额度查询'"><!-- 额度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#edcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#edcx"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='可用额度查询'"><!-- 可用额度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#kyedcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#kyedcx"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='可用取现额度查询'"><!-- 可用取现额度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#kyqxedcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#kyqxedcx"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='申请进度查询'"><!-- 申请进度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#sqjdcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#sqjdcx"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='交易密码修改'"><!-- 交易密码修改 -->
+					<if cond="threshold_val==0">
+						<goto next="#jymmxg_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#jymmxg"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='信用卡还款'"><!-- 信用卡还款 -->
+					<if cond="threshold_val==0">
+						<goto next="#xykhk_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#xykhk"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='开户行查询'"><!-- 开户行查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#khhcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#khhcx"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='账单日查询'"><!-- 账单日查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#zdrcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#zdrcx"/>
+					</if>
+				</if>
+				<if cond="end.SWI_meaning=='yes'">
+					<audio src="../audio/CEB2_1.wav"/>
+					<goto next="#mains"/>
+				</if>
+				<if cond="end.SWI_meaning=='no'">
+					<audio src="../audio/CEB7_2.wav"/>
+					<exit/>
+				</if>
+				<if cond="end.SWI_meaning=='otherCard'">
+					<assign name="rightCardNum" expr="'false'"/>
+					<audio src="../audio/CEB_2_3.wav"/>
+					<goto next="#mains"/>
+				</if>
+				<if cond="threshold_val==-1">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<if cond="fault_count==1">
+						<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+						<audio src="../audio/CEB_nomatch_01.wav"/>
+						<goto next="#mains"/>
+					</if>
+					<if cond="fault_count==2">
+						<audio src="../audio/CEB_nomatch_02.wav"/>
+						<goto next="#menu_back"/>
+					</if>
+				<else/>
+					<goto next="#menu_back"/>
+				</if>
+
+			</filled>
+		</field>
+		
+		<!-- 
+		<catch event="noinput nomatch">
+			<assign name="faultAuthCount" expr="faultAuthCount+1"/>
+			<if cond="faultAuthCount&lt;=2">
+				<goto next="#menu_back"/>
+			<else/>
+				<audio src="../audio/CEB7_2.wav"/>
+				<exit/>
+			</if>
+        </catch>
+		-->
+
+		<catch event="unmatch">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+				<audio src="../audio/CEB_nomatch_01.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_nomatch_01.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+		</catch>
+		<nomatch count="1">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+				<audio src="../audio/CEB_nomatch_01.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_nomatch_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+		<nomatch count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="../audio/CEB_nomatch_02.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_nomatch_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+
+		<noinput count="1"> 
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="../audio/CEB_noinput_01.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_noinput_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>	
+	    </noinput>
+		<noinput count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="../audio/CEB_noinput_02.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<audio src="../audio/CEB_noinput_02.wav"/>
+				<goto next="#menu_back"/>
+			</if>
+	     </noinput>
+
+	 </form>
+
+
+	 <!-- 人工服务 -->
+	 <form id="rgfw">
+	 	<block>
+			<audio src="../audio/CEB_Error_01.wav"/>
+			<audio src="../audio/CEB_Agent_01.wav"/>
+		</block>
+	 </form>
+
+	 <!-- 人工服务2 -->
+	 <form id="rgfw2">
+	 	<block>
+			<audio src="../audio/CEB_Agent_01.wav"/>
+		</block>
+	 </form>
+
+</vxml>

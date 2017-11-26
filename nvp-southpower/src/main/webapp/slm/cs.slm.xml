@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SLMTraining version="1.0.0" xml:lang="zh-cn">
+    <!--定义单个分词-->
+    <vocab>
+        <item>
+            营销
+        </item>
+        <item>
+            生产
+        </item>
+        <item>
+            基建
+        </item>
+        <item>
+            四 a
+        </item>
+    </vocab>
+    <!--把语句定义为训练数据-->
+    <training>
+        <!--定义用户可能说的语句-->
+        <sentence count="1">
+            营销 系统
+        </sentence>
+        <sentence count="2">
+            生产 系统
+        </sentence>
+    </training>
+    <!--为speakFreely设置参数-->
+    <param name="param_name">
+        <value>
+            param_value
+        </value>
+    </param>
+    <param name="fsm_out">
+        <value>
+            cs.fsm
+        </value>
+    </param>
+    <param name="wordlist_out">
+        <value>
+            cs.wordlist
+        </value>
+    </param>
+</SLMTraining>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入陪评系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='commentSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        培评
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item> 不能 上传 课件 </item>
+                    <item> 培评 上 视频 </item>
+                    <item> 培评 任务 列表 </item>
+                    <item> 培评 南网 学习 </item>
+                    <item> 培评 课程 出错 </item>
+                    <item> 导 课程 情况 </item>
+                    <item> 报名 外部 密码 </item>
+                    <item> 登录 确定 反应 </item>
+                    <item> 培评 重新 登录 </item>
+                    <item> 导出 部门 学分 </item>
+                    <item> 培评 界面 变 选课 </item>
+                    <item> 培评 账号 禁用 </item>
+                    <item> 证书 培评 加载 </item>
+                    <item> 人资 培评 失败 </item>
+                    <item> 培评 待办 一直 状态 </item>
+                    <item> 培训 提交 加载 </item>
+                    <item> 培评 教程 播放 </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

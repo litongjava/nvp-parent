@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入投资计划系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='investmentPlanSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        投资
+                        <item repeat="0-1">计划</item>
+                    </item>
+                    <item>
+                        年度 建议表 空白
+                    </item>
+                    <item>
+                        项目 投资 计划 基建 系统
+                    </item>
+                    <item>
+                        业扩 流程 最后 发送 不了
+                    </item>
+                    <item>
+                        用户 投资 系统 项目 审核 权限
+                    </item>
+                    <item>
+                        科研 编制 上报 找不到 名字
+                    </item>
+                    <item>
+                        预 安排 菜单 报错
+                    </item>
+                    <item>
+                        项目 研 流程 省 公司
+                    </item>
+                    <item>
+                        我 投资 计划 系统 登录
+                    </item>
+                    <item>
+                        生产 投资 管理 提交 看不到 单
+                    </item>
+                    <item>
+                        修理 信息 更新 项目 不见
+                    </item>
+                    <item>
+                        投资 计划 技改 权限 没有
+                    </item>
+                    <item>
+                        主网 投资 管理 找不到 项目
+                    </item>
+                    <item>
+                        信息 投资 报表 报错
+                    </item>
+                    <item>
+                        信息 投资 报表 查询 项目
+                    </item>
+                    <item>
+                        投资 计划 纳入 提交 操作 失败
+                    </item>
+                    <item>
+                        科技 投资 管理 搜索 失败
+                    </item>
+                    <item>
+                        续建 如何  预 安排 申请
+                    </item>
+                    <item>
+                        修改 管辖 权限
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

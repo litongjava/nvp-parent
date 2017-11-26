@@ -1,0 +1,34 @@
+{
+  "status": "TRAINED",
+  "reference": "5cc91740-a3ff-11e7-99cb-c98658619164",
+  "feedback": {
+    "cumulative": {
+      "status": "uncertain",
+      "details": "The trained domain LM is not guaranteed to improve recognition performance.",
+      "summary": {
+        "nwords": 4,
+        "number_new_words_added": 0,
+        "number_new_words_not_added": 0,
+        "unique_nwords": 2,
+        "ndocuments": 1,
+        "most_frequent_words_added": {},
+        "most_frequent_words_not_added_because_failure": {}
+      },
+      "recommendations": [
+        "Very few training data provided. The domain LM is likely not suitable for production usage.",
+        "The mean length of provided text sentences seem to be short. If this is unexpected please review the format of the training text. For most languages, domain LMs usually gain from using longer sentences in training."
+      ]
+    },
+    "components": {
+      "heguang.txt": {
+        "0-7": {
+          "most_frequent_words_not_in_vocabulary": {},
+          "status": "accepted",
+          "details": "Document is valid for training process."
+        }
+      }
+    }
+  },
+  "location": "/domainLM/heguang_5ccd0ee0-a3ff-11e7-852e-8995224aba0d",
+  "name": "heguang_5ccd0ee0-a3ff-11e7-852e-8995224aba0d"
+}

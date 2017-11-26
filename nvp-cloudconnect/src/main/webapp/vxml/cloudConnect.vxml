@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+    <property name="maxspeechtimeout" value="10s"/>
+    <property name="sensitivity" value="0.50"/>
+    <property name="incompletetimeout" value="1s"/>
+    <property name="confidencelevel" value="0.15"/>
+    <property name="timeout" value="3s"/>
+    <!--<property name="swirec.swiep_in_prompt_sensitivity_percent" value="20" /> -->
+    <property name="bargein" value="false"/>
+    <var name="nishishei" expr="''"/>
+
+
+    <form id="who2u">
+
+        <block>
+            <assign name="nishishei" expr="session.connection.remote.uri"/>
+            <if cond="nishishei=='sip:13916201791@xiaoi.com'"><!-- 1 -->
+                <prompt>
+                    <audio src="../audios/HELLO_Z.wav"/>
+                </prompt>
+                <goto next="#A2"/>
+            </if>
+            <if cond="nishishei=='sip:13501695900@xiaoi.com'"><!-- 1 -->
+                <prompt>
+                    <audio src="../audios/HELLO_W.wav"/>
+                </prompt>
+                <goto next="#A2"/>
+            </if>
+            <if cond="nishishei=='sip:18918973540@xiaoi.com'"><!-- 1 -->
+                <prompt>
+                    <audio src="../audios/HELLO_X.wav"/>
+                </prompt>
+                <goto next="#A2"/>
+            </if>
+            <goto next="#A1"/>
+        </block>
+    </form>
+
+
+    <form id="A1">
+        <field name="A1">
+            <prompt>
+                您好！我是云联客服专员，请问您是张先生本人吗？
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A1.dm_root=='identifyYes'">
+                    <goto next="#A2"/>
+                </if>
+                <if cond="A1.dm_root=='identifyNo'"> <!-- 3 -->
+                    <goto next="#A3"/>
+                </if>
+                <if cond="A1.dm_root=='identifyNoTime'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+                <goto next="#A2"/>
+            </filled>
+            <catch event="noinput nomatch">
+                <goto next="#A2"/>
+            </catch>
+        </field>
+
+    </form>
+
+    <form id="A2">
+        <field name="A2">
+            <prompt>
+                您好，张先生，耽误您1分钟，对您车牌皖A尾号567在**年10月15日的维修做个简短的回访，可以吗？
+            </prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A2.dm_root=='identifyYes'"><!-- 1 -->
+                    <goto next="#A4"/>
+                </if>
+                <if cond="A2.dm_root=='identifyNoTime'"> <!-- 2 -->
+                    <goto next="#A9"/>
+                </if>
+                <if cond="A2.dm_root=='identifyNoAccident'"> <!-- 3 -->
+                    <goto next="#A10"/>
+                </if>
+                <if cond="A2.dm_root=='identifyNo'"> <!-- 4 -->
+                    <goto next="#A3"/>
+                </if>
+                <goto next="#A4"/>
+            </filled>
+
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#A2"/>
+            </catch>
+        </field>
+
+    </form>
+
+
+    <form id="A3">
+        <field name="A3">
+            <prompt>不好意思，是这样的，我们想对他**年10月15日的车辆维修做个回访，请问您能否提供下车主人的手机号呢？您可以通过按键输入，然后以井号键结束。重新输入请按星号键。</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A3.dm_root=='identifyNo'"><!-- 1 -->
+                    <goto next="#end3"/>
+                </if>
+                <goto next="#end3"/>
+            </filled>
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#A3"/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A4">
+        <field name="A4">
+            <prompt>请问您在处理这次事故中，有见到我们公司的工作人员吗？</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A4.dm_root=='seestaff'"><!-- 1 -->
+                    <goto next="#A5"/>
+                </if>
+                <if cond="A4.dm_root=='noseestaff'"> <!-- 2 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A4.dm_root=='identifyNoTime'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+                <goto next="#A5"/>
+            </filled>
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#A4"/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A5">
+        <field name="A5">
+            <prompt>请问您是在哪个环节见到我们公司的工作人员呢？是现场查勘、车辆定损还是递交索赔资料环节呢？</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A5.dm_root=='responseContent'"><!-- 1 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A5.dm_root=='identifyNo'"> <!-- 2 -->
+                    <goto next="#A6"/>
+                </if>
+                <if cond="A5.dm_root=='identifyNoTime'"> <!-- 3 -->
+                    <goto next="#A9"/>
+                </if>
+                <goto next="#A6"/>
+            </filled>
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#A6"/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A6">
+        <field name="A6">
+            <prompt>请问您对我们公司的维修服务满意吗？</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A6.dm_root=='well'"><!-- 1 -->
+                    <goto next="#A7"/>
+                </if>
+                <if cond="A6.dm_root=='terrible'"> <!-- 2 -->
+                    <goto next="#A8"/>
+                </if>
+                <if cond="A6.dm_root=='good'"> <!-- 3 -->
+                    <goto next="#end1"/>
+                </if>
+
+                <if cond="A6.dm_root=='identifyNoTime'"> <!-- 4 -->
+                    <goto next="#end2"/>
+                </if>
+                <goto next="#A7"/>
+            </filled>
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#A7"/>
+            </catch>
+        </field>
+    </form>
+
+
+    <form id="A7">
+        <field name="A7">
+            <prompt>非常感谢您的肯定，请问您对我们公司的服务还有什么意见或建议吗？</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A7.dm_root=='identifyNo'"><!-- 1 -->
+                    <goto next="#end2"/>
+                </if>
+                <if cond="A7.dm_root=='identifyYes'"> <!-- 2 -->
+                    <goto next="#end1"/>
+                </if>
+                <goto next="#end2"/>
+            </filled>
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#end2"/>
+            </catch>
+        </field>
+    </form>
+
+
+    <form id="A8">
+        <field name="A8">
+            <prompt>非常抱歉，请问是哪方面令您感到不满意？例如服务态度、服务时效、理赔金额、服务技能或者其他。</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A8.dm_root=='terribleCategory'"><!-- 1 -->
+                    <goto next="#end1"/>
+                </if>
+                <goto next="#end1"/>
+            </filled>
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#end1"/>
+            </catch>
+        </field>
+    </form>
+
+
+    <form id="A9">
+        <field name="A9">
+            <prompt>请问您什么时候方便我们再回访您？</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A9.dm_root=='identifyNo'"><!-- 1 -->
+                    <goto next="#end3"/>
+                </if>
+                <if cond="A9.dm_root=='identifyYes'"><!-- 1 -->
+                    <goto next="#end4"/>
+                </if>
+                <goto next="#end3"/>
+            </filled>
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#end3"/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A10">
+        <field name="A10">
+            <prompt>张先生，您好，通过系统查到您的皖A车牌尾号为 567在10月15日有出险记录，我们主要针对这次事故进行回访</prompt>
+            <grammar src="../grammars/query.grxml"/>
+            <filled>
+                <if cond="A10.dm_root=='identifyYes'"><!-- 1 -->
+                    <goto next="#A4"/>
+                </if>
+                <if cond="A10.dm_root=='identifyNo'"> <!-- 2 -->
+                    <goto next="#end3"/>
+                </if>
+                <goto next="#A4"/>
+            </filled>
+
+            <catch event="noinput nomatch"> <!-- 5 -->
+                <goto next="#A4"/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="end1">
+        <block>
+            <prompt>您的意见我已经如实记录，我会把您的意见向相关部门反映，祝您幸福！再见！</prompt>
+        </block>
+    </form>
+
+    <form id="end2">
+        <block>
+            <prompt>非常感谢您对我们工作支持，祝您幸福！再见！</prompt>
+        </block>
+    </form>
+
+    <form id="end3">
+        <block>
+            <prompt>很抱歉打扰您了，祝您幸福！再见！</prompt>
+        </block>
+    </form>
+
+    <form id="end4">
+        <block>
+            <prompt>谢谢您的配合，我们下次再联系您。祝您幸福！再见！</prompt>
+        </block>
+    </form>
+</vxml>
+

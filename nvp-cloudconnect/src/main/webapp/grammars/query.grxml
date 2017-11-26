@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!-- ************************************************************
+        Copyright C 1995-2017 by Nuance Communications. All rights reserved.
+        Nuance Communications provides this document without representation or
+        warranty of any kind. Nuance Communications reserves the right to revise this
+        document and to change the information contained in this document without
+        further notice.
+
+        Generated from 
+   -->
+
+  <grammar  version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0" root="_ROOT_" >
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+
+<rule  id="_ROOT_" scope="public">
+<one-of>
+        <item>
+          <ruleref uri="#vocab"/><tag>
+            if (SWI_vars.disallow) {
+              var disallow_arr = SWI_vars.disallow.split('^');
+              disallowList = SWI_vars.disallow;
+              for (var i=0; i &lt; disallow_arr.length; i++) {
+                if (vocab.SWI_meaning == disallow_arr[i]) {
+                  SWI_disallow=1;
+                  break;
+                }
+              }
+             }
+           if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning};
+           dm_root=vocab.SWI_meaning;
+           grammar_version='20170505';
+           MEANING=SWI_meaning;
+         </tag>
+        </item>
+      </one-of>
+</rule>
+<rule id="vocab" scope="public">
+ <one-of>
+    <item>
+         <tag>SWI_meaning='identifyYes';</tag>
+         <one-of>
+            <!-- [嗯] [我] ((是)[的] | (可以) [的] | (行)) -->
+            <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item>
+				 <item repeat="0-1"> 我 </item> 
+				 <one-of>
+                     <item> 是
+				        <item repeat="0-1"> 的 </item>
+				    </item>
+				    <item> 可以
+				        <item repeat="0-1"> 的 </item>
+				    </item>
+				    <item> 行 </item>
+				 </one-of> 
+            </item>
+         </one-of>
+     </item>  
+
+   <item>
+       <tag>SWI_meaning='identifyNo';</tag>
+         <one-of>
+            <!-- [嗯] [不对] [我] ((不是)|(不认识)) -->
+            <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+		
+				  <item repeat="0-1"> 我 </item> 
+				   <one-of> 
+				     <item> 不是</item>
+					  <item> 不认识</item>
+				   </one-of> 
+            </item>
+        </one-of>
+   </item>
+
+   <item>
+       <tag>SWI_meaning='identifyNoTime';</tag>
+         <one-of>
+            <!-- [嗯] [我] ((没(时间)|(空)) ) -->
+            <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				  <item repeat="0-1"> 我 </item> 
+				   
+				     <item> 没
+					 <one-of> 
+					 <item > 时间 </item> 
+					 <item > 空 </item> 
+				   </one-of> 
+				  </item>					   
+            </item>
+        </one-of>
+   </item>
+
+      <item>
+       <tag>SWI_meaning='identifyNoAccident';</tag>
+         <one-of>
+            <!-- [嗯] [我] (((没 )|(未)) (发生) | (有) 事故) ) -->
+            <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				  <item repeat="0-1"> 我 </item> 
+					<item>
+					<one-of>
+					<item > 没 </item> 
+					<item > 未 </item> 
+					</one-of>
+					<one-of>
+					<item > 发生 </item> 
+					<item > 有</item> 
+					</one-of>
+					<item > 事故</item> 
+					</item>
+            </item>
+        </one-of>
+   </item>
+
+     <item>
+       <tag>SWI_meaning='noseestaff';</tag>
+         <one-of>
+            <!-- [嗯] [我] ((没 [(见过)|(有)] [啊]) ) -->
+			
+            <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				  <item repeat="0-1"> 我 </item> 
+					<item>
+					<item > 没 </item> 
+				<one-of>
+				 <item repeat="0-1"> 
+                    <item>
+					<item > 见过 </item> 
+					<item > 有 </item> 
+					</item> 
+				 </item> 
+				</one-of>
+					<item repeat="0-1"> 啊 </item> 
+				</item>
+            </item>
+        </one-of>
+   </item>
+
+     <item>
+       <tag>SWI_meaning='seestaff';</tag>
+         <one-of>
+            <!-- [嗯] [我] (( 见过 ) ) -->
+			
+            <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				  <item repeat="0-1"> 我 </item> 
+					<item>			
+					<item > 见过 </item> 
+				</item>
+            </item>
+        </one-of>
+   </item>
+
+      <item>
+       <tag>SWI_meaning='responseContent';</tag>
+         <one-of>
+            <!-- [嗯] (( 现场查勘 )| (车辆定损) | (递交索赔资料 ) ) -->
+			
+            <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+					<item>
+					<one-of>
+					<item > 现场查勘</item> 
+					<item > 车辆定损</item> 
+					<item > 递交索赔资料</item> 
+					</one-of>
+					</item>
+            </item>
+        </one-of>
+   </item>
+ 
+ 
+  <item>
+         <tag>SWI_meaning='well';</tag>
+         <one-of>
+
+            <!-- [嗯] [我] ((满意)) -->
+           <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				<item repeat="0-1"> 我 </item> 
+					<item>
+					<item >满意</item> 
+					</item>
+            </item>
+         </one-of>
+  </item>
+ 
+   <item>
+         <tag>SWI_meaning='terrible';</tag>
+         <one-of>
+
+            <!-- [嗯] [我] ((不满意)) -->
+           <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				<item repeat="0-1"> 我 </item> 
+					<item>
+					
+					<item >不满意</item> 
+					
+					</item>
+            </item>
+         </one-of>
+  </item>
+ 
+   <item>
+         <tag>SWI_meaning='good';</tag>
+         <one-of>
+
+            <!-- [嗯] [我] ((一般)) -->
+           <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				<item repeat="0-1"> 我 </item> 
+					<item>
+					
+					<item >一般</item> 
+					
+					</item>
+            </item>
+         </one-of>
+   </item>
+
+   <item>
+         <tag>SWI_meaning='terribleCategory';</tag>
+         <one-of>
+
+            <!-- [嗯] [我] ((服务态度)|(服务时效)|(理赔金额)|(服务技能))) -->
+           <item>
+                <tag></tag>
+                 <item repeat="0-1"> 嗯 </item> 
+				<item repeat="0-1"> 我 </item> 
+					<one-of>
+					<item>服务态度</item>
+					<item>服务时效</item>
+					<item>理赔金额</item>
+					<item>服务技能</item>
+					</one-of>
+            </item>
+         </one-of>
+  </item>
+ </one-of>
+</rule>
+
+</grammar>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入4A系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='4aSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        四 a
+                        <item repeat="0-1">系统</item>
+
+                    </item>
+                    <item>四 爱</item>
+                    <item>
+                        四 自助 找不到 登录 图标
+                    </item>
+                    <item>
+                        提示 证书 登录 权限
+                    </item>
+                    <item>
+                        系统 账号 管理 组织 人员 数据
+                    </item>
+                    <item>
+                        系统 账号 功能 模块 图标
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

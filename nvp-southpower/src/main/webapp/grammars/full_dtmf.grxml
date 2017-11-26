@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar"
+         tag-format="swi-semantics/1.0" mode="dtmf" root="_fallback">
+    <meta name="interdigittimeout" content="2000"/>
+    <rule id="_fallback" scope="public">
+        <one-of>
+            <item>
+                3
+                <tag>dm_root=3</tag>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN"
+    version="1.0"
+    xmlns="http://www.w3.org/2001/06/grammar"
+    tag-format="swi-semantics/1.0"
+    mode="dtmf"
+    root="_serviceV">
+
+    <meta name="interdigittimeout" content="2000"/>
+    
+    <rule id="_serviceV" scope="public">
+        <one-of>
+            <item>
+                1
+                <tag>
+                    SWI_meaning='Sales'; dm_root='Sales'; app_tag='Sales';
+                </tag>
+            </item>
+            <item>
+                2
+                <tag>
+                    SWI_meaning='Post'; dm_root='Post'; app_tag='Post';
+                </tag>
+            </item>
+            <item>
+                3
+                <tag>
+                    SWI_meaning='OtherServ'; dm_root='OtherServ'; app_tag='OtherServ';
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <var name="filename" expr="'http://192.168.28.217:8090/study/vxml/index.vxml'"/>
+    <var name="formid" expr="'#end1'"/>
+    <form id="main">
+        <field name="main">
+            <prompt>
+                你好,请问你要查询什么
+            </prompt>
+
+            <grammar src="../grammar/query.grxml"/>
+
+            <filled>
+                <if cond="main.dm_root=='bjw'">
+                    <submit next="http://192.168.29.178:8081/recive/test1.do" namelist="main.dm_root filename formid"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch">
+                <goto next="#edn1"/>
+            </catch>
+        </field>
+    </form>
+    <form id="bjw">
+
+    </form>
+    <form id="end1">
+        <block>
+            再见
+        </block>
+    </form>
+</vxml>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN"
+    version="1.0"
+    xmlns="http://www.w3.org/2001/06/grammar"
+    tag-format="swi-semantics/1.0"
+    mode="dtmf"
+    root="_fallback">
+
+    <meta name="interdigittimeout" content="2000"/>
+    
+    <rule id="_fallback" scope="public">
+        <one-of>
+            <item>
+                1
+                <tag>
+                    SWI_meaning='FoodMed'; dm_root='FoodMed'; app_tag='FoodMed';
+                </tag>
+            </item>
+            <item>
+                2
+                <tag>
+                    SWI_meaning='Tax'; dm_root='Tax'; app_tag='Tax';
+                </tag>
+            </item>
+            <item>
+                3
+                <tag>
+                    SWI_meaning='Prices'; dm_root='Prices'; app_tag='Prices';
+                </tag>
+            </item>
+            <item>
+                4
+                <tag>
+                    SWI_meaning='Cigar'; dm_root='Cigar'; app_tag='Cigar';
+                </tag>
+            </item>
+            <item>
+                5
+                <tag>
+                    SWI_meaning='NoneOfThem'; dm_root='NoneOfThem'; app_tag='None';
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

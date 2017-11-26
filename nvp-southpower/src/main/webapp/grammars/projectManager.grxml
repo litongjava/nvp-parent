@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入项目管理的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='projectManager'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        项目
+                        <item repeat="0-1">管理</item>
+                    </item>
+                    <item>
+                        添加 收款 信息
+                    </item>
+                    <item>
+                        账号 过期
+                    </item>
+                    <item>
+                        科技 录入 操作
+                    </item>
+                    <item>
+                        填写 收款 单位
+                    </item>
+                    <item>
+                        上传 附件 出来
+                    </item>
+                    <item>
+                        项目 发票 进去
+                    </item>
+                    <item>
+                        科技 权限 开通
+                    </item>
+                    <item>
+                        退回 方案
+                    </item>
+                    <item>
+                        名称 搜索
+                    </item>
+                    <item>
+                        项目 成果 调整
+                    </item>
+                    <item>
+                        合同 金
+                    </item>
+                    <item>
+                        项目 数据 修改
+                    </item>
+                    <item>
+                        科技 权限 查询
+                    </item>
+                    <item>
+                        收款 单位
+                    </item>
+                    <item>
+                        没有 收款 额
+                    </item>
+                    <item>
+                        科技 更新 进度
+                    </item>
+                    <item>
+                        科技 变更 年度
+                    </item>
+                    <item>
+                        科研 审批 内容
+                    </item>
+                    <item>
+                        开通 项目 查询
+                    </item>
+                    <item>
+                        首付款 提示 合同 计划
+                    </item>
+                    <item>
+                        服务 上报 节点 选择
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

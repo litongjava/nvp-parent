@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN" version="1.0"
+xmlns="http://www.w3.org/2001/06/grammar"
+mode="voice" root="_fallback">
+
+<meta name="incompletetimeout" content="1500"/>
+<meta name="maxspeechtimeout" content="7000"/>
+  
+  <rule id="_fallback" scope="public">
+  <one-of>
+	<item><ruleref uri="#FoodMed"/>
+	<tag>SWI_meaning='FoodMed'; dm_root='FoodMed'; app_tag='FoodMed';</tag></item>
+	<item><ruleref uri="#Tax"/>
+	<tag>SWI_meaning='Tax'; dm_root='Tax'; app_tag='Tax';</tag></item>
+	<item><ruleref uri="#Prices"/>
+	<tag>SWI_meaning='Prices'; dm_root='Prices'; app_tag='Prices';</tag></item>
+	<item><ruleref uri="#Cigar"/>
+	<tag>SWI_meaning='Cigar'; dm_root='Cigar'; app_tag='Cigar';</tag></item>
+	<item><ruleref uri="#NoneOfThem"/>
+	<tag>SWI_meaning='NoneOfThem'; dm_root='NoneOfThem'; app_tag='None';</tag></item>
+    <item><ruleref uri="#QualityID"/>
+	<tag>SWI_meaning='QualityID'; dm_root='QualityID'; app_tag='QualityID';</tag></item>
+    <item><ruleref uri="#House"/>
+	<tag>SWI_meaning='House'; dm_root='House'; app_tag='House';</tag></item>
+    <item><ruleref uri="#Taxi"/>
+	<tag>SWI_meaning='Taxi'; dm_root='Taxi'; app_tag='Taxi';</tag></item>
+  </one-of>
+  </rule>
+  
+  
+  <rule id="FoodMed" scope="public">
+	<!-- 食品药品/食品/食物/吃的/吃的东西/药/药品/保健品/中药/西药/第一个/一/一食品药品质量 -->
+	<!-- 食品/食品药品/药品/保健品/吃的/实物/药/药物/保养品/第一项/第一个/一/第一个食品药品/一食品药品 -->
+	<item>
+	<one-of>
+		<item>食品 药品</item>
+		<item>食品</item>
+		<item>食物</item>
+		<item>吃的</item>
+		<item>吃的 东西</item>
+		<item>保健品</item>
+		<item>药</item>
+		<item>药品</item>
+		<item>中药</item>
+		<item>西药</item>
+		<item>第一个</item>
+		<item>一</item>
+		<item>一 食品 药品 质量</item>
+		<item>食品 药品 质量</item>
+		<item>食品 质量</item>
+		<item>药品 质量</item>
+		<item>一 食品 质量</item>
+		<item>一 药品 质量</item>
+		<item>药物</item>
+		<item>保养品</item>
+		<item>第一项</item>
+		<item>第一个 食品 药品</item>
+		<item>一 食品 药品</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="Tax" scope="private">
+	<!-- 发票/收据/小票/发票票据/收银条/购物凭证/增值税发票/税务/第二个/二/二发票票据 -->
+	<item>
+	<one-of>
+		<item>发票</item>
+		<item>收据</item>
+		<item>小票</item>
+		<item>发票 票据</item>
+		<item>收银条</item>
+		<item>购物 凭证</item>
+		<item>增值税 发票</item>
+		<item>税务</item>
+		<item>第二个</item>
+		<item>二</item>
+		<item>二 发票 票据</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="Prices" scope="private">
+	<!-- 物价/价格/价钱/乱收费/第三个/三/三物价 -->
+	<item>
+	<one-of>
+		<item>物价</item>
+		<item>价格</item>
+		<item>价钱</item>
+		<item>乱收费</item>
+		<item>第三个</item>
+		<item>三</item>
+		<item>三 物价</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="Cigar" scope="private">
+	<!-- 烟草/香烟/卷烟/假烟/烟证/第四个/四/四烟草 -->
+	<item>
+	<one-of>
+		<item>烟草</item>
+		<item>香烟</item>
+		<item>卷烟</item>
+		<item>假烟</item>
+		<item>烟证</item>
+		<item>第四个</item>
+		<item>四</item>
+		<item>四 烟草</item>
+		<item>烟</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="NoneOfThem" scope="private">
+	<!-- 都不是/不知道/不清楚/搞不清楚/不懂/没有/说不好/讲不清楚/第五个/五/五都不是 -->
+	<item>
+	<one-of>
+		<item>都不是</item>
+		<item>不知道</item>
+		<item>不清楚</item>
+		<item>搞不清楚</item>
+		<item>不懂</item>
+		<item>没有</item>
+		<item>说不好</item>
+		<item>讲不清楚</item>
+		<item>第五个</item>
+		<item>五</item>
+		<item>五 都不是</item>
+		<item>不确定</item>
+		<item>我也 不知道</item>
+		<item>我也 不是 很清楚</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="QualityID" scope="private">
+	<!-- 质量鉴定/鉴定质量/质量检测/质量检查/检测/测试/质量好不好/鉴定真假/是不是正品 -->
+	<!-- 质量鉴定/鉴定质量/鉴定/检查质量/判断真假真假/第四个/四/四质量鉴定 -->
+	<item>
+	<one-of>
+		<item>质量 鉴定</item>
+		<item>鉴定 质量</item>
+		<item>质量 检测</item>
+		<item>质量 检查</item>
+		<item>检测</item>
+		<item>测试</item>
+		<item>质量 好不好</item>
+		<item>鉴定 真假</item>
+		<item>是不是 正品</item>
+		<item>鉴定</item>
+		<item>检查 质量</item>
+		<item>判断 真假</item>
+		<item>真假</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="House" scope="private">
+	<!-- 房屋/房子/二手房/新房/楼房/店铺/门面房/出租屋/房屋质量/房屋面积/房间/房间面积/建筑/建筑质量/拆迁/物业/小区物业/房屋格局/房屋设计 -->
+	<item>
+	<one-of>
+		<item>房屋</item>
+		<item>房子</item>
+		<item>二手房</item>
+		<item>新房</item>
+		<item>楼房</item>
+		<item>店铺</item>
+		<item>门面房</item>
+		<item>出租屋</item>
+		<item>房屋 质量</item>
+		<item>房屋 面积</item>
+		<item>房间</item>
+		<item>房间 面积</item>
+		<item>建筑</item>
+		<item>建筑 质量</item>
+		<item>拆迁</item>
+		<item>物业</item>
+		<item>小区 物业</item>
+		<item>房屋 格局</item>
+		<item>房屋 设计</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="Taxi" scope="private">
+	<!-- 出租车/的士/拒载/黑车/司机 -->
+	<item>
+	<one-of>
+		<item>出租车</item>
+		<item>的士</item>
+		<item>拒载</item>
+		<item>黑车</item>
+		<item>司机</item>
+	</one-of>
+	</item>
+  </rule>
+
+  
+ </grammar>
+  
+  

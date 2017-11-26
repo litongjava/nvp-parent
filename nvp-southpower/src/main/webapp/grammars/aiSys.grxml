@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--智能应答-->
+    <rule id="vocab">
+        <one-of>
+            <!--服务合同审批完成后，如何调整合同金额-->
+            <item>
+                <tag>SWI_meaning='serviceContract'</tag>
+                <item>
+                    <one-of>
+                        <!--服务合同审批成功后还能修改合同金额吗-->
+                        <item>服务 合同 审批 完成
+                            <one-of>
+                                <item>调整</item>
+                                <item>修改</item>
+                            </one-of>
+                            金额
+                        </item>
+
+                        <!--已经走完流程的服务合同修改调整金额的时候是在哪个菜单下-->
+                        <item>已经
+                            <one-of>
+                                <item>完成</item>
+                                <item>走完</item>
+                            </one-of>
+                            <item>流程 服务 合同 </item>
+                            <one-of>
+                                <item>修改</item>
+                                <item>调整</item>
+                            </one-of>
+                            <item>金额 菜单</item>
+                        </item>
+                        <!--审批流程已经完成后系统还有调整金额的功能吗-->
+                        <item>审批 流程 完成 系统 调整 金额</item>
+                        <!--您好，合同金额录入错误了，帮我退一下-->
+                        <item>合同 金额 录入 错误</item>
+                        <!--您好，我需要修改合同金额，我怎么改？-->
+                        <item>
+                            <item repeat="0-1">你好</item>
+                            <item repeat="0-1">我需要</item>
+                            <item>修改 合同 金额</item>
+                            <item repeat="0-1">审批</item>
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='计量在电能计量设备报废流程中终鉴环节中系统只默认可再利用的原因'</tag>
+                <item>
+                <one-of>
+                    <!--终鉴环节中系统只默认可再利用的原因-->
+                    <item>
+                        终鉴 环节 系统 默认 利用
+                        <item repeat="0-1">原因</item>
+                    </item>
+                </one-of>
+                 </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='计量在资产管理中设备领退管理中的电能计量装置安装领用界面中显示空白'</tag>
+                <item>
+                    <one-of>
+                        <!--计量在电能计量装置安装领用界面中显示空白-->
+                        <item>
+                            计量 电能 装置 界面 空白
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='计量查询资产登记者的方法'</tag>
+                <item>
+                    <one-of>
+                        <!--计量查询资产登记者的方法-->
+                        <item>
+                            计量 查询 资产 登记
+                            <item repeat="0-1">方法</item>
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>p
+                <tag>SWI_meaning='计量领用设备提示输入密码错误的处理办法'</tag>
+                <item>
+                    <one-of>
+                        <!--计量领用设备提示输入密码错误-->
+                        <item>
+                            计量 设备 密码 错误
+                            <item repeat="0-1">办法</item>
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩抄表信息显示多余的示数类型的处理办法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩抄表信息显示多余的示数类型-->
+                        <item>
+                            业扩 信息 多余 示数 类型
+                            <item repeat="0-1">办法</item>
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩用户档案的变比与实际不符的处理办法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩用户档案的变比与实际不符-->
+                        <item>
+                            业扩 档案 变化 实际 处理 办法
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩非新装工单在图形现场勘查环节无图形的处理办法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩非新装工单在图形现场勘查环节无图形-->
+                        <item>
+                            业扩 工单 图形 勘查 图形
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩工单传递提示指定的实体或部门不存在或者已停用的处理方法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩工单传递提示指定的实体或部门不存在或者已停用-->
+                        <item>
+                            业扩 传递 指定 部门 存在 停用
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩工单的图形只显示错误，请单击以获取详细信息的处理办法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩工单的图形只显示错误-->
+                        <item>
+                            业扩 工单 图形 错误
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩工单在现场勘查环节提示发现无效的计量点变压器关系的处理方法'</tag>
+                <item>
+                    <one-of>
+                        <!--提示发现无效的计量点变压器关系-->
+                        <item>
+                            提示 无效 计量 变压器 关系
+                            <item repeat="0-1">方法</item>
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩维护公变台区变压器的GISID的操作'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩维护公变台区变压器的GISID的操作-->
+                        <item>
+                            业扩 公变 变压器 操作
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩合同容量错误变更方法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩合同容量错误变更方法-->
+                        <item>
+                            业扩 容量 错误 方法
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩减容恢复提示根据用户编号检验用户办理减容恢复条件失败的处理办法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩减容恢复提示根据用户编号检验用户办理减容恢复条件失败-->
+                        <item>
+                            业扩 恢复 根据 编号 办理 恢复 失败
+                            <item repeat="0-1">办法</item>
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩修改用户的功率因素、考核标准方法'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩修改用户的功率因素、考核标准方法-->
+                        <item>
+                            业扩 修改 功率 考核 方法
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩三户的名字错误如何更名'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩三户的名字错误如何更名-->
+                        <item>
+                            业扩 名字 错误 更名
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='用户图形报错index:0，Size：0的处理方法'</tag>
+                <item>
+                    <one-of>
+                        <!--用户图形报错index:0，Size：0的处理方法-->
+                        <item>
+                            用户 图形 报错 处理
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩销除重复的公变台区的操作'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩销除重复的公变台区的操作-->
+                        <item>
+                            业扩 重复 公变 台区 操作
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩已销户的用户档案残留变压器信息的原因'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩已销户的用户档案残留变压器信息-->
+                        <item>
+                            业扩 销户 档案 残留 信息
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+            <item>
+                <tag>SWI_meaning='业扩用户销户后收到欠费短信的原因'</tag>
+                <item>
+                    <one-of>
+                        <!--业扩用户销户后收到欠费短信的原因-->
+                        <item>
+                            业扩 销户 欠费 短信
+                            <item repeat="0-1">原因</item>
+                        </item>
+                    </one-of>
+                </item>
+            </item>
+
+        </one-of>
+    </rule>
+</grammar>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN" version="1.0"
+xmlns="http://www.w3.org/2001/06/grammar"
+mode="voice" root="_serviceV">
+
+<meta name="incompletetimeout" content="1500"/>
+<meta name="maxspeechtimeout" content="7000"/>
+  
+  <rule id="_serviceV" scope="public">
+  <one-of>
+	<item><ruleref uri="#Sales"/>
+	<tag>SWI_meaning='Sales'; dm_root='Sales'; app_tag='Sales';</tag></item>
+	<item><ruleref uri="#Post"/>
+	<tag>SWI_meaning='Post'; dm_root='Post'; app_tag='Post';</tag></item>
+    <item><ruleref uri="#OtherServ"/>
+	<tag>SWI_meaning='OtherServ'; dm_root='OtherServ'; app_tag='OtherServ';</tag></item>
+  </one-of>
+  </rule>
+
+  <rule id="Sales" scope="private">
+	<!-- 退换货/退货/换货/退东西/换东西/退款/退钱/退/换/第一个/第一项/一/第一个退换货/一退换货 -->
+	<item>
+	<one-of>
+		<item>退换货</item>
+		<item>退货</item>
+		<item>换货</item>
+		<item>退东西</item>
+		<item>换东西</item>
+		<item>退款</item>
+		<item>退钱</item>
+		<item>退</item>
+		<item>换</item>
+		<item>第一个</item>
+		<item>第一项</item>
+		<item>一</item>
+		<item>第一个 退换货</item>
+		<item>一 退换货</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="Post" scope="private">
+  	<!-- 快递/物流/包裹/邮政快递/快递公司/物流公司/邮件/快递服务/货运/第二个/第二项/第二个快递服务/二快递服务 -->
+	<item>
+	<one-of>
+		<item>快递</item>
+		<item>物流</item>
+		<item>包裹</item>
+		<item>邮政快递</item>
+		<item>快递公司</item>
+		<item>物流公司</item>
+		<item>邮件</item>
+		<item>快递服务</item>
+		<item>货运</item>
+		<item>第二个</item>
+		<item>第二项</item>
+		<item>第二个 快递服务</item>
+		<item>二 快递服务</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="OtherServ" scope="private">
+  	<!-- 都不是/不清楚/其他/其他服务问题/别的问题/不好说/说不好/别的/第三个/第三项/第三个都不是/三都不是 -->
+	<item>
+	<one-of>
+		<item>都不是</item>
+		<item>不清楚</item>
+		<item>其他</item>
+		<item>其他 服务 问题</item>
+		<item>别的 问题</item>
+		<item>不好说</item>
+		<item>说不好</item>
+		<item>别的</item>
+		<item>第三个</item>
+		<item>第三项</item>
+		<item>第三个 都不是</item>
+		<item>三 都不是</item>
+	</one-of>
+	</item>
+  </rule>
+
+  
+ </grammar>
+  
+  

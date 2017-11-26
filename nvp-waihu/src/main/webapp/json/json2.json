@@ -1,0 +1,8 @@
+"model": {
+  "name": "locale_code",
+  "domainLM":{
+  "name": "domainLM_uuid",
+    "url": "URL",
+    "weight": "keyword"
+  }
+}

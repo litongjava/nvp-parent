@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <!--请求数据的地址-->
+    <var name="remote" expr="'http://192.168.28.217:8081/recive/test2.do'"/>
+    <var name="filename" expr="'/dianli/vxml/index.vxml'"/>
+    <!--请求正确后返回执行的formid-->
+    <var name="formidSuccess" expr="'#success'"/>
+    <!--请求错误后返回执行的formid-->
+    <var name="formidFail" expr="'#fail'"/>
+    <var name="qname" expr="''"/>
+
+    <!--<form id="test">-->
+        <!--<block>系统功能正常</block>-->
+    <!--</form>-->
+    <!--常用话术定义-->
+    <var name="mainP" expr="'
+         欢迎拨打广西柳州市供电局智能语音客服系统，请问有什么可以帮您？你可以这样问问题,例如,
+                1,查询电费余额,
+                2,查询停电信息,
+                3,查询阶梯电价,
+                4,查询消费记录,
+                5,其它,'"/>
+    <var name="catchMainP" expr="'我没有理解你的意思,你可以这样问问题,例如
+                    1,查询电费余额,
+                    2,查询停电信息,
+                    3,查询阶梯电价,
+                    4,查询消费记录,
+                    5,其它,'"/>
+    <var name="noRecognition" expr="'不好意思,我没有听懂'"/>
+
+    <form id="main">
+        <field name="main" type="digits?language=zh-CN;length=1">
+            <prompt>
+               <value expr="mainP"/>
+            </prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--<prompt><value expr="main"/></prompt>-->
+                <!--电费余额-->
+                <if cond="main.dm_root=='findPowerRate' || main.dm_root=='matchOne'">
+                    <goto next="#A1"/>
+                </if>
+                <if cond="main==1">
+                    <goto next="#A1"/>
+                </if>
+
+                <!--停电信息-->
+                <if cond="main.dm_root=='findPowerCut'">
+                    <goto next="#A2"/>
+                    <elseif cond="main.dm_root=='matchTwo'"/>
+                    <goto next="#A2"/>
+                </if>
+
+                <if cond="main==2">
+                    <goto next="#A2"/>
+                </if>
+
+                <!--查询阶梯电价-->
+                <if cond="main.dm_root=='findLadderPrice'">
+                    <goto next="#A3"/>
+                    <elseif cond="main.dm_root=='matchThree'"/>
+                    <goto next="#A3"/>
+                </if>
+
+                <if cond="main==3">
+                    <goto next="#A3"/>
+                </if>
+                <!--查询消费记录-->
+                <if cond="main.dm_root=='findConsumeRecord'">
+                    <goto next="#A4"/>
+                    <elseif cond="main.dm_root=='matchFour'"/>
+                    <goto next="#A4"/>
+                </if>
+
+                <if cond="main==4">
+                    <goto next="#A4"/>
+                </if>
+
+                <!--其它-->
+                <if cond="main.dm_root=='otherNext'">
+                    <goto next="#otherNext"/>
+                    <elseif cond="main.dm_root=='matchFive'"/>
+                    <goto next="#otherNext"/>
+                </if>
+
+                <if cond="main==5">
+                    <goto next="#otherNext"/>
+                </if>
+                <prompt>我没有理解你的意思</prompt>
+                <goto next="#main"/>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="catchMainP"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="catchMainP"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+    <var name="otherNextP" expr="'欢迎致电,请选择以下问题,
+         5,故障报修,
+         6,修改密码,
+         7,紧急锁卡,紧急解卡,
+         8,业务办理,
+         9,举报投诉,
+         0,人工服务,'"/>
+
+    <form id="otherNext">
+        <field name="otherNext" type="digits?language=zh-CN;length=1">
+            <prompt><value expr="otherNextP"/></prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--5,故障报修,-->
+                <if cond="otherNext.dm_root=='powerRepair'">
+                    <goto next="#A5"/>
+                </if>
+
+                <if cond="otherNext==5">
+                    <goto next="#A5"/>
+                </if>
+                <!--6,修改密码,-->
+                <if cond="otherNext.dm_root=='changePassword'">
+                    <goto next="#A6"/>
+                </if>
+
+                <if cond="otherNext==6">
+                    <goto next="#A6"/>
+                </if>
+                <!--7,紧急锁卡,紧急解卡,-->
+                <if cond="otherNext.dm_root=='unlockCard' || otherNext.dm_root=='lockCard'">
+                    <goto next="#A7"/>
+                </if>
+
+                <if cond="otherNext==7">
+                    <goto next="#A7"/>
+                </if>
+                <!--8,业务办理,-->
+                <if cond="otherNext.dm_root=='businessManagement'">
+                    <goto next="#A8"/>
+                </if>
+
+                <if cond="otherNext==8">
+                    <goto next="#A8"/>
+                </if>
+                <!--9,举报投诉,-->
+                <if cond="otherNext.dm_root=='reportComplaint'">
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="otherNext==9">
+                    <goto next="#A9"/>
+                </if>
+                <!--0,人工服务,-->
+                <if cond="otherNext.dm_root=='manualService'">
+                    <goto next="#A0"/>
+                </if>
+
+                <if cond="otherNext==0">
+                    <goto next="#A0"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="noRecognition"/>
+                    请选择以下问题,
+                    5,故障报修,
+                    6,修改密码,
+                    7,紧急锁卡,紧急解卡,
+                    8,业务办理,
+                    9,举报投诉,
+                    0,人工服务,
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="noRecognition"/>
+                    请选择以下问题,
+                    5,故障报修,
+                    6,修改密码,
+                    7,紧急锁卡,紧急解卡,
+                    8,业务办理,
+                    9,举报投诉,
+                    0,人工服务,
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--电费余额-->
+    <form id="A1">
+        <field name="A1" type="digits">
+            <prompt>请输入您的8位合同账户并按井号键确认</prompt>
+        </field>
+
+        <filled>
+            <assign name="qname" expr="'A1'"/>
+            <assign name="formidSuccess" expr="'#success'"/>
+            <assign name="formidFail" expr="'#A1'"/>
+            <submit expr="remote" namelist="qname A1 filename formidSuccess formidFail"/>
+        </filled>
+
+        <catch event="noinput nomatch" count="1">
+            <prompt>请输入您的8位合同账户并按井号键确认</prompt>
+        </catch>
+        <catch event="noinput nomatch" count="2">
+            <prompt>请输入您的8位合同账户并按井号键确认</prompt>
+        </catch>
+        <catch event="noinput nomatch" count="3">
+            <prompt>感谢你的致电,再见</prompt>
+            <exit/>
+        </catch>
+    </form>
+
+    <form id="A2">
+        <field name="A2">
+            <prompt>请问你在哪个区</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--柳北区-->
+                <if cond="A2.dm_root='locationLiubei'">
+                    <goto next="#A2_1"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <goto next="#locationNoRecognition"/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="locationNoRecognition">
+        <block>
+            <prompt>本市不存在该区,本市存在下列区1.柳北区,2.建设中,3.建设中,4.建设中</prompt>
+            <goto next="#A2"/>
+        </block>
+    </form>
+
+    <form id="A2_1">
+        <block name="A2_1">
+            <prompt>
+                2014年9月计划停电检修的线路如下：2014年9月1日13点30分到2014年9月1日13点30,柳北区A线路停电一小时,
+                2014年9月10日2点30分到2014年9月10日4点30分,柳北区B线路停电2小时:
+            </prompt>
+            <goto next="#success"/>
+        </block>
+    </form>
+
+    <form id="A2_2">
+        <block name="A2_2">
+            <prompt>
+                本市不存在该区,本市存在下列区1,柳北区,2,建设只中,3,建设中,4,建设中,
+            </prompt>
+            <goto next="#A2"/>
+        </block>
+    </form>
+
+    <!--查询阶梯电价-->
+    <form id="A3">
+        <field name="A3">
+            <prompt>是照明用电还是工业用电</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+
+                <!--照明用电-->
+                <if cond="A3.dm_root=='lightPower'">
+                    <goto next="#A3_1"/>
+                </if>
+                <!--工业用电-->
+                <if cond="A3.dm_root=='industryPower'">
+                    <goto next="#A3_2"/>
+                </if>
+
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt><value expr="noRecognition"/>是照明用电还是工业用电</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt><value expr="noRecognition"/>是照明用电还是工业用电</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--照明用电-->
+    <form id="A3_1">
+        <block name="A3_1">
+
+                广西居民阶梯电价计费周期从“按月执行”调整为“按年执行”
+                照明用电
+                2040度以下,每度5毛2分83厘元,
+                2040度到3240度,包含3240度,每度5毛7分83厘,
+                3240度以上,每度8毛2分83厘元
+
+            <goto next="#success"/>
+        </block>
+    </form>
+
+    <form id="A3_2">
+        <block name="A3_2">
+            <prompt>
+                广西居民阶梯电价计费周期从“按月执行”调整为“按年执行”
+                工业用电
+                2040度以下,每度9毛2分83厘
+                2040_3240,包含3240度,每度9毛7分83厘
+                3240度以上,每度1元2毛2分83厘
+            </prompt>
+            <goto next="#success"/>
+        </block>
+    </form>
+
+
+    <form id="A4">
+        <field name="A4">
+            <prompt>您是要查询今年消费记录还是查询往年消费记录</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--今年消费记录-->
+                <if cond="A4.dm_root=='thisYear'">
+                    <goto next="#A4_1"/>
+                </if>
+                <!--往年消费记录-->
+                <if cond="A4.dm_root='otherYear'">
+                    <goto next="#A4_2"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt><value expr="noRecognition"/>您是要查询今年消费记录还是查询往年消费记录</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt><value expr="noRecognition"/>您是要查询今年消费记录还是查询往年消费记录</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A4_1">
+        <field name="A4_1" type="digits">
+            <prompt>请按键输入月份,以井号键结束</prompt>
+            <filled>
+                <!--1-->
+                <if cond="A4_1==1">
+                    <prompt>你今年一月消费100元</prompt>
+                    <goto next="#success"/>
+                    <else/>
+                    <prompt>对不起,系统建设中,目前只支持输入1</prompt>
+                    <goto next="#A4_1"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>对不起,系统建设中,目前只支持输入1</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>对不起,系统建设中,目前只支持输入1</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+
+    <form id="A4_2">
+        <field name="A4_2" type="digits">
+            <prompt>请输入4位数的年份和两位数的月份,并按#号键结束</prompt>
+            <filled>
+                <if cond="A4_2==201710">
+                    <prompt>你2017年10月消费101元</prompt>
+                    <goto next="#success"/>
+                    <else/>
+                    <prompt>输入错误,请重新输入,目前只支持输入201710</prompt>
+                    <goto next="#A4_2"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>对不起,系统建设中,目前只支持输入201710</prompt>
+
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>对不起,系统建设中,目前只支持输入201710</prompt>
+
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--5.故障报修-->
+    <form id="A5">
+        <field name="A5">
+            <prompt>请问你是要故障报修吗</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <!--柳北区-->
+            <filled>
+                <!--是-->
+                <if cond="A5.dm_root=='powerRepairYes'">
+                    <goto next="#A5_1"/>
+                </if>
+                <!--不是-->
+                <if cond="A5.dm_root=='powerRepairNo'">
+                    <goto next="#success"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt><value expr="noRecognition"/>
+                    请问你是要故障报修吗</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt><value expr="noRecognition"/>请问你是要故障报修吗</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--请问你在哪个区-->
+
+    <form id="A5_1">
+        <field name="A5_1">
+            <prompt>请问你在哪个区？</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--柳北区-->
+                <if cond="A5_1.dm_root='locationLiubei'">
+                    <!--转柳北区人工-->
+                    <prompt>正在为您转接柳北区人工</prompt>
+                    <goto next="#transferMan"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>本市不存在该区,本市存在下列区1.柳北区,2.建设只中,3.建设中,4.建设中,请问你在哪个区</prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>本市不存在该区,本市存在下列区1.柳北区,2.建设只中,3.建设中,4.建设中,请问你在哪个区</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>感谢你的致电</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A6">
+        <field name="A6" type="digits">
+            <prompt>请输入你的八位卡号,按井号键结束</prompt>
+        </field>
+        <filled>
+            <if cond="A6==12345678">
+                <goto next="#A6_1"/>
+                <else/>
+                <prompt>卡号输入错误,目前只支持输入1.2.3.4.5.6.7.8</prompt>
+                <goto next="#A6"/>
+            </if>
+        </filled>
+        <catch event="noinput nomatch" count="1">
+            <prompt>对不起,系统建设中,目前只支持输入12345678,请输入你的卡号,并按井号键结束</prompt>
+        </catch>
+        <catch event="noinput nomatch" count="2">
+            <prompt>对不起,系统建设中,目前只支持输入123456,请重新输入您的卡号,并按井号键结束</prompt>
+        </catch>
+        <catch event="noinput nomatch" count="3">
+            <prompt>感谢你的致电,再见</prompt>
+            <exit/>
+        </catch>
+    </form>
+
+    <form id="A6_1">
+        <field name="A6_1" type="digits">
+            <prompt>请输入旧密码,并按井号键结束</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <if cond="A6_1==12345678">
+                    <goto next="#A6_1_1"/>
+                    <else/>
+                    <prompt>对不起,你输入的密码不正确,请输入旧密码按井号键结束,旧密码是12345678</prompt>
+                    <goto next="#A6_1"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>对不起,你输入的密码不正确,请输入旧密码按井号键结束,旧密码是12345678</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>对不起,你输入的密码不正确,请输入旧密码按井号键结束,旧密码是12345678</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A6_1_1">
+        <field name="A6_1_1" type="digits">
+            <prompt>密码输入正确,请输入新密码按井号键结束</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <if cond="A6_1_1==12345678">
+                    <goto next="#A6_1_1_1"/>
+                    <else/>
+                    <prompt>密码输入正确,请输入新密码按井号键结束</prompt>
+                    <goto next="#A6_1_1"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>密码输入正确,请输入新密码按井号键结束</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>密码输入正确,请输入新密码按井号键结束</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A6_1_1_1">
+        <field name="A6_1_1_1" type="digits">
+            <prompt>请再次输入密码并按井号键确认</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <if cond="A6_1_1_1==12345678">
+                    <prompt>密码修改成功</prompt>
+                    <goto next="#success"/>\
+                    <else/>
+                    <goto next="#6_1_1_1"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>对不起,你输入的确认密码不相符,请重新输入</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>对不起,你输入的确认密码不相符,请重新输入</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A7">
+        <field name="A7">
+            <prompt>请问你是要锁卡,还是要解卡</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--锁卡-->
+                <if cond="A7.dm_root=='lockCard'">
+                    <goto next="#A7_1"/>
+                </if>
+                <!--解卡-->
+                <if cond="A7.dm_root=='unlockCard'">
+                    <goto next="#A7_2"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>请问你是要锁卡,还是要解卡</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>请问你是要锁卡,还是要解卡</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A7_1">
+        <field name="A7_1" type="digits">
+            <prompt>你正在办理锁卡业务,请输入卡号,并按井号键确认</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <if cond="A7_1==12345678">
+                    <goto next="#A7_1_1"/>
+                    <else/>
+                    <prompt>输入有误</prompt>
+                    <goto next="#A7_1"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>请问你是要锁卡,还是用解卡</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>请问你是要锁卡,还是用解卡</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A7_1_1">
+        <field name="A7_1_1" type="digits">
+            <prompt>请输入密码并按井号键确认</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <if cond="A7_1_1=='12345678'">
+                    <prompt>锁卡成功</prompt>
+                    <goto next="#success"/>
+                    <else/>
+                    <prompt>对不起,系统建设中,目前只支持输入12345678</prompt>
+                    <goto next="#A7_1_1"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>对不起,你输入的密码不正确,请重新输入</prompt>
+            </catch>
+            <catch event="noinput nomatch">
+                <prompt>对不起,你输入的密码不正确,请重新输入</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A7_2">
+        <field name="A7_2" type="digits">
+            <prompt>你正在办理解卡业务,请输入卡号,并按井号键确认</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <if cond="A7_2==12345678">
+                    <goto next="#A7_2_1"/>
+                    <else/>
+                    <prompt>对不起,系统建设中,目前只支持输入12345678</prompt>
+                    <goto next="#A7_2"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>对不起,系统建设中,目前只支持输入12345678</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>对不起,系统建设中,目前只支持输入12345678</prompt>
+            </catch>
+            <catch event="noinput nomatch">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A7_2_1">
+        <field name="A7_2_1" type="digits">
+            <prompt>请输入密码并按井号键确认</prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <if cond="A7_2_1==12345678">
+                    <prompt>解卡成功</prompt>
+                    <goto next="#success"/>
+                    <else/>
+                    <prompt>对不起,你输入的密码不正确,请重新输入</prompt>
+                    <goto next="#A7_2_1"/>
+                </if>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>对不起,系统建设中,目前只支持输入12345678</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="2">
+                <prompt>对不起,系统建设中,目前只支持输入12345678</prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <form id="A8">
+        <block name="A8">
+            <prompt>业务建设中,目前还没有对外开放,请选择其它服务</prompt>
+            <goto next="#success"/>
+        </block>
+    </form>
+    <form id="A9">
+        <block name="A9">
+            <goto next="#transferMan"/>
+        </block>
+    </form>
+
+    <form id="A0">
+        <block name="A0">
+            <goto next="#transferMan"/>
+        </block>
+    </form>
+
+    <var name="successP" expr="'请问您还需要办理什么业务？
+                    1,查询电费余额,
+                    2,查询计划停电信息,
+                    3,查询阶梯电价,
+                    4,查询消费记录,
+                    5,故障报修,
+                    6,修改密码,
+                    7,紧急锁卡,紧急解卡,
+                    8,业务办理,
+                    9,举报投诉,
+                    0,人工服务,'"/>
+    <var name="catchSuccessP" expr="'我没有理解你的意思,你可以这样问问题,
+                    1,查询电费余额,
+                    2,查询计划停电信息,
+                    3,查询阶梯电价,
+                    4,查询消费记录,
+                    5,故障报修,
+                    6,修改密码,
+                    7,紧急锁卡,紧急解卡,
+                    8,业务办理,
+                    9,举报投诉,
+                    0,人工服务'"/>
+
+    <form id="success">
+        <field name="success" type="digits?language=zh-CN;length=1">
+            <prompt><value expr="successP"/></prompt>
+            <grammar src="../grammars/query1.grxml"/>
+            <filled>
+                <!--电费余额-->
+                <if cond="success.dm_root=='findPowerRate' || success.dm_root=='matchOne'">
+                    <goto next="#A1"/>
+                </if>
+                <if cond="success==1">
+                    <goto next="#A1"/>
+                </if>
+
+                <!--停电信息-->
+                <if cond="success.dm_root=='findPowerCut'">
+                    <goto next="#A2"/>
+                    <elseif cond="success.dm_root=='matchTwo'"/>
+                    <goto next="#A2"/>
+                </if>
+
+                <if cond="success==2">
+                    <goto next="#A2"/>
+                </if>
+
+                <!--查询阶梯电价-->
+                <if cond="success.dm_root=='findLadderPrice'">
+                    <goto next="#A3"/>
+                    <elseif cond="success.dm_root=='matchThree'"/>
+                    <goto next="#A3"/>
+                </if>
+
+                <if cond="success==3">
+                    <goto next="#A3"/>
+                </if>
+                <!--查询消费记录-->
+                <if cond="success.dm_root=='findConsumeRecord'">
+                    <goto next="#A4"/>
+                    <elseif cond="success.dm_root=='matchFour'"/>
+                    <goto next="#A4"/>
+                </if>
+
+                <if cond="success==4">
+                    <goto next="#A4"/>
+                </if>
+
+                <!--5,故障报修,-->
+                <if cond="success.dm_root=='powerRepair' ||success.dm_root=='matchFive'">
+                    <goto next="#A5"/>
+                </if>
+
+                <if cond="success==5">
+                    <goto next="#A5"/>
+                </if>
+                <!--6,修改密码,-->
+                <if cond="success.dm_root=='changePassword' || success.dm_root=='mcatchSix'">
+                    <goto next="#A6"/>
+                </if>
+
+                <if cond="success==6">
+                    <goto next="#A6"/>
+                </if>
+                <!--7,紧急锁卡,紧急解卡,-->
+                <if cond="success.dm_root=='unlockCard' || success.dm_root=='lockCard' || success.dm_root=='matchSeven'">
+                    <goto next="#A7"/>
+                </if>
+
+                <if cond="success==7">
+                    <goto next="#A7"/>
+                </if>
+                <!--8,业务办理,-->
+                <if cond="success.dm_root=='businessManagement' || success.dm_root=='matchEight'">
+                    <goto next="#A8"/>
+                </if>
+
+                <if cond="success==8">
+                    <goto next="#A8"/>
+                </if>
+                <!--9,举报投诉,-->
+                <if cond="success.dm_root=='reportComplaint' || success.dm_root=='matchNine'">
+                    <goto next="#A9"/>
+                </if>
+
+                <if cond="success==9">
+                    <goto next="#A9"/>
+                </if>
+                <!--0,人工服务,-->
+                <if cond="success.dm_root=='manualService'|| success.dm_root=='matchZero'">
+                    <goto next="#A0"/>
+                </if>
+
+                <if cond="success==0">
+                    <goto next="#A0"/>
+                </if>
+
+                <if cond="success.dm_root=='end'">
+                    <goto next="#end"/>
+                </if>
+                <prompt>我没有理解你的意思</prompt>
+                <goto next="#success"/>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="catchSuccessP"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="catchSuccessP"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>感谢你的致电,再见</prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+
+    <!--转人工-->
+    <form id="transferMan">
+        <transfer name="call" dest="4" bridge="false">
+            <prompt>您的电话正在被转接到话务员，请稍候…</prompt>
+            <filled>
+                <if cond="call == noanswer">
+                    <prompt>对不起，话务员无法接听您的电话，请稍后再试。谢谢，再见！</prompt>
+                    <disconnect/>
+                    <exit/>
+                </if>
+            </filled>
+        </transfer>
+    </form>
+
+    <form id="end">
+        <block>
+            感谢你的致电,再见
+            <exit/>
+        </block>
+    </form>
+</vxml>

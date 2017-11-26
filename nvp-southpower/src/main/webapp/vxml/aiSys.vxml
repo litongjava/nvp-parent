@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+    <!--开始定义请求数据变量-->
+    <!--请求数据的地址-->
+    <var name="remote" expr="'http://192.168.28.177:8081/recive/test2.do'"/>
+    <var name="filename" expr="'/nvp-baozhang/vxml/'"/>
+    <!--请求正确后返回执行的formid-->
+    <var name="formidSuccess" expr="'success.vxml#'"/>
+    <!--请求错误后返回执行的formid-->
+    <var name="formidFail" expr="'#fail'"/>
+    <var name="qname" expr="''"/>
+    <!--结束定义请求数据变量-->
+    <!--请求数据变量定义结束-->
+    <!--输入无效话术-->
+    <var name="inputInvalid" expr="'您的输入无效'"/>
+    <!--输入错误时的话术-->
+    <var name="inputError" expr="'您的意思我没有太理解，'"/>
+    <!--结束话术-->
+    <var name="endP" expr="'感谢您的致电,再见'"/>
+    <!--智能应答-->
+    <var name="A2P" expr="'请直接说出您的问题,例如,
+                1.服务合同审批完成后，如何调整合同金额'"/>
+    <form id="A2">
+        <field name="input">
+            <prompt>
+                <value expr="A2P"/>
+            </prompt>
+            <!--智能应答匹配语法-->
+            <grammar src="../grammars/aiSys.grxml"/>
+            <grammar src="../grammars/aiSys2.grxml"/>
+            <filled>
+                <if cond="input.dm_root=='serviceContract'">
+                    <prompt>通过合同变更功能，选择需要变更的合同，走审批流程，审批完成后合同金额就调整完成了。</prompt>
+                    <goto next="success.vxml#success"/>
+                </if>
+                <assign name="qname" expr="'input.dm_root'"/>
+                <assign name="formidSuccess" expr="'success.vxml#success'"/>
+                <assign name="formidFail" expr="'#A2'"/>
+                <submit expr="remote" namelist="qname input.dm_root filename formidSuccess formidFail"/>
+                <!--<assign name="qname" expr="'input.dm_root'"/>
+                <assign name="formidSuccess" expr="'success.vxml#success'"/>
+                <assign name="formidFail" expr="'#A2'"/>
+                <submit expr="remote" namelist="qname input.dm_root filename formidSuccess formidFail"/>-->
+                <prompt>
+                    <value expr="inputInvalid"/>
+                </prompt>
+                <goto next="#A2"/>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+</vxml>

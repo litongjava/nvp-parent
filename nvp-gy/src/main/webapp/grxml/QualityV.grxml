@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN" version="1.0"
+xmlns="http://www.w3.org/2001/06/grammar"
+mode="voice" root="_qualityV">
+
+<meta name="incompletetimeout" content="1500"/>
+<meta name="maxspeechtimeout" content="7000"/>
+  
+  <rule id="_qualityV" scope="public">
+  <one-of>
+	<item><ruleref uri="fallback1.grxml#FoodMed"/>
+	<tag>SWI_meaning='FoodMed'; dm_root='FoodMed'; app_tag='FoodMed';</tag></item>
+	<item><ruleref uri="#Cigar"/>
+	<tag>SWI_meaning='Cigar'; dm_root='Cigar'; app_tag='Cigar';</tag></item>
+	<item><ruleref uri="#OtherProd"/>
+	<tag>SWI_meaning='OtherProd'; dm_root='OtherProd'; app_tag='OtherProd';</tag></item>
+    <item><ruleref uri="#QualityID"/>
+	<tag>SWI_meaning='QualityID'; dm_root='QualityID'; app_tag='QualityID';</tag></item>
+  </one-of>
+  </rule>
+
+  <rule id="Cigar" scope="private">
+	<!-- 烟草/香烟/卷烟/假烟/烟证/第四个/四/四烟草 -->
+	<!-- 烟草/香烟/卷烟/烟/二/第二个/第二项/第二个烟草/二烟草 -->
+	<item>
+	<one-of>
+		<item>烟草</item>
+		<item>香烟</item>
+		<item>卷烟</item>
+		<item>假烟</item>
+		<item>烟证</item>
+		<item>烟</item>
+		<item>二</item>
+		<item>第二个</item>
+		<item>第二项</item>
+		<item>第二个 烟草</item>
+		<item>二 烟草</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="OtherProd" scope="private">
+	<!-- 其他商品/其他/别的/都不是/不知道/不清楚/说不好/三/第三个/第三项/三其他商品/第三个其他商品 -->
+	<item>
+	<one-of>
+		<item>其他 商品</item>
+		<item>其他</item>
+		<item>别的</item>
+		<item>都不是</item>
+		<item>不知道</item>
+		<item>不清楚</item>
+		<item>说不好</item>
+		<item>三</item>
+		<item>第三个</item>
+		<item>第三项</item>
+		<item>三 其他 商品</item>
+		<item>第三个 其他 商品</item>
+	</one-of>
+	</item>
+  </rule>
+
+  <rule id="QualityID" scope="private">
+	<!-- 质量鉴定/鉴定质量/质量检测/质量检查/检测/测试/质量好不好/鉴定真假/是不是正品 -->
+	<!-- 质量鉴定/鉴定质量/鉴定/检查质量/判断真假真假/第四个/四/四质量鉴定 -->
+	<item>
+	<one-of>
+		<item>质量 鉴定</item>
+		<item>鉴定 质量</item>
+		<item>质量 检测</item>
+		<item>质量 检查</item>
+		<item>检测</item>
+		<item>测试</item>
+		<item>质量 好不好</item>
+		<item>鉴定 真假</item>
+		<item>是不是 正品</item>
+		<item>鉴定</item>
+		<item>检查 质量</item>
+		<item>判断 真假</item>
+		<item>真假</item>
+		<item>第四个</item>
+		<item>四</item>
+		<item>四 质量 鉴定</item>
+	</one-of>
+	</item>
+  </rule>
+
+  
+ </grammar>
+  
+  

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0" root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                        var disallow_arr = SWI_vars.disallow.split('^');
+                        disallowList = SWI_vars.disallow;
+                        for (var i=0; i &lt; disallow_arr.length; i++) {
+                            if (vocab.SWI_meaning == disallow_arr[i]) {
+                                SWI_disallow=1;
+                                break;
+                            }
+                        }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                        dm_root=vocab.SWI_meaning;
+                        grammar_version='20170505';
+                        MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="vocab" scope="public">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='matchZero'</tag>
+                <one-of>
+                    <item>零</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='matchOne'</tag>
+                <one-of>
+                    <item>一</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchTwo'</tag>
+                <one-of>
+                    <item>二</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchThree'</tag>
+                <one-of>
+                    <item>三</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchFour'</tag>
+                <one-of>
+                    <item>四</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchFive'</tag>
+                <one-of>
+                    <item>五</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchSix'</tag>
+                <one-of>
+                    <item>六</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchSeven'</tag>
+                <one-of>
+                    <item>七</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchEight'</tag>
+                <one-of>
+                    <item>八</item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='matchNine'</tag>
+                <one-of>
+                    <item>九</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='findPowerRate'</tag>
+                <one-of>
+                    <!--电费余额-->
+
+                    <item>
+                        <item repeat="0-1">查询</item>
+                        电费余额</item>
+                    <item>卡里面还剩多少钱</item>
+                    <item>余额</item>
+                    <item>一</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='findPowerCut'</tag>
+                <one-of>
+                    <!--我想查一下宝安区的计划停电信息-->
+                    <item>查询停电信息</item>
+                    <item>停电</item>
+                    <item>怎么停电了</item>
+                    <item>计划停电</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='findLadderPrice'</tag>
+                <one-of>
+                    <item>查询阶梯电价</item>
+                    <item>阶梯</item>
+                    <item>阶梯电价</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='lightPower'</tag>
+                <one-of>
+                    <item>照明用电</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='industryPower'</tag>
+                <one-of>
+                    <item>工业用电</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='findConsumeRecord'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">查询</item>
+                        消费记录</item>
+                    <item>消费记录</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='thisYear'</tag>
+                <one-of>
+                    <item>今年消费记录</item>
+                    <item>今年</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='otherYear'</tag>
+                <one-of>
+                    <item>往年消费记录</item>
+                    <item>往年</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='otherNext'</tag>
+                <one-of>
+                    <!--其它-->
+                    <item>其它</item>
+                    <item>都不是</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='powerRepair'</tag>
+                <one-of>
+                    <item>故障报修</item>
+                    <item>我们家的电表坏了</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='powerRepairYes'</tag>
+                <one-of>
+                    <item>是</item>
+                    <item>是的</item>
+                    <item>我是要故障报修</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='powerRepairNo'</tag>
+                <one-of>
+                    <item>不是</item>
+                    <item>我不是要故障报修</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='changePassword'</tag>
+                <one-of>
+                    <item>修改密码</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='lockCard'</tag>
+                <one-of>
+                    <item>锁卡</item>
+                    <item>我要锁卡</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='unlockCard'</tag>
+                <one-of>
+                    <item>解卡</item>
+                    <item>我要解卡</item>
+                </one-of>
+            </item>
+
+
+
+            <item>
+                <tag>SWI_meaning='businessManagement'</tag>
+                <one-of>
+                    <item>业务办理</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='manualService'</tag>
+                <one-of>
+                    <item>人工服务</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='reportComplaint'</tag>
+                <one-of>
+                    <item>举报投诉</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='end'</tag>
+                <one-of>
+                    <!--看一下我的电费情况-->
+                    <item>没有</item>
+                    <item>不需要</item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

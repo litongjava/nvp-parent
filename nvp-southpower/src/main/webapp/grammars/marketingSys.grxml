@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='marketingSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        营 销
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <!--你好，我想催一下营销的一张单-->
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        催 营销 张单
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        工单 归档 录错 修改
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        工单 删除
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        电子发票 冲红
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        信息 工单 节点
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        电子 发票 开票 对不上
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        现场勘察单
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        报废 工单 服务器 异常
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        权限 南网 营销 系统
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        营销 收据 打印
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        导出 电费 数据
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        营业厅 扣费 营销 银行
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        临时用电客户 电表
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        收费信息发票 普通发票
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        低保户 看不到 信息
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        抢修单 停电模拟 影响数
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        九 五 五 九 八 短信 问题
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        虚拟表 销户
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        支付宝 缴费 营销 欠费
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        收费 重复
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        结算户 开 电子发票
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        结算户 混乱 修改
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        修改 付款 更新 系统
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        工单 班主 维护
+                    </item>
+                    <item>
+                        <item repeat="0-1">你好</item>
+                        抄表 迁移
+                    </item>
+                    <item>
+                        发票 查询 不到
+                    </item>
+                    <item>
+                        查询 欠费
+                    </item>
+                    <item>
+                        业扩 触发 手动 功能
+                    </item>
+                    <item>
+                        客户 传递 提交
+                    </item>
+                    <item>
+                        周期 计划 户号 工单
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

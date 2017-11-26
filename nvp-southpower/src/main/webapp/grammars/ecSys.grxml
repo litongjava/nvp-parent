@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入物资系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='ecSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        电子商务
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        电商 登录 显示 失败
+                    </item>
+                    <item>
+                        采购 编号 空
+                    </item>
+                    <item>
+                        选择 单位 南方 电网
+                    </item>
+                    <item>
+                        招标 组长 选不到 代理
+                    </item>
+                    <item>
+                        闭网 合同 不 了
+                    </item>
+                    <item>
+                        浏览器 刚起 合同
+                    </item>
+                    <item>
+                        项目 改 招标 方式
+                    </item>
+                    <item>
+                        内部 文件 附件 审核 依据
+                    </item>
+                    <item>
+                        详细 分数 矛盾 修改
+                    </item>
+                    <item>
+                        招标 看不到 风险 管控表
+                    </item>
+                    <item>
+                        电子 商务 申请 流程 变更
+                    </item>
+                    <item>
+                        流转 没有 中心 人员
+                    </item>
+                    <item>
+                        进入 电商 定标 流程
+                    </item>
+                    <item>
+                        电子 招标 方式 部长 修改
+                    </item>
+                    <item>
+                        通过 电商 竞标 流程
+                    </item>
+                    <item>
+                        盖章 合同 文本 空白
+                    </item>
+                    <item>
+                        电子 供应商 审核 财务 系统 信息
+                    </item>
+                    <item>
+                        电商 方案 清空 恢复
+                    </item>
+                    <item>
+                        电商 项目 流程 错 删除
+                    </item>
+                    <item>
+                        电商 审批 权限 授权
+                    </item>
+                    <item>
+                        如何 取回 定标 流程
+                    </item>
+                    <item>
+                        如何 修改 招标 方式
+                    </item>
+                    <item>
+                        竞标 流程 操作
+                    </item>
+                    <item>
+                        供应商 审核 财务 同步
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

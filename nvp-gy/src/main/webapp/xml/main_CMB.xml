@@ -1,0 +1,1610 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+	 <property name="maxspeechtimeout" value="20s" />
+	 <property name="sensitivity" value="0.80" /> 
+	 <property name="incompletetimeout" value="1.5s" />
+	 <property name="confidencelevel" value="0.02" />
+	 <property name="swirec.swiep_in_prompt_sensitivity_percent" value="20" />
+	 <var name="tempvalue" expr="''"/>
+	 <var name="tempvalue_error" expr="''"/>
+	 <var name="threshold_val" expr="'0'"/><!-- 置信度分数 -->
+	 <var name="noinput_count" expr="'0'"/>
+	 <var name="nomacth_count" expr="'0'"/>
+	 <var name="disambig_count" expr="0"/>
+	 <var name="fault_count" expr="0"/>
+	 <var name="tempFaultCount" expr="0"/>
+	 <script>
+		//相似度比较
+		function needConfirm(param){
+			param = parseFloat(param);
+			if(param &gt;= 0.84)
+				return 1;
+			else
+				return 0;
+		}
+	 </script>
+	
+	<script>
+		//异常信息处理
+		function errorReply(param){
+			if(param != 'BillCheck' &amp;&amp; param != 'CurrentBill' &amp;&amp; param != 'UnpaidBill' &amp;&amp; param != 'CreditCheck' &amp;&amp; param != 'CreditLimitChange' &amp;&amp; param != 'CreditFixedChange' &amp;&amp; param != 'CreditTempChange' &amp;&amp; param != 'InquiryPW' &amp;&amp; param != 'TradePW' &amp;&amp; param != 'CardLostReport' &amp;&amp; param != 'CardApplicationInqury' &amp;&amp; param != 'CashWithdrawFee' &amp;&amp; param != 'PointsRule' &amp;&amp; param != 'YoungCard' &amp;&amp; param != 'InstallmentFee' &amp;&amp; param != 'AcceCardIntro' &amp;&amp; param != 'InquiryPWIntro' &amp;&amp; param != 'BillDate' &amp;&amp; param != 'PenaltyIntro' &amp;&amp; param != 'Complaints' &amp;&amp; param != 'Operator' &amp;&amp; param != 'unknown' &amp;&amp; param != 'AcceCardApply')
+				return 10;	
+			else
+				return 11;
+		}
+	 </script>
+
+	 <!-- 首次进入招商银行-->
+	 <form id="main">
+		<block>
+			<!-- <prompt>欢迎进入招商银行，请问有什么可以帮您！</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB1D1.wav"/>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D1.wav"/>
+			<goto next="#mains"/>
+		</block>
+	 </form>
+
+	<form id="mains">
+		<field name="mains">
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/cmb_chinese.gram"/>
+			<filled>
+				<assign name="threshold_val" expr="mains$.interpretation.similarity"/>
+				<if cond="tempvalue!=mains$.interpretation.command">
+					<assign name="disambig_count" expr="0"/>
+				</if>
+				<assign name="tempFaultCount" expr="0"/>
+				<assign name="tempvalue" expr="mains$.interpretation.command"/>
+				
+				<assign name="threshold_val" expr="needConfirm(mains$.interpretation.similarity)"/>
+
+				
+				<assign name="tempvalue_error" expr="errorReply(tempvalue)"/>
+
+				<if cond="tempvalue_error==10">
+				<assign name="fault_count" expr="fault_count+1"/>
+					<if cond="fault_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="fault_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D2.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+				
+
+				<if cond="mains$.interpretation.command=='BillCheck'"><!-- 查账 -->
+					<if cond="threshold_val==0">
+						<goto next="#cz_confirm"/>
+					</if>
+					<if cond="threshold_val==1"> <!-- 不需要消崎 -->
+						<!-- <prompt>好的，马上为您转入查账业务，请稍候。</prompt> -->
+						<goto next="#cz"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='CurrentBill'"><!-- 查询本期账单 -->
+					<if cond="threshold_val==0">
+						<goto next="#bqzd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#bqzd"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='UnpaidBill'"><!-- 查询未出账单 -->
+					<if cond="threshold_val==0">
+						<goto next="#wczd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#wczd"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='CreditCheck'"><!-- 查询可用额度 -->
+					<if cond="threshold_val==0">
+						<goto next="#kyedcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#kyedcx"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='CreditLimitChange'"><!-- 额度调整 -->
+					<if cond="threshold_val==0">
+						<goto next="#edtz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#edtz"/>
+					</if>
+				</if>
+				
+				<if cond="mains$.interpretation.command=='CreditFixedChange'"><!-- 固定额度调整 -->
+					<if cond="threshold_val==0">
+						<goto next="#gdedtz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#gdedtz"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='CreditTempChange'"><!-- CreditTempChange -->
+					<if cond="threshold_val==0">
+						<goto next="#lsedtz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#lsedtz"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='InquiryPW'"><!-- 查询密码业务 -->
+					<if cond="threshold_val==0">
+						<goto next="#cxmm_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#cxmm"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='TradePW'"><!-- 交易密码业务 -->
+					<if cond="threshold_val==0">
+						<goto next="#jymm_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#jymm"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='CardLostReport'"><!-- 挂失 -->
+					<if cond="threshold_val==0">
+						<goto next="#gs_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#gs"/>
+					</if>
+				</if>
+			
+				<if cond="mains$.interpretation.command=='CardApplicationInqury'"><!-- 新户办卡 -->
+					<if cond="threshold_val==0">
+						<goto next="#xhbk_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#xhbk"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='CashWithdrawFee'"> <!-- 取现收费标准 -->
+					<if cond="threshold_val==0">
+						<goto next="#qxsfbz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#qxsfbz"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='PointsRule'"><!-- 积分累计规则 -->
+					<if cond="threshold_val==0">
+						<goto next="#jfljgz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#jfljgz"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='YoungCard'"><!-- YOUNG卡首刷活动 -->
+					<if cond="threshold_val==0">
+						<goto next="#youngkss_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#youngkss"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='InstallmentFee'"><!-- 账单分期手续费 -->
+					<if cond="threshold_val==0">
+						<goto next="#zdfqsxf_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#zdfqsxf"/>
+					</if>
+				</if>
+				
+			
+				<if cond="mains$.interpretation.command=='AcceCardIntro'"><!-- 附属卡介绍 -->
+					<if cond="threshold_val==0">
+						<goto next="#fskjs_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#fskjs"/>
+					</if>
+				</if>
+
+				<if cond="mains$.interpretation.command=='AcceCardApply'"><!-- 附属卡办理 -->
+					<if cond="threshold_val==0">
+						<goto next="#fskbl_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#fskbl"/>
+					</if>
+				</if>
+				
+				<if cond="mains$.interpretation.command=='PenaltyIntro'"><!-- 滞纳金含义 -->
+					<if cond="threshold_val==0">
+						<goto next="#znjhy_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#znjhy"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='InquiryPWIntro'"><!-- 查询密码含义 -->
+					<if cond="threshold_val==0">
+						<goto next="#cxmmhy_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#cxmmhy"/>
+					</if>
+				</if>
+				
+			
+				 <if cond="mains$.interpretation.command=='BillDate'"> 
+					<if cond="threshold_val==0">
+						<goto next="#zdhkr_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#zdhkr"/>
+					</if>
+				</if>
+				<if cond="mains$.interpretation.command=='Operator'"><!-- 人工 -->					
+						<goto next="#rgfw2"/>					
+				</if>
+				<if cond="mains$.interpretation.command=='Complaints'"><!-- 投诉 -->					
+						<goto next="#rgfw3"/>					
+				</if>
+				<if cond="mains$.interpretation.command=='unknown'">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<if cond="fault_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="fault_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D2.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+
+		<nomatch count="1">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D2.wav"/><!--查一下账单或者调整额度-->
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+		<nomatch count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D2.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+
+		<noinput count="1"> 
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>抱歉，没有听到您的声音，请问您要办理什么业务呢？比如您可以说查一下账单或者调整额度 。。</prompt> -->
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D3.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>	
+	     </noinput>
+		<noinput count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>抱歉，没有听到您的声音，请问您要办理什么业务呢？比如您可以说查一下账单或者调整额度 。</prompt>-->
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D3.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>
+	     </noinput>
+	</form>
+
+	 <!-- 查账消崎 -->
+	 <form id="cz_confirm">
+		<field name="cz_confirm">
+			<!-- <prompt>查账，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D1.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="cz_confirm$.interpretation.command=='Operator'"><!-- Operator -->					
+						<goto next="#rgfw2"/>					
+				</if>
+				<if cond="cz_confirm$.interpretation.command=='yes'">
+					<goto next="#cz"/>
+				</if>
+				<if cond="cz_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>		
+			</filled>
+		</field>
+
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D2.wav"/><!--您是要查账，对吗？请说正确或者错误。-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+
+		</form>
+	<!-- 查账 -->
+	 <form id="cz">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D1.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+
+		 <!-- 本期账单消歧 -->
+	 <form id="bqzd_confirm">
+		<field name="bqzd_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D3.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="bqzd_confirm$.interpretation.command=='Operator'"><!-- Operator -->					
+						<goto next="#rgfw2"/>					
+				</if>				
+				<if cond="bqzd_confirm$.interpretation.command=='yes'">
+					<goto next="#bqzd"/>
+				</if>
+				<if cond="bqzd_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D4.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 本期账单 -->
+	 <form id="bqzd">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D2.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	  <!-- 未出账单消歧 -->
+	 <form id="wczd_confirm">
+		<field name="wczd_confirm">
+			<!-- <prompt> 查询未出账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D5.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="wczd_confirm$.interpretation.command=='Operator'"><!-- Operator -->					
+						<goto next="#rgfw2"/>					
+				</if>
+				<if cond="wczd_confirm$.interpretation.command=='yes'">
+					<goto next="#wczd"/>
+				</if>
+				<if cond="wczd_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D6.wav"/><!--您是要查询未出账单，对吗？请说正确或者错误。-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 未出账单 -->
+	 <form id="wczd">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D3.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	 <!-- 可用额度查询消歧 -->
+	 <form id="kyedcx_confirm">
+		<field name="kyedcx_confirm">
+			<!-- <prompt> 查询可用额度，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D7.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="kyedcx_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="kyedcx_confirm$.interpretation.command=='yes'">
+					<goto next="#kyedcx"/>
+				</if>
+				<if cond="kyedcx_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D8.wav"/><!--您是要查询可用额度，对吗？请说正确或者错误。-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 可用额度查询 -->
+	 <form id="kyedcx">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D4.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	 <!-- 额度调整 消歧 -->
+	 <form id="edtz_confirm">
+		<field name="edtz_confirm">
+			<!-- <prompt>额度调整 ，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D9.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="edtz_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="edtz_confirm$.interpretation.command=='yes'">
+					<goto next="#edtz"/>
+				</if>
+				<if cond="edtz_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D10.wav"/><!-- 您是要调整额度，对吗？请说正确或者错误。 -->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 额度调整 -->
+	 <form id="edtz">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D5.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	  <!-- 固定额度调整消歧 -->
+	 <form id="gdedtz_confirm">
+		<field name="gdedtz_confirm">
+			<!-- <prompt>固定额度调整，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D11.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="gdedtz_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="gdedtz_confirm$.interpretation.command=='yes'">
+					<goto next="#gdedtz"/>
+				</if>
+				<if cond="gdedtz_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D12.wav"/><!--  您是要调整固定额度，对吗？请说正确或者错误。 -->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 固定额度调整 -->
+	 <form id="gdedtz">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D6.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+	
+	 <!-- CreditTempChange消歧 -->
+	 <form id="lsedtz_confirm">
+		<field name="lsedtz_confirm">
+			<!-- <prompt> 调整临时额度，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D13.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="lsedtz_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="lsedtz_confirm$.interpretation.command=='yes'">
+					<goto next="#lsedtz"/>
+				</if>
+				<if cond="lsedtz_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D14.wav"/><!-- 您是要调整临时额度，对吗？请说正确或者错误。 -->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- CreditTempChange -->
+	 <form id="lsedtz">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D7.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	  <!-- 查询密码消歧 -->
+	 <form id="cxmm_confirm">
+		<field name="cxmm_confirm">
+			<!-- <prompt> 查询密码相关业务，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D15.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="cxmm_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="cxmm_confirm$.interpretation.command=='yes'">
+					<goto next="#cxmm"/>
+				</if>
+				<if cond="cxmm_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D16.wav"/><!-- 是查询密码的相关业务，对吗？请说正确或者错误。 -->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 查询密码 -->
+	 <form id="cxmm">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D8.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	  <!-- 交易密码消歧 -->
+	 <form id="jymm_confirm">
+		<field name="jymm_confirm">
+			<!-- <prompt> 交易密码相关业务，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D17.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="jymm_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="jymm_confirm$.interpretation.command=='yes'">
+					<goto next="#jymm"/>
+				</if>
+				<if cond="jymm_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D18.wav"/><!-- 是交易密码的相关业务，对吗？请说正确或者错误。 -->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 交易密码 -->
+	 <form id="jymm">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D9.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	  <!-- 挂失消歧 -->
+	 <form id="gs_confirm">
+		<field name="gs_confirm">
+			<!-- <prompt> 挂失，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D19.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="gs_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="gs_confirm$.interpretation.command=='yes'">
+					<goto next="#gs"/>
+				</if>
+				<if cond="gs_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D20.wav"/><!--   您是要挂失，对吗？请说正确或者错误。  -->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 挂失 -->
+	 <form id="gs">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D10.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	 <!-- 新户办卡消歧 -->
+	 <form id="xhbk_confirm">
+		<field name="xhbk_confirm">
+			<!-- <prompt>  咨询新户办卡，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D23.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>	
+				<if cond="xhbk_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="xhbk_confirm$.interpretation.command=='yes'">
+					<goto next="#xhbk"/>
+				</if>
+				<if cond="xhbk_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D24.wav"/><!--  您是要咨询新户办卡，对吗？请说正确或者错误。  -->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 新户卡片办卡 -->
+	 <form id="xhbk">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D12.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	
+	<!-- 取现收费标准消歧 -->
+	 <form id="qxsfbz_confirm">
+		<field name="qxsfbz_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D29.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="qxsfbz_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="qxsfbz_confirm$.interpretation.command=='yes'">
+					<goto next="#qxsfbz"/>
+				</if>
+				<if cond="qxsfbz_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D30.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 取现利息和手续费收费标准 -->
+	 <form id="qxsfbz">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D15.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	 <!-- 积分累计规则消歧 -->
+	 <form id="jfljgz_confirm">
+		<field name="jfljgz_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D31.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="jfljgz_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="jfljgz_confirm$.interpretation.command=='yes'">
+					<goto next="#jfljgz"/>
+				</if>
+				<if cond="jfljgz_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D32.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- 积分累计规则 -->
+	 <form id="jfljgz">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D16.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	 <!-- YOUNG卡(青年版)新户首刷礼活动 消歧 -->
+	 <form id="youngkss_confirm">
+		<field name="youngkss_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D33.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="youngkss_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="youngkss_confirm$.interpretation.command=='yes'">
+					<goto next="#youngkss"/>
+				</if>
+				<if cond="youngkss_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+		
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D34.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!-- YOUNG卡(青年版)新户首刷礼活动 -->
+	 <form id="youngkss">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D17.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+	  <!--  账单分期手续费 消歧 -->
+	 <form id="zdfqsxf_confirm">
+		<field name="zdfqsxf_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D49.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="zdfqsxf_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="zdfqsxf_confirm$.interpretation.command=='yes'">
+					<goto next="#zdfqsxf"/>
+				</if>
+				<if cond="zdfqsxf_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+				
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D50.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!--  账单分期手续费  -->
+	 <form id="zdfqsxf">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D25.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	
+	 <!--  附属卡介绍 消歧 -->
+	 <form id="fskjs_confirm">
+		<field name="fskjs_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D57.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="fskjs_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="fskjs_confirm$.interpretation.command=='yes'">
+					<goto next="#fskjs"/>
+				</if>
+				<if cond="fskjs_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+		
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D58.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!--  附属卡介绍  -->
+	 <form id="fskjs">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D29.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+
+	 <!--  附属卡介绍 消歧 -->
+	 <form id="fskbl_confirm">
+		<field name="fskbl_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D85.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="fskbl_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="fskbl_confirm$.interpretation.command=='yes'">
+					<goto next="#fskbl"/>
+				</if>
+				<if cond="fskbl_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+		
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D86.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!--  附属卡介绍  -->
+	 <form id="fskbl">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D43.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+	
+
+	
+	 <!--  滞纳金含义 消歧 -->
+	 <form id="znjhy_confirm">
+		<field name="znjhy_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D61.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="znjhy_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="znjhy_confirm$.interpretation.command=='yes'">
+					<goto next="#znjhy"/>
+				</if>
+				<if cond="znjhy_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+			
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D62.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!--  滞纳金含义  -->
+	 <form id="znjhy">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D31.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	 <!--  查询密码含义 消歧 -->
+	 <form id="cxmmhy_confirm">
+		<field name="cxmmhy_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D63.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="cxmmhy_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="cxmmhy_confirm$.interpretation.command=='yes'">
+					<goto next="#cxmmhy"/>
+				</if>
+				<if cond="cxmmhy_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+		
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D64.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!--  查询密码定义  -->
+	 <form id="cxmmhy">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D32.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+	
+	
+		
+		
+
+	 
+	  <!--  账单还款日 消歧 -->
+	 <form id="zdhkr_confirm">
+		<field name="zdhkr_confirm">
+			<!-- <prompt>查询本期账单，对吗？</prompt> -->
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D75.wav"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/yes_no.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<if cond="zdhkr_confirm$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="zdhkr_confirm$.interpretation.command=='yes'">
+					<goto next="#zdhkr"/>
+				</if>
+				<if cond="zdhkr_confirm$.interpretation.command=='no'">
+					<assign name="disambig_count" expr="disambig_count+1"/>
+					<if cond="disambig_count==2">
+						<goto next="#menu_back"/>
+						<!-- no到disambig_count==1到mains(此时进入了再收集阶段)到disambig_count==2再次否定触发后备菜单  -->
+					</if>
+					<if cond="disambig_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D1.wav"/>
+						<goto next="#mains"/>
+					</if>
+				</if>
+
+			</filled>
+		</field>
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB5D76.wav"/><!--请问您是要查询本期账单，对吗？-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		
+		</form>
+		<!--  账单日&还款日  -->
+	 <form id="zdhkr">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB4D38.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+	
+	<form id="menu_back">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB7D1.wav"/><!--后备菜单语音播报-->
+			<assign name="fault_count" expr="0"/>
+			<goto next="#menu_backs"/>
+		</block>
+	 </form>
+
+
+	<!-- 后备菜单 -->
+	 <form id="menu_backs">
+		<field name="menu_backs">
+			
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/fallback.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/fallback_dtmf.grxml" />
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/agent_service.grxml"/>
+			<filled>
+				<assign name="tempvalue" expr="menu_backs$.interpretation.command"/>
+				<if cond="menu_backs$.interpretation.command=='CurrentBill'"><!-- 本期账单 -->
+					<goto next="#bqzd"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='one'"><!-- 本期账单 -->
+					<goto next="#bqzd"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='UnpaidBill'"><!-- 未出账单 -->
+					<goto next="#wczd"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='two'"><!-- 未出账单 -->
+					<goto next="#wczd"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='CreditCheck'"><!-- 可用额度查询 -->
+					<goto next="#kyedcx"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='three'"><!-- 可用额度查询 -->
+					<goto next="#kyedcx"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='CreditLimitChange'"><!-- 额度调整 -->
+					<goto next="#edtz"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='four'"><!-- 额度调整 -->
+					<goto next="#edtz"/>
+				</if>
+				<if cond="menu_backs$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="menu_backs$.interpretation.command=='no'"><!-- 都不是 -->
+					<goto next="#rgfw"/>
+				
+				</if>
+
+			<if cond="menu_backs$.interpretation.command=='unknown'">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<if cond="fault_count==2">
+						<goto next="#rgfw"/>
+					</if>
+					<if cond="fault_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB7D2.wav"/>
+						<goto next="#menu_backs"/>
+					</if>
+				</if>
+	
+		</filled>
+		</field>
+		
+
+		<catch event="noinput nomatch">
+			<assign name="tempFaultCount" expr="tempFaultCount+1"/>
+			<if cond="tempFaultCount&lt;2">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB7D2.wav"/><!--按键提示音-->
+			<else/>
+				<assign name="tempFaultCount" expr="0"/>
+				<goto next="#rgfw"/>
+			</if>
+		</catch>
+		 </form>
+
+	 <form id="ends">
+		<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB6D1.wav"/>
+			<assign name="fault_count" expr="0"/>
+			<goto next="#end"/>
+		</block>
+	 </form>
+
+	
+	<!-- 业务结束-->
+	 <form id="end">
+	
+		<field name="end">
+			
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/otherService.grxml"/>
+			<grammar src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/grammars/cmb_chinese.gram" />
+			<filled>
+				<assign name="threshold_val" expr="end$.interpretation.similarity"/>
+				<assign name="disambig_count" expr="0"/>
+				<assign name="tempFaultCount" expr="0"/>
+				<assign name="tempvalue" expr="end$.interpretation.command"/>
+				<assign name="threshold_val" expr="needConfirm(end$.interpretation.similarity)"/>
+				<!-- <prompt><value expr="end$.interpretation.command"/></prompt>-->
+					<if cond="end$.interpretation.command=='BillCheck'"><!-- 查账 -->
+					<if cond="threshold_val==0">
+						<goto next="#cz_confirm"/>
+					</if>
+					<if cond="threshold_val==1"> <!-- 不需要消崎 -->
+						<!-- <prompt>好的，马上为您转入查账业务，请稍候。</prompt> -->
+						<goto next="#cz"/>
+					</if>
+				</if>
+				
+		<!--		<if cond="threshold_val==-1">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D1.wav"/>
+					<goto next="#mains"/>
+				</if>
+				-->
+
+				<if cond="end$.interpretation.command=='CurrentBill'"><!-- 本期账单 -->
+					<if cond="threshold_val==0">
+						<goto next="#bqzd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#bqzd"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='UnpaidBill'"><!-- 未出账单 -->
+					<if cond="threshold_val==0">
+						<goto next="#wczd_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#wczd"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='CreditCheck'"><!-- 可用额度查询 -->
+					<if cond="threshold_val==0">
+						<goto next="#kyedcx_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#kyedcx"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='CreditLimitChange'"><!-- 额度调整 -->
+					<if cond="threshold_val==0">
+						<goto next="#edtz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#edtz"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='CreditFixedChange'"><!-- 固定额度调整 -->
+					<if cond="threshold_val==0">
+						<goto next="#gdedtz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#gdedtz"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='CreditTempChange'"><!-- CreditTempChange -->
+					<if cond="threshold_val==0">
+						<goto next="#lsedtz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#lsedtz"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='InquiryPW'"><!-- 查询密码 -->
+					<if cond="threshold_val==0">
+						<goto next="#cxmm_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#cxmm"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='TradePW'"><!-- 交易密码 -->
+					<if cond="threshold_val==0">
+						<goto next="#jymm_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#jymm"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='CardLostReport'"><!-- 挂失 -->
+					<if cond="threshold_val==0">
+						<goto next="#gs_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#gs"/>
+					</if>
+				</if>
+				
+				<if cond="end$.interpretation.command=='CardApplicationInqury'"><!-- 新户办卡 -->
+					<if cond="threshold_val==0">
+						<goto next="#xhbk_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#xhbk"/>
+					</if>
+				</if>
+
+				<if cond="end$.interpretation.command=='CashWithdrawFee'"><!-- 取现利息和手续费收费标准 -->
+					<if cond="threshold_val==0">
+						<goto next="#qxsfbz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#qxsfbz"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='PointsRule'"><!-- 积分累计规则 -->
+					<if cond="threshold_val==0">
+						<goto next="#jfljgz_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#jfljgz"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='YoungCard'"><!-- YOUNG卡(青年版)新户首刷礼活动 -->
+					<if cond="threshold_val==0">
+						<goto next="#youngkss_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#youngkss"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='InstallmentFee'"><!-- 账单分期手续费 -->
+					<if cond="threshold_val==0">
+						<goto next="#zdfqsxf_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#zdfqsxf"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='AcceCardIntro'"><!-- 附属卡介绍 -->
+					<if cond="threshold_val==0">
+						<goto next="#fskjs_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#fskjs"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='AcceCardApply'"><!-- 附属卡办理 -->
+					<if cond="threshold_val==0">
+						<goto next="#fskbl_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#fskbl"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='PenaltyIntro'"><!-- 滞纳金含义 -->
+					<if cond="threshold_val==0">
+						<goto next="#znjhy_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#znjhy"/>
+					</if>
+				</if>
+				<if cond="end$.interpretation.command=='InquiryPWIntro'"><!-- 查询密码含义 -->
+					<if cond="threshold_val==0">
+						<goto next="#cxmmhy_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#cxmmhy"/>
+					</if>
+				</if>
+
+				<if cond="end$.interpretation.command=='BillDate'"><!-- 账单还款日 -->
+					<if cond="threshold_val==0">
+						<goto next="#zdhkr_confirm"/>
+					</if>
+					<if cond="threshold_val==1">
+						<goto next="#zdhkr"/>
+					</if>
+				</if>				
+				<if cond="end$.interpretation.command=='Operator'"><!-- Operator -->                   
+                        <goto next="#rgfw2"/>                   
+                </if>
+				<if cond="end$.interpretation.command=='Complaints'"><!-- Complaints -->					
+						<goto next="#rgfw3"/>					
+				</if>
+				<if cond="end$.interpretation.command=='yes'">
+					<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB6D3.wav"/><!-- 好的，请简短的告诉我您来电的目的？  -->
+					<goto next="#mains"/>
+				</if>
+				<if cond="end$.interpretation.command=='no'">
+					<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB6D2.wav"/>
+					<exit/>
+				</if>
+
+				<if cond="end$.interpretation.command=='unknown'">
+					<assign name="fault_count" expr="fault_count+1"/>
+					<if cond="fault_count==2">
+						<goto next="#menu_back"/>
+					</if>
+					<if cond="fault_count==1">
+						<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D2.wav"/>
+						<goto next="#end"/>
+					</if>
+				</if>				
+			</filled>
+		</field>
+
+		<nomatch count="1">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听清。请简短的告诉我您来电的目的。</prompt>-->
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D2.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+		<nomatch count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D2.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>
+		</nomatch>
+
+		<noinput count="1"> 
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>对不起，我没有听到您的声音。请简短的告诉我您来电的目的。</prompt> -->
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB2D3.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>	
+	     </noinput>
+		<noinput count="2">
+			<assign name="fault_count" expr="fault_count+1"/>
+			<if cond="fault_count==1">
+				<!-- <prompt>抱歉，还是没有听见。</prompt>-->
+				<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB3D3.wav"/>
+			</if>
+			<if cond="fault_count==2">
+				<goto next="#menu_back"/>
+			</if>
+	     </noinput>
+		
+	 </form>
+
+	<!-- 错误转Operator -->
+	 <form id="rgfw">
+	 	<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB8D1.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+	 
+	 <!-- Operator -->
+	 <form id="rgfw2">
+	 	<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB8D2.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+	<!-- Complaints -->
+	 <form id="rgfw3">
+	 	<block>
+			<audio src="file:/xiaoi_app/nrecserver/webapps/root/WEB-INF/audio/CMB9D1.wav"/>
+			<goto next="#ends"/>
+		</block>
+	 </form>
+
+
+</vxml>

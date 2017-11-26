@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入财务的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='finaceSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        财务
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item> 添加 单位 </item>
+                    <item> 银行 权限 使用 </item>
+                    <item> 变 单位 信息 </item>
+                    <item> 审批 短信 </item>
+                    <item> 报销 修改 支付 </item>
+                    <item> 电子 支付 推送 </item>
+                    <item> 安装 财务 </item>
+                    <item> 找 收款 账户 </item>
+                    <item> 经营 支出 乱码 </item>
+                    <item> 财务 报表 失败 </item>
+                    <item> 财务 单位 查 </item>
+                    <item> 开通 财务 项目 角色 </item>
+                    <item> 财务 报 附件 </item>
+                    <item> 财务 账号 登录 功能 </item>
+                    <item> 工程 支付 关联 记录 </item>
+                    <item> 更改 财务 项目 金额 </item>
+                    <item> 开通 预算 权限 </item>
+                    <item> 停用 收款 账号 </item>
+                    <item> 工程 支付 工资 权限 </item>
+                    <item> 电商 添加 供应商 财务 查不到 </item>
+                    <item> 工程 报销 审批 权限 财务 专职 </item>
+                    <item> 添加 收款 单位 权限 </item>
+                    <item> 推送 财务 系统 显示 </item>
+                    <item> 财务 系统 报表 路径 拒绝 </item>
+                    <item> 财务 登录 重复 超时 </item>
+                    <item> 供应商 审批 同步 系统 </item>
+                    <item> 报销 超出 资金 额 </item>
+                    <item> 财务 显示 账号 开户行 </item>
+                    <item> 财务 银行 其他 使用 </item>
+                    <item> 财务 报表 错误 </item>
+                    <item> 挂账 关联 财务 工单 下去 </item>
+                    <item> 资产 批量 选择 不方便 </item>
+                    <item> 财务 单位 剩 个 </item>
+                    <item> 付款 选择 发票 输入 </item>
+                    <item> 财务 系统 规划 消失 </item>
+                    <item> 项目 经费 差旅费 分解 </item>
+                    <item> 填写 单据 保存 </item>
+                    <item> 新增 查询 结果 </item>
+                    <item> 登录 系统 用户 存在 </item>
+                    <item> 变更 系统 公司 做 </item>
+                    <item> 财务 内置 账户 电商 不一样 </item>
+                    <item> 财务 报销 单位 信息 </item>
+                    <item> 能否 后台 财务 入口 </item>
+                    <item> 四 财务 登录 去 </item>
+                    <item> 资产 表 处理 </item>
+                    <item> 财务 停用 名称 </item>
+                    <item> 财务 更改 生产 编号 </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

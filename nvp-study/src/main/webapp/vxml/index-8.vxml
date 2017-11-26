@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <!--请求指定的服务器-->
+    <var name="remote" expr="'http://192.168.29.178:8081/test/test1.do'"/>
+    <!--指定端口好号和文件部署位置-->
+    <var name="filename" expr="'8090/study/vxml/index.vxml'"/>
+    <!--请求正确后返回执行的formid-->
+    <var name="formid1" expr="'#end1'"/>
+    <!--请求失败后返回执行的formid-->
+    <var name="formid2" expr="'#end2'"/>
+    <!--请求问题变量的名称-->
+    <var name="qname" expr="''"/>
+
+    <var name="AP" expr="'我的名字是李通'"/>
+
+    <form id="test3">
+        <field name="test3" type="digits">
+            <prompt>测试2:请输入我的名字是李通</prompt>
+            <grammar src="../grammars/litong.grxml"/>
+            <filled>
+                <if cond="test3==1">
+                    <prompt>话术正确</prompt>
+                    <elseif cond="test3==2"/>
+                    <prompt>话术正确</prompt>
+                    <else/>
+                    <prompt>话术不正确</prompt>
+                    <goto next="#test3"/>
+                </if>
+            </filled>
+        </field>
+    </form>
+
+    <form id="test2">
+        <field name="test2" type="digits">
+            <prompt>测试2:请输入我的名字是李通</prompt>
+            <grammar src="../grammars/litong.grxml"/>
+            <filled>
+                <if cond="test2.dm_root=='yes'">
+                    <prompt>话术正确</prompt>
+                    <else/>
+                    <prompt>话术不正确</prompt>
+                    <goto next="#test2"/>
+                </if>
+            </filled>
+        </field>
+    </form>
+
+    <form id="test1">
+        <block>
+            <log label="trace:?level=INFO" expr="'info 系统信息'"/>
+            <prompt><value expr="AP"/> </prompt>
+        </block>
+    </form>
+
+
+    <form id="three">
+        <field name="A6_1_1_1_1" type="digits">
+            <prompt>请输入密码</prompt>
+            <filled>
+                <if cond="A6_1_1_1_1==123">
+                    <prompt>密码输入正确</prompt>
+                </if>
+            </filled>
+
+            <nomatch>
+                <prompt>密码输入错误</prompt>
+            </nomatch>
+        </field>
+    </form>
+
+    <form id="testcatch">
+        <field name="tc" type="digits">
+            <prompt>请输入密码</prompt>
+            <filled>
+                <if cond="tc == 12345678">
+                    <prompt>密码输入不正确</prompt>
+                    <goto next="#testcatch"/>
+                </if>
+
+            </filled>
+
+
+            <nomatch count="1" cond="true">
+                <prompt>
+                    密码输入不正确,请重新输入密码
+                </prompt>
+                <goto next="#testcatch"/>
+            </nomatch>
+            <nomatch count="1">
+                <prompt>
+                    密码输入不正确,请再次重新输入密码
+                </prompt>
+                <goto next="#testcatch"/>
+            </nomatch>
+
+            <nomatch count="3" cond="true">
+                您三次密码输入错误，再见
+                <exit/>
+            </nomatch>
+        </field>
+    </form>
+
+    <form id="calculatePrice">
+        <var name="quantity" expr="2"/>
+        <var name="unitPrice" expr="24.95"/>
+        <block>
+            <var name="price" expr="quantity*unitPrice"/>
+            <prompt>总价格是<value expr="price"/>元
+            </prompt>
+        </block>
+    </form>
+
+    <form id="transfer">
+        <transfer name="call" dest="4" bridge="false">
+            <prompt>您的电话正在被转接到话务员，请稍候…</prompt>
+            <filled>
+                <if cond="call == noanswer">
+                    <prompt>对不起，话务员无法接听您的电话，请稍后再试。谢谢，再见！</prompt>
+                    <disconnect/>
+                    <exit/>
+                </if>
+            </filled>
+        </transfer>
+    </form>
+
+    <form id="main">
+        <field name="A0" type="digits">
+
+            <prompt>
+                请问你需要办理什么业务,
+                1,个人业务,
+                2,公司业务,
+            </prompt>
+            <grammar src="../grammar/query.grxml"/>
+            <filled>
+                <if cond="A0==1">
+                    <prompt>按键1</prompt>
+                </if>
+                <if cond="A0==2">
+                    <prompt>按键2</prompt>
+                </if>
+                <if cond="A0.dm_root=='person'">
+                    <prompt>语音个人</prompt>
+                </if>
+                <if cond="A0.dm_root=='company'">
+                    语音公司
+                </if>
+            </filled>
+            <catch event="nomatch noinput">
+                <prompt>输入的是
+                    <value expr="A0"/>
+                </prompt>
+            </catch>
+        </field>
+    </form>
+    <form id="QueryProductCode">
+        <field name="productCode" type="digits">
+            <prompt>
+                <audio src="InputProductCode.wav">
+                    请输入产品代码
+                </audio>
+            </prompt>
+            <filled>
+                <prompt>你输入的产品代码是
+                    <value expr="productCode"/>
+                </prompt>
+            </filled>
+        </field>
+    </form>
+</vxml>

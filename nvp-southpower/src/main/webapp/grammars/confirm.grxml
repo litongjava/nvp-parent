@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='answerNo'</tag>
+                <one-of>
+                    <item>否</item>
+                    <item>不
+                        <item repeat="0-1">是</item>
+                        <item repeat="0-1">满意</item>
+                        <item repeat="0-1">选择</item>
+                    </item>
+                    <item>
+                        没有
+                        <item repeat="0-1">了</item>
+                    </item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='answerYes'</tag>
+                <one-of>
+                    <item>有</item>
+                    <item>是
+                        <item repeat="0-1">的</item>
+                    </item>
+                    <item>选择</item>
+                    <item>我选择</item>
+                    <item>还有</item>
+                    <item>满意</item>
+                    <item>还好</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='4aSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        4 A
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='capitalSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        基建
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='commentSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        培评
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='ecSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        电子商务
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='finaceSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        财务
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='gisSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        G I S
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='humanRecourceSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        人资
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='investmentPlanSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        投资
+                        <item repeat="0-1">计划</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='marketingSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        营销
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='materialSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        物资
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='oakSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        O A K
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='productionSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        生产
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='projectManager'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        项目管理
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='unifiedDoc'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 去</item>
+                        统一
+                        <item repeat="0-1">图档</item>
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

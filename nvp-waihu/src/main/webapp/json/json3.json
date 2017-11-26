@@ -1,0 +1,18 @@
+{
+  "operating_mode": "accurate",
+  "model": {
+    "name": "eng-usa",
+    "domain": {
+      "name": "GAMES_a199e4de-9ee6-42a8-a02f-4fb2a49c4363",
+      "url": "http://www.abc.com/domain_lms/GAMES_a199e4de-9ee6-42a8-a02f-4fb2a49c4363",
+      "weight": "high"
+    }
+  },
+  "channels": {
+    "firstChannelLabel": {
+      "url": "http://www.abc.com/audio_files/audio1.wav",
+      "format": "wave",
+      "diarize": true,
+      "result_format": "transcript",
+      ...
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml version="2.0">
+    <form id="test3">
+
+        <field name="test3" type="digits">
+            <prompt>测试,查询阶梯电价</prompt>
+            <grammar src="../grammars/dianjia.grxml"/>
+
+            <filled>
+                <if cond="test3.dm_root='yes'">
+                    <prompt>话术正确</prompt>
+                    <else/>
+                    <prompt>话术不正确</prompt>
+                    <goto next="#test3"/>
+                </if>
+            </filled>
+        </field>
+    </form>
+</vxml>
