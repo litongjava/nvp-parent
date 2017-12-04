@@ -7,6 +7,8 @@
 
 package cn.eastrobot.www.ws.RobotServiceEx;
 
+import com.recive.utils.ConfigUtil;
+
 public class RobotServiceEx_ServiceLocator extends org.apache.axis.client.Service
 		implements RobotServiceEx_Service {
 
@@ -22,13 +24,8 @@ public class RobotServiceEx_ServiceLocator extends org.apache.axis.client.Servic
 		super(wsdlLoc, sName);
 	}
 
-	// Use to get a proxy class for DefaultRobotServiceExPort
-	// private java.lang.String DefaultRobotServiceExPort_address =
-	// "http://bjyhzxyhr.demo.xiaoi.com/dev/ws/RobotServiceEx";
-	//private String DefaultRobotServiceExPort_address = "http://111.202.106.148:8348/robot/ws/RobotServiceEx";
-	private String DefaultRobotServiceExPort_address = "http://192.168.28.194:8000/robot/ws/RobotServiceEx";
-	// private String DefaultRobotServiceExPort_address =
-	// properties.getProperty("DefaultRobotServiceExPort_address");
+	//private String DefaultRobotServiceExPort_address = "http://111.202.106.147:8010/robot/ws/RobotServiceEx";
+	private String DefaultRobotServiceExPort_address = ConfigUtil.getConfig("webservice.addr1");
 
 	public String getDefaultRobotServiceExPortAddress() {
 		return DefaultRobotServiceExPort_address;

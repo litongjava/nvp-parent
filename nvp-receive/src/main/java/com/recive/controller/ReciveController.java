@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by zhouyangying on 2017/9/26. 接收vxml提交过来参数
+ * Created by litong on 2017/9/26. 接收vxml提交过来参数
  */
 @RestController
 @RequestMapping("recive")

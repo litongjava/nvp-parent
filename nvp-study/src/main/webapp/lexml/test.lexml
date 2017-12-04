@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<lexicon xml:lang="zh-CN" alphabet="application/sampa;localization=nuance">
+    <entry key="水">
+        <definition value="swE3"/>
+        <definition value="SwE3"/>
+    </entry>
+</lexicon>

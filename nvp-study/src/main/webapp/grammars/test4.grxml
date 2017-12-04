@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- root="_ROOT_":指定入口 -->
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         xml:lang="zh-CN" root="ROOT">
+    <rule id="ROOT">
+        <tag>dm_root='yes'</tag>
+        <item repeat="0-1">
+            <item repeat="0-1">i like</item>
+            big
+        </item>
+        bike
+        <item repeat="0-">
+            <one-of>
+                <item>and</item>
+                <item>and</item>
+            </one-of>
+        </item>
+    </rule>
+</grammar>

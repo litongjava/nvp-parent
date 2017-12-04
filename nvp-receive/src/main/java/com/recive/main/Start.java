@@ -8,11 +8,11 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan("com")
-public class Start /*extends SpringBootServletInitializer*/ {
-//	@Override
-//	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-//		return builder.sources(Start.class);
-//	}
+public class Start extends SpringBootServletInitializer {
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(Start.class);
+	}
 	public static void main(String[] args){
 		//启动方式1
 		//SpringApplication.run(Start.class, args);

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grammar xml:lang="zh-CN" version="1.0" xmlns="http://www.w3.org/2001/06/grammar"
+         tag-format="swi-semantics/1.0" mode="voice" root="ROOT">
+    <rule id="ROOT">
+        <ruleref uri="builtin:grammar/digits?language=zh_CN;length=4"/>
+        <tag>dm_root='yes';
+            result=_digits.MEANING;
+        </tag>
+    </rule>
+</grammar>

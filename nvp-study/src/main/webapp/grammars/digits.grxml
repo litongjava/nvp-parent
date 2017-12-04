@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- root="_ROOT_":指定入口 -->
+<grammar version="1.0" xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar"
+         tag-format="swi-semantics/1.0" root="pin">
+<rule id="pin" scope="public">
+    <tag>result="yes"</tag>
+    <tag>dm_root='yes'</tag>
+    <item repeat="0-1">我的密码是</item>
+    <item repeat="4"><ruleref uri="#digits"/></item>
+</rule>
+<rule id="digits">
+    <one-of>
+        <item>零</item>
+        <imte>一</imte>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>七</item>
+        <item>八</item>
+        <item>九</item>
+    </one-of>
+</rule>
+</grammar>

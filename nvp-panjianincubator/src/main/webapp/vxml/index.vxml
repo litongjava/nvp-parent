@@ -1,31 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--添加vxml约束,必须添加-->
 <!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
-<!--指定xml版本-->
-<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN" >
-    <!--开始定义请求数据变量-->
-    <!--请求数据的地址-->
-    <var name="remote" expr="'http://192.168.28.177:8081/recive/test2.do'"/>
-    <var name="filename" expr="'/nvp-baozhang/vxml/'"/>
-    <!--请求正确后返回执行的formid-->
-    <var name="formidSuccess" expr="'success.vxml#'"/>
-    <!--请求错误后返回执行的formid-->
-    <var name="formidFail" expr="'#fail'"/>
-    <var name="qname" expr="''"/>
-    <!--结束话术-->
-    <var name="endP" expr="'感谢您的致电,再见'"/>
-    <!--开始话术-->
-    <var name="mainP" expr="'欢迎致电10000信息热线，人工系统请按1，智能系统请按2'"/>
-    <!--输入错误时的话术-->
-    <var name="inputError" expr="'您的意思我没有太理解,'"/>
-    <!--输入无效话术-->
-    <var name="inputInvalid" expr="'您的输入无效'"/>
+<vxml version="2.0">
     <form id="main">
         <field name="input" type="digits?language=zh-CN;length=1">
             <prompt>
-                <value expr="mainP"/>
+                <prompt expr="mainP"></prompt>
             </prompt>
-            <grammar src="../grammars/query1.grxml"/>
+            <grammar src="../grammars/main.grxml"/>
 
             <filled>
                 <!--人工系统-->
@@ -66,6 +47,4 @@
             </catch>
         </field>
     </form>
-
-
 </vxml>

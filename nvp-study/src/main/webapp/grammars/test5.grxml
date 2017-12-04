@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grammar xml:lang="zh-CN" version="1.0" xmlns="http://www.w3.org/2001/06/grammar"
+         tag-format="swi-semantics/1.0" mode="voice" root="travel_information">
+    <rule id="travel_information">
+        <tag>dm_root='yes'</tag>
+        从
+        <!--引用city_name 这个rule-->
+        <ruleref uri="#city_name"/>
+        到
+        <ruleref uri="#city_name"/>
+    </rule>
+    <rule id="city_name">
+        <one-of>
+            <item>北京</item>
+            <item>上海</item>
+            <item>广州</item>
+        </one-of>
+    </rule>
+</grammar>

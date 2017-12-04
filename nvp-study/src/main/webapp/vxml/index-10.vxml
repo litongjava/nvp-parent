@@ -3,6 +3,7 @@
 <!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
 <!--指定xml版本-->
 <vxml version="2.0">
+    <!--打开录音,打开录音后才可以得到录音文件-->
     <property name="recordutterance" value="true"/>
     <form id="main">
         <field name="input" type="digits?language=zh_CN;length=1">
@@ -12,14 +13,16 @@
             <grammar src="../grammars/test2.grxml"/>
             <filled>
                 <prompt>
+                    <!--得到匹配的字符-->
                     <value expr="application.lastresult$.interpretation.SWI_literal"/>
                     <value expr="input$.interpretation.SWI_literal"/>
                 </prompt>
-                <var name="audio1" expr="input$.recording"/>
-                <prompt><value expr="audio1"/></prompt>
+                <prompt>
+                    <!--得到录音-->
+                    <var name="audio1" expr="input$.recording"/>
+                </prompt>
                 <goto next="#main"/>
             </filled>
-
         </field>
     </form>
 </vxml>

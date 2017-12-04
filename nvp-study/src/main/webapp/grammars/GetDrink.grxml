@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xml:lang="zh-CN" version="1.0" mode="voice" root="ROOT"
+         xmlns="http://www.w3.org/2001/06/grammar">
+    <rule id="ROOT" scope="public">
+        <one-of>
+            <item>可口可乐</item>
+            <item>橙汁</item>
+            <item>瓶装水</item>
+            <item>咖啡</item>
+            <item>茶</item>
+        </one-of>
+        <item repeat="0-1">谢谢</item>
+    </rule>
+</grammar>

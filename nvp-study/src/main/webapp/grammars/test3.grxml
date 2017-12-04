@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xml:lang="zh-CN" xmlns="http://www.w3.org/2001/06/grammar"
+         mode="voice" root="ROOT">
+    <rule id="ROOT" scope="public">
+        <one>
+
+        </one>
+    </rule>
+</grammar>
