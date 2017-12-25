@@ -3,7 +3,7 @@
 <!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
 <!--指定xml版本-->
 <vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
-    <!--开始定义请求数据变量-->
+    <!--开始定义请求数据变量,123-->
     <!--请求数据的地址-->
     <var name="remote" expr="'http://192.168.28.177:8081/recive/test2.do'"/>
     <var name="filename" expr="'/nvp-baozhang/vxml/'"/>
