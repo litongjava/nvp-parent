@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+
+<vxml version="2.0">
+
+    <!--指定当前文件的名字-->
+    <var name="page" expr="'index.vxml'"/>
+
+    <form id="main3">
+        <var name="formname" expr="page+'#main3'"/>
+        <field name="input">
+            <prompt>输入4位数</prompt>
+            <grammar src="../grammars/test7.grxml"/>
+            <filled>
+                <prompt><value expr="input.result"/></prompt>
+                <if cond="input.dm_root=='yes'">
+                    <prompt>I heard is</prompt>
+                    <prompt>匹配成功,按键是1</prompt>
+                    <goto expr="formname"/>
+                </if>
+
+                <if cond="input.dm_root=='no'">
+                    <prompt>I heard is</prompt>
+                    <prompt>匹配成功,按键是0</prompt>
+                    <goto expr="formname"/>
+                </if>
+                <!--得到匹配的文本-->
+                <prompt>匹配失败</prompt>
+                <goto expr="formname"/>
+            </filled>
+        </field>
+    </form>
+
+    <form id="main2">
+        <var name="formname" expr="page+'#main2'"/>
+        <field name="input">
+            <prompt>麻辣香锅</prompt>
+            <grammar src="../grammars/test6.grxml"/>
+            <filled>
+                <prompt><value expr="input.result"/></prompt>
+                <if cond="input.dm_root=='yes'">
+                    <prompt>I heard is</prompt>
+                    <prompt>匹配成功</prompt>
+                    <goto expr="formname"/>
+                </if>
+                <!--得到匹配的文本-->
+
+                <prompt>匹配失败</prompt>
+                <goto expr="formname"/>
+            </filled>
+        </field>
+    </form>
+
+    <form id="main1">
+        <!--字符串拼接-->
+        <var name="formname" expr="page+'#main1'"/>
+        <field name="input" type="digits?language=zh-CN;length=1">
+            <prompt>匹配,话术</prompt>
+            <filled>
+                <if cond="input==1">
+                    <prompt>匹配成功</prompt>
+                    <goto expr="formname"/>
+                </if>
+                <prompt>匹配失败</prompt>
+                <goto expr="formname"/>
+            </filled>
+        </field>
+    </form>
+    <form id="main">
+        <field name="input">
+            <prompt>请输入任意四位数字</prompt>
+            <grammar src="../grammars/digits.grxml"/>
+            <filled>
+                <if cond="input.dm_root=='yes'">
+                    <prompt>匹配成功</prompt>
+                    <goto next="#main"/>
+                </if>
+                <prompt>匹配失败</prompt>
+                <goto next="#mamin"/>
+            </filled>
+        </field>
+    </form>
+</vxml>

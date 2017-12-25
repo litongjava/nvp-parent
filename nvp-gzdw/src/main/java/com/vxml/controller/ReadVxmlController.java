@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Created by litong on 2017/11/28.
@@ -28,7 +29,7 @@ public class ReadVxmlController {
     @RequestMapping("/")
     @ResponseBody
     public String index() {
-        return "盘锦孵化器内呼";
+        return "贵州电力";
     }
 
     /**
@@ -65,6 +66,7 @@ public class ReadVxmlController {
         }else{
             result=VxmlUtil.getContent(realPath);
         }
+
         out.println(result);
         //log.info(result);
     }

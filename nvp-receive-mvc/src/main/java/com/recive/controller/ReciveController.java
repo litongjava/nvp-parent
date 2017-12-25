@@ -112,7 +112,4 @@ public class ReciveController {
         }
         return result;
     }
-    @RequestMapping(value = "recive", produces = "text/xml;charset=utf-8",method = RequestMethod.GET)
-
-
 }

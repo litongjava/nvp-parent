@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+    <!--结束话术-->
+    <var name="endP" expr="'感谢您的致电,再见'"/>
+    <!--输入错误时的话术-->
+    <var name="inputError" expr="'您的输入无效,'"/>
+    <!--输入无效话术-->
+    <var name="inputInvalid" expr="'您的意思我没有太理解,'"/>
+    <!--营销系统-->
+    <var name="A1_2P" expr="'是否选择 人资 系统坐席为您服务'"/>
+
+    <form id="A1_2">
+        <field name="input" type="digits?language=zh_CN;length=1">
+            <prompt>
+                <value expr="A1_2P"/>
+            </prompt>
+            <!--<grammar src="../grammars/full_dtmf.grxml"/>-->
+            <grammar src="../grammars/confirm.grxml"/>
+            <filled>
+                <log expr="input.dm_root"/>
+
+                <if cond="input.dm_root=='answerYes' || input==1">
+                    <goto next="manualService.vxml#transfer"/>
+                </if>
+                <if cond="input.dm_root=='answerNo' || input==2">
+                    <goto next="manualService.vxml#A1"/>
+                </if>
+                <if cond="input.dm_root=='cooperativeOfficeSys'">
+                    <goto next="humanRecourceSys.vxml#A1_1"/>
+                </if>
+                <if cond="input.dm_root=='marketingSys'">
+                    <goto next="marketingSys.vxml#A1_3"/>
+                </if>
+                <if cond="input.dm_root=='finaceSys'">
+                    <goto next="finaceSys.vxml#A1_4"/>
+                </if>
+                <if cond="input.dm_root=='desktopIssues'">
+                    <goto next="desktopIssues.vxml#A1_5"/>
+                </if>
+            </filled>
+
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1_2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="A1_2P"/>
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+</vxml>

@@ -21,4 +21,6 @@ public class Start extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(Start.class);
     }
+
+
 }

@@ -1,25 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
-<vxml version="2.0">
+<vxml version="2.0" application="../application/application.vxml">
+    <!--page的值由Controller进行替换-->
+    <var name="page" expr="''"/>
+    <var name="ans" expr="''"/>
     <form id="main">
+        <var name="formname" expr="page+'#main'"/>
+
         <field name="input" type="digits?language=zh-CN;length=1">
             <prompt>
-                <prompt expr="mainP"></prompt>
+                <value expr="mainP"/>
             </prompt>
-            <grammar src="../grammars/main.grxml"/>
+            <grammar src="../grammars/ruzhu.grxml"/>
+            <grammar src="../grammars/zhengce.grxml"/>
 
             <filled>
-                <!--人工系统-->
-                <if cond="input==1 || input.dm_root=='matchOne' || input.dm_root=='manualSys'">
-                    <log>进人工系统</log>
-                    <goto next="manualService.vxml"/>
+                <!--入驻问题-->
+                <if cond="input==1 || input.dm_root=='matchOne' || input.dm_root=='ruzhu'">
+                    <log label="trace:?level=MINOR_ALARM">
+                        <value expr="input"/>
+                    </log>
+                    <prompt>入驻问题</prompt>
                 </if>
 
-                <!--智能系统-->
-                <if cond="input==2 || input.dm_root=='matchTwo' || input.dm_root=='aiSys'">
-                    <log>进入智能系统</log>
-                    <goto next="aiSys.vxml#A2"/>
+                <!--办理入驻条件-->
+                <if cond="input.dm_root=='banliruzhu'">
+                    <log>
+                        <value expr="input.dm_root"/>
+                    </log>
+                    <assign name="ans" expr="'
+                        办理入驻需要以下条件,
+                        1,基本条件,企业注册地在盘锦科技孵化器所属区域内；新注册企业成立时间不足2年,
+                        2,企业类型,石油装备制造（工程技术服务）研发型企业；与油公司开展结算业务的贸易型企业（免租期2年）,
+                        3,智能制造研发型企业；软件和信息服务类企业；“互联网+”创新创业团队；其它高科技企业等。
+                        4,入驻企业已拥有自主知识产权的优先，没有自主知识产权的需要在入驻之日起半年内申请自主知识产权。
+                        '"/>
+                    <goto next="#repeat"/>
                 </if>
+                <!--孵化器可以提供哪些服务-->
+                <if cond="input.dm_root=='whichservice'">
+                    <assign name="ans" expr="'
+                        孵化器可以提供的服务如下
+                        入驻孵化器内的企业和团队,可享受创业咨询、政策辅导、手续代理、财务代理、
+                        法律咨询、专利服务、成果展示、展览会议、产品对接、信息咨询、融资投资、人才招聘等服务。
+                        '"/>
+                    <goto next="#repeat"/>
+                </if>
+                <!--入驻办理手续-->
+
+
+                <if cond="input.dm_root=='ruzhubanli'">
+                    <assign name="ans" expr="'
+                        入驻办理手续如下,
+                        1、意向入驻企业填写入孵申请书，报孵化器审核，孵化器审核后报招管委会科技局审核；
+                        2、入驻企业原则上注册资金不少于100万，不超过200万，经营范围包含制造、研发业务、技术服务等；
+                        3、入驻申请通过后孵化器为入驻企业安排房间登记备案，原则上每间办公室不少于4人；
+                        4、未办理注册的公司承诺15天内完成公司注册；
+                        5、企业完成物业费汇款事宜。
+                        '"/>
+                    <goto next="#repeat"/>
+                </if>
+
+                <!--入驻费用怎么收取-->
+                <if cond="input.dm_root=='ruzhufeiyong'">
+                    <assign name="ans" expr="'
+                        入驻费用怎么收取如下,
+                        入驻孵化器的企业享受3年免房租的优惠政策，只收取50元/年*平的物业管理费（包括水、电、网、暖）以及
+                        相应的押金（1-3间房间收取5000元，3间以上收取10000元）。
+                        '"/>
+                    <goto next="#repeat"/>
+                </if>
+
+                <!--入驻需要准备哪些材料-->
+                <if cond="input.dm_root=='ruzhucailiao'">
+                    <assign name="ans" expr="'
+                        入驻需要准备的材料如下,
+                        1.入孵申请书,
+                        2.公司简介,
+                        3.法人代表身份证复印件,
+                        4.营业执照复印件,
+                        5.企业相关资质证书（专利证书或其他）,
+                        6.公章、法人章
+                        '"/>
+                    <goto next="#repeat"/>
+                </if>
+
+                <!--政策咨询-->
+                <if cond="input==2 || input.dm_root=='matchTwo' || input.dm_root=='zhengce'">
+                    <log>
+                        <value expr="input"/>
+                    </log>
+                    <prompt>政策咨询</prompt>
+                </if>
+
+                <!--申请知识产权能享受什么政策-->
+                <if cond="input.dm_root=='xiangshouzhengce'">
+                    <assign name="ans" expr="'
+                        申请知识产权能享受政策如下:
+                        1.对高新区内企业当年获得授权的发明专利给予1万元补助，对当年获得授权的实用新型给予500元补助。
+                    '"/>
+                    <goto next="#repeat"/>
+                </if>
+
+                <!--高新技术企业享受什么政策-->
+                <if cond="input.dm_root=='gaoxingzhengce'">
+                    <assign name="ans" expr="'
+                        高新技术企业享受政策如下,
+                        首次获批国家高新技术企业给予15万元补助，通过重新认定的高新技术企业给予7.5万元补助。
+                    '"/>
+                    <goto next="#repeat"/>
+                </if>
+
+                <!--创建国家、省级创新平台享受怎样的政策-->
+                <if cond="input.dm_root=='pingtaizhengce'">
+                    <assign name="ans" expr="'
+                        创建国家、省级创新平台享受的政策如下,
+                        被认定为国家级工程技术研究中心、重点实验室、工程实验室且科技资源在高新区内的企业，一次性给予100万元补助；
+                        被认定为国家级企业技术中心、工程研究中心且科技资源在高新区内的企业，一次性给予50万元补助；
+                        被认定为省级企业技术中心、工程技术研究中心的企业、省级企业公共服务平台和产业技术创新平台的企业，一次性给予20万元补助。
+                    '"/>
+                    <goto next="#repeat"/>
+                </if>
+
+                <!--参加创新创业大赛享受什么政策-->
+                <if cond="input.dm_root=='dasaizhengce'">
+                    <assign name="ans" expr="'
+                        参加创新创业大赛享受政策如下,
+                        对入围中国创新创业大赛的企业给予30万元补助；
+                        对获得辽宁省大赛前三名的企业分别给予10万元、5万元、3万元补助。
+                    '"/>
+                    <goto next="#repeat"/>
+                </if>
+                <!--关于人才引进方面享受什么政策？-->
+                <if cond="input.dm_root=='rencaizhengce'">
+                    <assign name="ans" expr="'
+                        关于人才引进方面享受的政策如下,
+                        盘锦高新区鼓励入区企业引进国家各类人才，其中
+                        一类人才包括对国家、省（部）级有突出贡献的中青年专家、国内某一学科、技术领域的带头人、博士生导师；
+                        二类人才包括博士后、博士研究生等高层次人才；
+                        对以上高端人才年薪在20万元以上的，按照所交的个人所得税地方留成部分给予全额补贴。
+                        以上高端人才与企业签订3年以上长期工作合同的，可享受工资外津贴和安家补贴；
+                        一类人才工资外津贴1500元/月，安家补贴10万元；二类人才工资外津贴800元/月，安家补贴5万元。
+                        对在高新区成立公司从事创新创业活动的“两院”院士、国家“千人计划”、“万人计划”等高层次人才
+                        所承担的拥有自主知识产权的成果转化项目给予30万元的资金补助。
+                    '"/>
+                    <goto next="#repeat"/>
+                </if>
+
+                <!--开展产学研合作享受什么政策？-->
+                <if cond="input.dm_root=='hezuozhengce'">
+                    <assign name="ans" expr="'
+                        开展产学研合作享受的政策如下,
+                        对新引进并实现成果转化的研究院，经审定，按照实际建设投资规模给予20-50万元的运营补助。
+                        支持企业与科研院所共建博士后科研工作站，对区内获批的博士后工作站一次性给予10万元补助，并在科研项目上给予重点扶持。
+                        对于企业依托自身研发平台与两院院士合作，成立院士工作站的企业，一次性给予不少于100万元的建站补助。
+                        鼓励企业联合高校、科研院所开展创新研发活动，达成合作开发或委托开发的项目，按照合同执行金额10%进行补贴，最高不超过100万元。
+                    '"/>
+                    <goto next="#repeat"/>
+                </if>
+
                 <prompt>
                     <value expr="inputInvalid"/>
                 </prompt>
@@ -36,6 +175,40 @@
                 <prompt>
                     <value expr="inputError"/>
                     <value expr="mainP"/>
+                </prompt>
+            </catch>
+            <catch event="noinput nomatch" count="3">
+                <prompt>
+                    <value expr="inputError"/>
+                    <value expr="endP"/>
+                </prompt>
+                <exit/>
+            </catch>
+        </field>
+    </form>
+    <!--重播-->
+    <form id="repeat">
+        <field name="input" type="digits?lang=zh-CN;length=1">
+            <prompt>
+                <value expr="ans"/>
+            </prompt>
+            <prompt>重播请按九</prompt>
+            <filled>
+                <if cond="input==9">
+                    <goto next="#repeat"/>
+                </if>
+                <goto next="#main"/>
+            </filled>
+            <catch event="noinput nomatch" count="1">
+                <prompt>
+                    <value expr="inputError"/>
+
+                </prompt>
+            </catch>
+
+            <catch event="noinput nomatch" count="2">
+                <prompt>
+                    <value expr="inputError"/>
                 </prompt>
             </catch>
             <catch event="noinput nomatch" count="3">

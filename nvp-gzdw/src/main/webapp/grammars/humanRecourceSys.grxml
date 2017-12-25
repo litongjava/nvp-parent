@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入人资系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='humanRecourceSys'</tag>
+                <one-of>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我想 去</item>
+                        人资
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">为什么</item>
+                        管理<item repeat="0-1">人员</item>
+                        <item repeat="0-1">进不去</item>人资
+                        <item repeat="0-1">后台</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">你好</item>
+                        <item repeat="0-1">请</item>
+                        <item repeat="0-1">帮 我</item>
+                        <item repeat="0-1">处理</item> 岗位 编码 空
+                        <item repeat="0-1">问题</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">你好</item>
+                        <item repeat="0-1">请</item>
+                        处理 岗位 编码 空 问题
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        企业<item repeat="0-1">年金</item> 结转 薪酬
+                        <item repeat="0-1">问题</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        系统<item repeat="0-1">不能</item>修改
+                        内退<item repeat="0-1">人员</item> 岗位
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        系统 不能 修改 内退 人员 岗位
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        机构<item repeat="0-1">维护</item>提交
+                        审批<item repeat="0-1">空指针</item>异常
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        机构 维护 提交 审批 异常
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        导入 基数 缴费 名称 空
+                        <item repeat="0-1">怎么办</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">导入</item>
+                        公积金<item repeat="0-1">基数</item>
+                        <item repeat="0-1">提示</item> 缴费
+                        <item repeat="0-1">地域</item>名称
+                        <item repeat="0-1">不能 空</item>
+                        <item repeat="0-1">怎么办</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">员工</item>
+                        调配<item repeat="0-1">管理</item>
+                        <item repeat="0-1">返岗</item> 流程
+                        <item repeat="0-1">在哪 走</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        员工 调配 管理 返岗 流程
+                        <item repeat="0-1">走</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">员工</item>绩效
+                        发布<item repeat="0-1">绩效</item>
+                        结果<item repeat="0-1">不对</item>
+                        修改<item repeat="0-1">结果</item>数据
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        员工 绩效 发布 结果 不对
+                        <item repeat="0-1"> 修改 数据</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        请假 点击 显示 人员 列表
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        请假<item repeat="0-1">流程</item>
+                        <item repeat="0-1">点击</item>部门
+                        显示 <item repeat="0-1">不出</item>
+                        <item repeat="0-1">人员</item> 列表
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        流程<item repeat="0-1">审批</item> 角色
+                        <item repeat="0-1">怎么</item> 设置
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">你好</item>
+                        <item repeat="0-1">有</item>
+                        员工 考勤<item repeat="0-1">一直</item>休假 状态
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">你好</item>
+                        <item repeat="0-1">有</item>
+                        员工 考勤 休假 状态
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">用户</item>
+                        <item repeat="0-1">咨询</item>辞职 流程
+                        <item repeat="0-1">配置</item>问题
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">咨询</item>
+                        辞职 流程 配置 问题
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        离岗<item repeat="0-1">界面</item>
+                        <item repeat="0-1">没有</item>岗位
+                        <item repeat="0-1">选择</item> 功能
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        离岗 界面 岗位 选择 功能
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">你好</item>
+                        用工<item repeat="0-1">管理</item>
+                        页面<item repeat="0-1">没有</item> 退休
+                        <item repeat="0-1">人员</item> 数据
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">为什么</item>
+                        用工 管理 退休 人员 数据
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        修改<item repeat="0-1">六盘水</item>
+                        全日制<item repeat="0-1">员工</item>信息
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        修改 六盘水 全日制 员工 信息
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        报表<item repeat="0-1">管理</item>
+                        信息<item repeat="0-1">不一致</item> 提交
+                        <item repeat="0-1">不了</item>
+                        <item repeat="0-1">怎么办</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        报表 信息 不一致 提交
+                        <item repeat="0-1">不了</item>
+                        <item repeat="0-1">怎么办</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        人力<item repeat="0-1">资源</item>系统
+                        <item repeat="0-1">无法</item><item repeat="0-1">正常</item>
+                        上传 附件
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        人力 资源 无法 正常 上传 附件
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        员工 请假<item repeat="0-1">提交</item>
+                        <item repeat="0-1">空指针</item>异常
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">点击</item>
+                        考勤<item repeat="0-1">空指针</item>异常
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        休假<item repeat="0-1">申请</item>公休假
+                        <item repeat="0-1">怎么</item> 计算
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="main">
+        <item repeat="0-1">我想 问一下</item>
+        <item repeat="0-1">我 想</item>
+        <item repeat="0-1">我 要</item>
+        <item repeat="0-1">我</item>
+        <item repeat="0-1">我想 咨询</item>
+        <item repeat="0-1">你好</item>
+        <item repeat="0-1">请问</item>
+        <item repeat="0-1">为什么</item>
+    </rule>
+</grammar>

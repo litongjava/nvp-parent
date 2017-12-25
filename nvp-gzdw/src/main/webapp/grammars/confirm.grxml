@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='answerNo'</tag>
+                <one-of>
+                    <item>否</item>
+                    <item>不
+                        <item repeat="0-1">是</item>
+                        <item repeat="0-1">满意</item>
+                        <item repeat="0-1">选择</item>
+                    </item>
+                    <item>
+                        没有
+                        <item repeat="0-1">了</item>
+                    </item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='answerYes'</tag>
+                <one-of>
+                    <item>有</item>
+                    <item>是
+                        <item repeat="0-1">的</item>
+                    </item>
+                    <item>选择</item>
+                    <item>我选择</item>
+                    <item>还有</item>
+                    <item>满意</item>
+                    <item>还好</item>
+                </one-of>
+            </item>
+
+            <item>
+                <tag>SWI_meaning='cooperativeOfficeSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        协同 办公
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='humanRecourceSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        人资
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='desktopIssues'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        桌面
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='finaceSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        财务
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+            <item>
+                <tag>SWI_meaning='marketingSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        营销
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+</grammar>

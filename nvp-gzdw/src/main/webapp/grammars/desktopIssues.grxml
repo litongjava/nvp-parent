@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入4A系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='desktopIssues'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        桌面
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">电脑</item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        开机 <item repeat="0-1">无法</item>显示
+                     </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        办公 软件<item repeat="0-1">无法</item> 使用
+                    </item>
+                    <item>
+                        <item repeat="0-1">为什么</item>
+                        <ruleref uri="#main"/>
+                        电脑<item repeat="0-1">不能</item>上网
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我</item>
+                        <item repeat="0-1">需要</item>
+                        <item repeat="0-1">安装</item>扫描仪
+                        <item repeat="0-1">设备</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">怎么</item>
+                        <item repeat="0-1">如何</item>
+                        <item repeat="0-1">激活</item>
+                        凹<item repeat="0-1">费 思</item>
+                        <item repeat="0-1">二 零 一 零</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">怎么</item>
+                        <item repeat="0-1">如何</item>
+                        <ruleref uri="#main"/>
+                        激活 凹  二  零
+                    </item>
+                    <item>
+                        <item repeat="0-1">怎么</item>
+                        <item repeat="0-1">如何</item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        打印机<item repeat="0-1">需要</item>
+                        <item repeat="0-1">安装</item>驱动
+                    </item>
+                    <item>
+                        <item repeat="0-1">怎么</item>
+                        <item repeat="0-1">如何</item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">电脑</item>
+                        <item repeat="0-1">需要</item> 重装 系统
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>
+                        悠 盘 <item repeat="0-1">需要</item>注册
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>
+                        u <item repeat="0-1">需要</item>注册
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item>
+                        申请<item repeat="0-1">座机</item>电话
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item>
+                        <item repeat="0-1">安装</item> 劈
+                        <item repeat="0-1">地</item> 转换器
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item>
+                        安装 转换器
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        云盘 <item repeat="0-1">打不开</item>
+                        <item repeat="0-1">无法</item>更新
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>
+                        <item repeat="0-1">笔记本</item>电脑
+                        <item repeat="0-1">显示</item>
+                        温 斗<item repeat="0-1">思</item>
+                        <item repeat="0-1">副本</item>
+                        <item repeat="0-1">不是</item> 正版
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>
+                        笔记本 显示 副本 正版
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        安装<item repeat="0-1">c a 地</item>
+                        制图 软件
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        安装 c a d<item repeat="0-1">软件</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的 扎 袜</item>
+                        <item repeat="0-1">我的 抓 袜</item>
+                        <item repeat="0-1">我的 j a v a</item>
+                        <item repeat="0-1">扎 袜</item>
+                        <item repeat="0-1">抓 袜</item>
+                        <item repeat="0-1">j a v a</item>
+                        无法 加载
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        安装<item repeat="0-1">亚信</item>
+                        杀毒<item repeat="0-1">软件</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">电脑</item>
+                        <item repeat="0-1">我的</item>
+                        输入法<item repeat="0-1">不见 了</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        四 登录 装载 证书 出错
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        四<item repeat="0-1">a</item>
+                        <item repeat="0-1">无法</item> 登录
+                        <item repeat="0-1">提示</item>
+                        装载 证书<item repeat="0-1">组件</item>
+                        <item repeat="0-1">组件</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的 k</item>
+                        <item repeat="0-1">凯</item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">k</item> 无法 登录
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        申请 a d 账号
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">申请</item>
+                        <item repeat="0-1">a d</item> 域 账号
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>
+                        营销<item repeat="0-1">系统</item> 插件
+                        <item repeat="0-1">不对</item> 图形
+                        <item repeat="0-1">打不开</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>
+                        营销 插件 不对 图形
+                        <item repeat="0-1">打不开</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">电脑</item>
+                        显示器<item repeat="0-1">突然</item> 黑屏
+                        主机<item repeat="0-1">没有</item>
+                        <item repeat="0-1">运行 声音</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        电脑 黑屏 主机 运行
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <one-of>
+                            <item repeat="0-1">该怎么</item>
+                            <item repeat="0-1">该如何</item>
+                        </one-of>
+                        安装 <item repeat="0-1">哀 亿</item><item repeat="0-1">九</item> 浏览器
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>
+                        电脑<item repeat="0-1">无法</item>
+                        <item repeat="0-1">安装</item>企信
+                        <item repeat="0-1">g 爱</item><item repeat="0-1">系统</item>
+                        <item repeat="0-1">无法</item><item repeat="0-1">打开</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        电脑 无法 企信 g 爱 打开
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        打印机<item repeat="0-1">打印</item>
+                        <item repeat="0-1">提示</item>
+                        挨 劈 <item repeat="0-1">地址</item> 占用
+                    </item>
+                    <item>
+                        <item repeat="0-1">怎样</item>
+                        <item repeat="0-1">怎么</item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">全盘</item>格式化
+                        安装<item repeat="0-1">温 七</item> 系统
+                    </item>
+                    <item>
+                        <item repeat="0-1">屁</item>
+                        <item repeat="0-1">k</item>
+                        <item repeat="0-1">哎</item>
+                        <ruleref uri="#main"/>
+                        钥匙<item repeat="0-1">登录</item> 欧
+                        <item repeat="0-1">a</item> 办公
+                        <item repeat="0-1">系统</item>
+                        <item repeat="0-1">提示</item>锁定
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        电脑<item repeat="0-1">加</item>域
+                        <item repeat="0-1">没有</item> 账号
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        内网<item repeat="0-1">网页</item>
+                        <item repeat="0-1">打开</item>慢
+                        <item repeat="0-1">办公</item>
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        内网 打开 很慢 影响 办公
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">安装</item> 工具 软件
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        打印 挨 劈 地址 占用
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        打印机 提示 地址 占用
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">危</item>
+                        <item repeat="0-1">屁</item>
+                        <item repeat="0-1">恩</item>
+                        <item repeat="0-1">无法</item>
+                        <item repeat="0-1">正常</item> 连接
+                        <item repeat="0-1">提示</item> 密码
+                        <item repeat="0-1">被</item> 锁
+                    </item>
+                    <item>
+                        <item repeat="0-1">我的</item>
+                        <ruleref uri="#main"/>
+                        危 屁 恩 无法 连接 密码 锁
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="main">
+        <item repeat="0-1">我想 问一下</item>
+        <item repeat="0-1">我 想</item>
+        <item repeat="0-1">我 要</item>
+        <item repeat="0-1">我想 咨询</item>
+        <item repeat="0-1">你好</item>
+        <item repeat="0-1">请问</item>
+        <item repeat="0-1">为什么</item>
+    </rule>
+</grammar>

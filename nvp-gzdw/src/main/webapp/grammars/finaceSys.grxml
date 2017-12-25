@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入财务的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='finaceSys'</tag>
+                <one-of>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        财务
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        财务<item repeat="0-1">系统</item>
+                        <item repeat="0-1">怎么</item><item repeat="0-1">找到</item>
+                        科技<item repeat="0-1">项目</item>合同
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        财务 删除<item repeat="0-1">业务</item>
+                        <item repeat="0-1">部门</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">其他</item>费用 报销
+                        <item repeat="0-1">提示</item>
+                        编制<item repeat="0-1">允许</item>
+                        <item repeat="0-1">发生</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        差旅费<item repeat="0-1">报销</item>
+                        <item repeat="0-1">推送</item>
+                        <item repeat="0-1">提示</item>控制
+                        <item repeat="0-1">方案</item>资金 计划
+                        <item repeat="0-1">费用</item>
+                        <item repeat="0-1">报销</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        无形 资产<item repeat="0-1">财务</item>
+                        <item repeat="0-1">数据</item>
+                        <item repeat="0-1">无法</item>
+                        <item repeat="0-1">确认</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        电子<item repeat="0-1">支付</item>
+                        <item repeat="0-1">审批</item>
+                        <item repeat="0-1">界面</item>
+                        账号<item repeat="0-1">信息</item>
+                        <item repeat="0-1">不一致</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        承兑<item repeat="0-1">汇票</item>财务
+                        <item repeat="0-1">流程</item>
+                        <item repeat="0-1">完成</item>
+                        营销<item repeat="0-1">系统</item>
+                        <item repeat="0-1">无法</item>
+                        <item repeat="0-1">查看</item>
+                        <item repeat="0-1">不了</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item>
+                        变更<item repeat="0-1">往来</item>
+                        <item repeat="0-1">单位</item>名称
+                        <item repeat="0-1">及</item>账号
+                        <item repeat="0-1">信息</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">退</item>预付 电费
+                        <item repeat="0-1">提示</item>
+                        <item repeat="0-1">没有</item>配置
+                        <item repeat="0-1">资金</item><item repeat="0-1">支付</item>
+                        <item repeat="0-1">后置</item><item repeat="0-1">流程</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">增加</item>
+                        资本性<item repeat="0-1">支出</item>
+                        <item repeat="0-1">资金</item>计划
+                        <item repeat="0-1">表</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">开户</item>账号 错误
+                        <item repeat="0-1">需要</item>修改
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item><item repeat="0-1">批量</item>
+                        修改 收款<item repeat="0-1">方</item>账号 <item repeat="0-1">信息</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">工程</item><item repeat="0-1">业务</item>
+                        报销<item repeat="0-1">支付</item><item repeat="0-1">申请单</item>
+                        <item repeat="0-1">提示</item><item repeat="0-1">报销</item>
+                        金额<item repeat="0-1">超出</item>分解<item repeat="0-1">金额</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">预购</item>电费 单据
+                        <item repeat="0-1">需要</item>退回
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        单位<item repeat="0-1">账号</item><item repeat="0-1">登录</item>
+                        财务<item repeat="0-1">系统</item><item repeat="0-1">显示</item>
+                        <item repeat="0-1">不是</item><item repeat="0-1">本 单位</item>
+                        <item repeat="0-1">组织</item>机构
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">工程</item>合同
+                        <item repeat="0-1">归属</item>部门
+                        <item repeat="0-1">不对</item>
+                        <item repeat="0-1">需要</item>刷新
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        绑定<item repeat="0-1">管理员</item>
+                        <item repeat="0-1">账号</item>权限
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        营销<item repeat="0-1">系统</item>
+                        <item repeat="0-1">完成</item>对账
+                        <item repeat="0-1">推送</item>
+                        财务<item repeat="0-1">系统</item>
+                        <item repeat="0-1">看不到</item>数据
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">导入</item>固定 资产
+                        <item repeat="0-1">卡片</item>
+                        <item repeat="0-1">全量</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        作废 单据<item repeat="0-1">对应</item>
+                        资金<item repeat="0-1">任务</item>分解
+                        <item repeat="0-1">后台</item>删除
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">用户</item>
+                        <item repeat="0-1">需要</item>修改 收款
+                        <item repeat="0-1">方</item>账户
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">打开</item>资金 模块
+                        <item repeat="0-1">没有</item>
+                        <item repeat="0-1">子项</item>菜单
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        银行 数据<item repeat="0-1">推送</item>
+                        <item repeat="0-1">成功</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        银行 数据 <item repeat="0-1">无法</item>
+                        采集
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">咨询</item>物资
+                        <item repeat="0-1">部门</item>流程
+                        <item repeat="0-1">过程</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        融资<item repeat="0-1">无法</item>
+                        <item repeat="0-1">计提</item><item repeat="0-1">无法</item>
+                        <item repeat="0-1">生成</item>利息 单
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        收款<item repeat="0-1">方</item>
+                        <item repeat="0-1">信息</item>变更
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        工资<item repeat="0-1">人资</item>
+                        <item repeat="0-1">系统</item><item repeat="0-1">推送</item>
+                        财务<item repeat="0-1">系统</item><item repeat="0-1">没有</item>
+                        权限
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">推</item>退费
+                        <item repeat="0-1">流程</item>
+                        <item repeat="0-1">提示</item>错误
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        工程 项目<item repeat="0-1">没有</item>
+                        子项<item repeat="0-1">工程</item>
+                        <item repeat="0-1">导入</item><item repeat="0-1">时候</item>
+                        <item repeat="0-1">提示</item><item repeat="0-1">必须 有</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">银行</item>凭证
+                        <item repeat="0-1">不能</item>传递
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">分公司</item>折旧
+                        <item repeat="0-1">子公司</item><item repeat="0-1">折旧</item>
+                        差异
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        报表<item repeat="0-1">任务</item>
+                        <item repeat="0-1">缺少</item>
+                        <item repeat="0-1">年度</item>结算 报表
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="main">
+        <item repeat="0-1">我想 问一下</item>
+        <item repeat="0-1">我 想</item>
+        <item repeat="0-1">我 要</item>
+        <item repeat="0-1">我想 咨询</item>
+        <item repeat="0-1">你好</item>
+        <item repeat="0-1">请问</item>
+        <item repeat="0-1">为什么</item>
+    </rule>
+</grammar>

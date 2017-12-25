@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <!--进入4A系统的语法-->
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='cooperativeOfficeSys'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        协同 办公
+                        <item repeat="0-1">系统</item>
+
+                    </item>
+                    <item>协 同</item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">用户</item>
+                        <item repeat="0-1">有</item>
+                        <item repeat="0-1">份</item>
+                        发布 公告<item repeat="0-1">需要</item> 修改
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">为什么</item>
+                        工作 <item repeat="0-1">联系</item>
+                        流程<item repeat="0-1">没有</item>
+                        <item repeat="0-1"> 文件</item> 办结
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        工作 联系 单 流程 没有 文件 办结
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">用户 反映</item>
+                        欧 <item repeat="0-1">a</item>新增
+                        <item repeat="0-1">用户</item> 异常
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">如何</item>学习
+                        欧<item repeat="0-1">a</item><item repeat="0-1">业务</item>
+                        咨询 业务<item repeat="0-1">文件</item> 手册
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        学习 业务 咨询 业务 手册
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">你好</item>
+                        <item repeat="0-1">用户</item>管理
+                        <item repeat="0-1">制度</item> 废止
+                        <item repeat="0-1">流程</item>
+                        <item repeat="0-1">无法</item>推进
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">用户</item>
+                        管理 制度 废止 进程 推进
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">将</item>农电
+                        <item repeat="0-1">账号</item>
+                        <item repeat="0-1">调至</item>
+                        产业 投资<item repeat="0-1">部</item>
+                        <item repeat="0-1">并</item>
+                        注销<item repeat="0-1">对应</item>
+                        <item repeat="0-1">兼职</item>账号
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item>
+                        农电 账号 产业 投资 注销 兼职 账号
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">将</item>文件
+                        调整<item repeat="0-1">拟稿</item> 环节
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        文件 调整 拟稿 环节
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        起草<item repeat="0-1">合同</item>
+                        提示<item repeat="0-1">没有</item>填写
+                        <item repeat="0-1">合同</item> 联系
+                        <item repeat="0-1">人</item>
+                        <item repeat="0-1">其实 写了</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        起草 合同 提示 填写 联系
+                        <item repeat="0-1">其实 写</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        欧<item repeat="0-1">a</item>
+                        文件<item repeat="0-1">新启</item> 错误
+                        <item repeat="0-1">需要</item> 删除
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        o 文件 新启 错误 删除
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        十九<item repeat="0-1">大</item> 供电
+                        <item repeat="0-1">总结</item> 表彰
+                        <item repeat="0-1">大会</item>
+                        <item repeat="0-1">需要</item> 调整
+                        <item repeat="0-1">分发</item>环节
+
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        十九 保 供电 表彰 大会 调整 分发
+                        <item repeat="0-1">环节</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">有</item>
+                        合同<item repeat="0-1">需要</item>
+                        <item repeat="0-1">调 至</item>
+                        中标<item repeat="0-1">通知 书</item>环节
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">将</item>
+                        <item repeat="0-1">文件</item>
+                        流程<item repeat="0-1">调整</item> 拟稿
+                        <item repeat="0-1">环节</item> 修改
+                        <item repeat="0-1">移到</item>领导
+                        <item repeat="0-1">会签</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">将</item>
+                        <item repeat="0-1">两份</item>
+                        部门<item repeat="0-1">收文</item> 文件
+                        <item repeat="0-1">流程</item>
+                        调整<item repeat="0-1">收文</item>
+                        <item repeat="0-1">运转</item> 环节
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">将 两份</item>
+                        <item repeat="0-1">将</item>
+                        收文 流程 收文 运转 环节
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">将</item>
+                        文件<item repeat="0-1">还原</item>删除
+                        <item repeat="0-1">前</item> 状态
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        制度<item repeat="0-1">已经</item>终止
+                        文件<item repeat="0-1">怎么</item> 恢复
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        制度 已经 终止 文件 怎么 恢复
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        发文<item repeat="0-1"> 流程</item> 问题
+                        <item repeat="0-1">发文 不对</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        发文 流程
+                        <item repeat="0-1">发文人 不对</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">有 份</item>
+                        快报<item repeat="0-1">简报</item>
+                        <item repeat="0-1">需要</item> 修改
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        作业<item repeat="0-1">标准</item>
+                        制度<item repeat="0-1">需要</item>
+                        <item repeat="0-1">调至</item>
+                        <item repeat="0-1">编号</item>
+                        <item repeat="0-1">环节</item>
+                        <item repeat="0-1">进行</item> 编号
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        作业 标准 制度 需要 调至 编号 环节 进行 编号
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        四<item repeat="0-1">a</item>
+                        平台<item repeat="0-1">没有</item>
+                        协同<item repeat="0-1">办公</item> 系统
+                        <item repeat="0-1">需要</item>
+                        激活
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        四 a 平台 没有 协同 办公 系统
+                        <item repeat="0-1">需要 激活</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        激活 四 a 平台 协同 办公 系统
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1"> 用户</item>
+                        <item repeat="0-1">无法</item> 提交 出差 申请
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1"> 用户</item>
+                        无法 提交 出差 申请
+                        <item repeat="0-1">怎么办</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item>
+                        修改<item repeat="0-1">模板</item>
+                        增加 内容
+                        <item repeat="0-1">发送</item>
+                        <item repeat="0-1">管理 邮箱</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">需要</item>
+                        修改 模板 增加 内容 发送 管理员 邮箱
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        召回<item repeat="0-1">没有</item> 盖章
+                        <item repeat="0-1">分发</item>文件
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        召回 没有 盖章 发出 文件
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        团委 主任 环节 调度 人员
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        团委<item repeat="0-1">发文</item>主任
+                        审定<item repeat="0-1">环节</item>
+                        <item repeat="0-1">添加</item> 调度
+                        <item repeat="0-1">科</item>人员
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        替换<item repeat="0-1">发文 </item> 模板
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        新 k 绑定 欧 系统
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">新</item>
+                        申请<item repeat="0-1">k</item>
+                        <item repeat="0-1"> 怎么</item>绑定
+                        欧<item repeat="0-1">a</item>系统
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">电脑</item>
+                        浏览器 打开 协同 系统
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">电脑</item>
+                        浏览器<item repeat="0-1">无法</item>
+                        <item repeat="0-1">打开</item> 协同
+                        <item repeat="0-1">办公</item> 系统
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="main">
+        <item repeat="0-1">我想 问一下</item>
+        <item repeat="0-1">我 想</item>
+        <item repeat="0-1">我 要</item>
+        <item repeat="0-1">我</item>
+        <item repeat="0-1">我想 咨询</item>
+        <item repeat="0-1">你好</item>
+        <item repeat="0-1">请问</item>
+        <item repeat="0-1">为什么</item>
+    </rule>
+</grammar>

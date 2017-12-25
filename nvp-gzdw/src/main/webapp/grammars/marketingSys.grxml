@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="_ROOT_">
+
+    <meta name="swirec_compile_parser" content="1"/>
+
+    <rule id="_ROOT_" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#vocab"/>
+                <tag>
+                    if (SWI_vars.disallow) {
+                    var disallow_arr = SWI_vars.disallow.split('^');
+                    disallowList = SWI_vars.disallow;
+                    for (var i=0; i &lt; disallow_arr.length; i++) {
+                    if (vocab.SWI_meaning == disallow_arr[i]) {
+                    SWI_disallow=1;
+                    break;
+                    }
+                    }
+                    }
+                    if(vocab.SWI_meaning) {SWI_meaning=vocab.SWI_meaning;
+                    dm_root=vocab.SWI_meaning;
+                    grammar_version='20170505';
+                    MEANING=SWI_meaning;
+                    }
+                </tag>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="vocab">
+        <one-of>
+            <item>
+                <tag>SWI_meaning='marketingSys'</tag>
+                <one-of>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
+                        营销
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <!--你好，我想催一下营销的一张单-->
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">你好</item>
+                        作废<item repeat="0-1">张</item>工单
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">用户</item>
+                        <item repeat="0-1">无法 走</item>
+                        档案 <item repeat="0-1">信息</item>维护
+                        流程
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        抄表 区段 <item repeat="0-1">三个</item>
+                        <item repeat="0-1">用户</item>
+                        <item repeat="0-1">找不到</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        电子化<item repeat="0-1">移交单</item>流程
+                        <item repeat="0-1">走完</item>
+                        <item repeat="0-1">提示</item>
+                        <item repeat="0-1">未</item>结束
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        工单<item repeat="0-1">待办</item>情况
+                        <item repeat="0-1">没有</item>信息
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">走</item>
+                        高压 新装<item repeat="0-1">流程</item>
+                        <item repeat="0-1">无法</item>
+                        <item repeat="0-1">推走</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        回退<item repeat="0-1">无法</item>
+                        <item repeat="0-1">查找</item>单据
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">批量</item>建档
+                        <item repeat="0-1">流程</item>
+                        <item repeat="0-1">无法</item>推进
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        供电<item repeat="0-1">方案</item>
+                        <item repeat="0-1">无法</item>保存
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        受电 装置 <item repeat="0-1">变更</item>
+                        <item repeat="0-1">不能 走</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">自动</item>查询
+                        电量 <item repeat="0-1">提示</item>
+                        编号<item repeat="0-1">错</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">预购</item>电费
+                        <item repeat="0-1">统计</item>金额
+                        财务<item repeat="0-1">不一样</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        工单<item repeat="0-1">过户</item>
+                        <item repeat="0-1">现场</item>勘察
+                        <item repeat="0-1">图</item>
+                        <item repeat="0-1">无法</item>保存
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">预收</item>金额
+                        <item repeat="0-1">预收</item>统计
+                        金额<item repeat="0-1">不一致</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">无法</item>
+                        录入<item repeat="0-1">示数</item>
+                        抄表<item repeat="0-1">册 号</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        财务<item repeat="0-1">推送</item>
+                        <item repeat="0-1">过来</item>数据
+                        营销<item repeat="0-1">无法</item>查询
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        远程 抄表 <item repeat="0-1">调整</item>
+                        <item repeat="0-1">户号</item>
+                        <item repeat="0-1">加</item>
+                        <item repeat="0-1">资产</item>
+                        <item repeat="0-1">编号</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        营销<item repeat="0-1">系统</item>
+                        计量点<item repeat="0-1">流程</item>
+                        <item repeat="0-1">显示</item>错误
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">有</item>电价
+                        代码<item repeat="0-1">但</item>
+                        <item repeat="0-1">执行</item>电价
+                        <item repeat="0-1">零</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        营销<item repeat="0-1">系统</item>
+                        变更<item repeat="0-1">g 爱</item>
+                        <item repeat="0-1">系统</item>
+                        <item repeat="0-1">挨 滴</item><item repeat="0-1">流程</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">修改</item>变压器
+                        <item repeat="0-1">运行</item>状态
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">无法</item>
+                        查询 工单
+                        <item repeat="0-1">怎么办</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        计量 模块<item repeat="0-1">数据</item>
+                        <item repeat="0-1">不能</item><item repeat="0-1">上传</item>
+                        <item repeat="0-1">和</item>下载 工单
+                        <item repeat="0-1">号</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">工单</item>销户 流程
+                        <item repeat="0-1">图形化</item>模型
+                        <item repeat="0-1">只有</item>高压电
+                        <item repeat="0-1">源点</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        抄表<item repeat="0-1">册</item>数据
+                        <item repeat="0-1">功能</item>
+                        <item repeat="0-1">无法</item>实现
+                    </item>
+                </one-of>
+            </item>
+        </one-of>
+    </rule>
+    <rule id="main">
+        <item repeat="0-1">我想 问一下</item>
+        <item repeat="0-1">我 想</item>
+        <item repeat="0-1">我 要</item>
+        <item repeat="0-1">我想 咨询</item>
+        <item repeat="0-1">你好</item>
+        <item repeat="0-1">请问</item>
+        <item repeat="0-1">为什么</item>
+    </rule>
+</grammar>

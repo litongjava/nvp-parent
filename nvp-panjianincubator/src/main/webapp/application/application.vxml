@@ -13,7 +13,7 @@
     <!--开始话术-->
     <var name="mainP" expr="'你好,这里是盘锦孵化器,你可以这样问问题,例如:办理入驻需要哪些条件'"/>
     <!--输入错误时的话术-->
-    <var name="inputError" expr="'您的输入无效,'"/>
+    <var name="inputError" expr="'您的意思我没有太理解,'"/>
     <!--输入无效话术-->
-    <var name="inputInvalid" expr="'您的意思我没有太理解,'"/>
+    <var name="inputInvalid" expr="'您的输入无效,'"/>
 </vxml>

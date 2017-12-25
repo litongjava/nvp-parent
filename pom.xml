@@ -18,6 +18,10 @@
         <module>nvp-receive</module>
         <module>nvp-southpower</module>
         <module>nvp-panjianincubator</module>
+        <module>nvp-outcall</module>
+        <module>nvp-waihu-ap</module>
+        <module>nvp-gzdw</module>
+        <module>nvp-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
