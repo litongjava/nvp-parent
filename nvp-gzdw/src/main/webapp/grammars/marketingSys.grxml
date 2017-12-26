@@ -46,6 +46,25 @@
                         <item repeat="0-1">问题</item>
                         <item repeat="0-1">系统</item>
                     </item>
+                    <item>营销
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>营销<item repeat="0-1">系统</item>
+                        <item repeat="0-1">有 问题</item>
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">出现 问题</item>
+                        <item repeat="0-1">相关 问题</item>
+                        <item repeat="0-1">不能 打开</item>
+                        <item repeat="0-1">打 不 开</item>
+                        <item repeat="0-1">打不开 了</item>
+                        <item repeat="0-1">登录 不了</item>
+                        <item repeat="0-1">登录</item>
+                        <item repeat="0-1">无法 登录</item>
+                        <item repeat="0-1">怎么办</item>
+                    </item>
                     <!--你好，我想催一下营销的一张单-->
                     <item>
                         <ruleref uri="#main"/>

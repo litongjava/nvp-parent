@@ -37,9 +37,34 @@
                     <item>
                         <ruleref uri="#main"/>
                         <item repeat="0-1">我想 问</item>
-                        <item repeat="0-1">我想 去</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            去</item>
                         人资
+                        <item repeat="0-1">问题</item>
                         <item repeat="0-1">系统</item>
+                    </item>
+                    <item>人资
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">我的</item>人资<item repeat="0-1">系统</item>
+                        <item repeat="0-1">有 问题</item>
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">出现 问题</item>
+                        <item repeat="0-1">相关 问题</item>
+                        <item repeat="0-1">不能 打开</item>
+                        <item repeat="0-1">打 不 开</item>
+                        <item repeat="0-1">打不开 了</item>
+                        <item repeat="0-1">登录 不了</item>
+                        <item repeat="0-1">登录</item>
+                        <item repeat="0-1">无法 登录</item>
+                        <item repeat="0-1">怎么办</item>
                     </item>
                     <item>
                         <ruleref uri="#main"/>

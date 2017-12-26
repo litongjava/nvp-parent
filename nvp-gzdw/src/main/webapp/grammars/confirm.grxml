@@ -36,8 +36,14 @@
                     <item>否</item>
                     <item>不
                         <item repeat="0-1">是</item>
+                        <item repeat="0-1">是的</item>
+                        <item repeat="0-1">对</item>
+                        <item repeat="0-1">需要</item>
                         <item repeat="0-1">满意</item>
+                        <item repeat="0-1">可以</item>
+                        <item repeat="0-1">行</item>
                         <item repeat="0-1">选择</item>
+                        <item repeat="0-1">要</item>
                     </item>
                     <item>
                         没有
@@ -54,10 +60,14 @@
                         <item repeat="0-1">的</item>
                     </item>
                     <item>选择</item>
+                    <item>好<item repeat="0-1">的</item></item>
                     <item>我选择</item>
                     <item>还有</item>
+                    <item>需要</item>
                     <item>满意</item>
                     <item>还好</item>
+                    <item>可以</item>
+                    <item>行</item>
                 </one-of>
             </item>
 

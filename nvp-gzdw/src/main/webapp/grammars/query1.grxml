@@ -105,6 +105,10 @@
                         <item repeat="0-1">服务</item>
                         <item repeat="0-1">系统</item>
                     </item>
+                    <item>人工
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
                 </one-of>
             </item>
 
@@ -123,6 +127,10 @@
                         <item repeat="0-1">问题</item>
                         <item repeat="0-1">系统</item>
                     </item>
+                    <item>智能
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
                 </one-of>
             </item>
 
@@ -136,6 +144,27 @@
                 </one-of>
             </item>
 
+            <item>
+                <tag>SWI_meaning='hearing'</tag>
+                <one-of>
+                    <item>
+                        <item repeat="0-1">我想 问</item>
+                        <item repeat="0-1">我
+                            <one-of>
+                                <item>想</item>
+                                <item>要</item>
+                            </one-of>
+                            </item>
+                        重听
+                        <item repeat="0-1">一遍</item>
+                        <item repeat="0-1">一次</item>
+                    </item>
+                    <item>人工
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
+                </one-of>
+            </item>
         </one-of>
     </rule>
 </grammar>

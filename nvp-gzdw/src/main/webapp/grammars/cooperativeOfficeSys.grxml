@@ -28,7 +28,7 @@
             </item>
         </one-of>
     </rule>
-    <!--进入4A系统的语法-->
+    <!--进入协同办公系统的语法-->
     <rule id="vocab">
         <one-of>
             <item>
@@ -46,13 +46,24 @@
                         <item repeat="0-1">系统</item>
 
                     </item>
-                    <item>协 同</item>
+                    <item>协同
+                        <item repeat="0-1">办公</item>
+                        <item repeat="0-1">系统</item>
+                    </item>
                     <item>
                         <ruleref uri="#main"/>
-                        <item repeat="0-1">用户</item>
-                        <item repeat="0-1">有</item>
-                        <item repeat="0-1">份</item>
-                        发布 公告<item repeat="0-1">需要</item> 修改
+                        <item repeat="0-1">我的</item>协同 办公<item repeat="0-1">系统</item>
+                        <item repeat="0-1">有 问题</item>
+                        <item repeat="0-1">问题</item>
+                        <item repeat="0-1">出现 问题</item>
+                        <item repeat="0-1">相关 问题</item>
+                        <item repeat="0-1">不能 打开</item>
+                        <item repeat="0-1">打 不 开</item>
+                        <item repeat="0-1">打不开 了</item>
+                        <item repeat="0-1">登录 不了</item>
+                        <item repeat="0-1">登录</item>
+                        <item repeat="0-1">无法 登录</item>
+                        <item repeat="0-1">怎么办</item>
                     </item>
                     <item>
                         <ruleref uri="#main"/>
@@ -64,6 +75,20 @@
                     <item>
                         <ruleref uri="#main"/>
                         工作 联系 单 流程 没有 文件 办结
+                    </item>
+                    <item>
+                        <ruleref uri="#main"/>
+                        <item repeat="0-1">有</item>
+                        <item repeat="0-1">用户</item>
+                        <item repeat="0-1">反映</item>
+                        <item repeat="0-1">有</item>
+                        <one-of>
+                            <item repeat="0-1">一份</item>
+                            <item repeat="0-1">份</item>
+                        </one-of>
+                        <item repear="0-1">已经</item>
+                        发布 公告
+                        <item repeat="0-1">需要</item> 修改
                     </item>
                     <item>
                         <ruleref uri="#main"/>

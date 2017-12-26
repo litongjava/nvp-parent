@@ -3,62 +3,104 @@
 <!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
 <!--指定xml版本-->
 <vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
-    <!--开始定义请求数据变量,123-->
+    <!--开始定义请求数据变量-->
     <!--请求数据的地址-->
-    <var name="remote" expr="'http://192.168.28.177:8081/recive/test2.do'"/>
-    <var name="filename" expr="'/nvp-baozhang/vxml/'"/>
+    <var name="remote" expr="'http://192.168.28.216:8080/recive/test2.do'"/>
+    <var name="filename" expr="'/dianli/vxml/index.vxml'"/>
     <!--请求正确后返回执行的formid-->
-    <var name="formidSuccess" expr="'success.vxml#'"/>
+    <var name="formidSuccess" expr="'#success'"/>
     <!--请求错误后返回执行的formid-->
     <var name="formidFail" expr="'#fail'"/>
     <var name="qname" expr="''"/>
+    <var name="shangji" expr="'*'"/>
+    <var name="toindex" expr="'#'"/>
     <!--结束话术-->
     <var name="endP" expr="'感谢您的致电,再见'"/>
-    <!--开始话术-->
-    <var name="mainP" expr="'欢迎致电贵阳电网信息服务热线，人工系统请按1，智能系统请按2'"/>
     <!--输入错误时的话术-->
-    <var name="inputError" expr="'您的意思我没有太理解,'"/>
+    <var name="inputError" expr="'您的输入无效,'"/>
     <!--输入无效话术-->
-    <var name="inputInvalid" expr="'您的输入无效'"/>
+    <var name="inputInvalid" expr="'您的意思我没有太理解,'"/>
 
-    <var name="noAdd" expr="'暂未添加智能系统'"/>
-    <form id="main">
+    <!--<form>-->
+    <!--<block>测试成功</block>-->
+    <!--</form>-->
+
+    <var name="A1P" expr="'欢迎致电贵阳电网信息服务热线,请直接说出您的问题,或选择以下系统,
+                协同办公系统,
+                人资系统，
+                营销系统,
+                财务系统,
+                桌面问题,
+                人工服务,
+                或选择重听
+                '"/>
+
+    <!--人工系统-->
+    <form id="A1">
         <field name="input" type="digits?language=zh-CN;length=1">
             <prompt>
-                <value expr="mainP"/>
+                <value expr="A1P"/>
             </prompt>
             <grammar src="../grammars/query1.grxml"/>
-
+            <!--匹配协同办公系统-->
+            <grammar src="../grammars/cooperativeOfficeSys.grxml"/>
+            <!--匹配人资系统-->
+            <grammar src="../grammars/humanRecourceSys.grxml"/>
+            <!--匹配营销系统-->
+            <grammar src="../grammars/marketingSys.grxml"/>
+            <!--匹配财务管理-->
+            <grammar src="../grammars/finaceSys.grxml"/>
+            <!--匹配桌面系统-->
+            <grammar src="../grammars/desktopIssues.grxml"/>
             <filled>
-                <!--人工系统-->
-                <if cond="input==1 || input.dm_root=='matchOne' || input.dm_root=='manualSys'">
-                    <log>进人工系统</log>
-                    <goto next="manualService.vxml"/>
+                <!--进入协同办公系统-->
+                <if cond="input==1 || input.dm_root=='matchOne' || input.dm_root=='cooperativeOfficeSys'">
+                    <goto next="cooperativeOfficeSys.vxml#A1_1"/>
+                </if>
+                <!--人资系统-->
+                <if cond="input==2 || input.dm_root=='matchTwo' || input.dm_root=='humanRecourceSys'">
+                    <goto next="humanRecourceSys.vxml#A1_2"/>
+                </if>
+                <!--营销系统-->
+                <if cond="input==3 || input.dm_root=='matchThree' || input.dm_root=='marketingSys'">
+                    <goto next="marketingSys.vxml#A1_3"/>
+                </if>
+                <!--财务系统-->
+                <if cond="input==4 || input.dm_root=='matchFour' || input.dm_root=='finaceSys'">
+                    <goto next="finaceSys.vxml#A1_4"/>
+                </if>
+                <!--桌面管理-->
+                <if cond="input==5 || input.dm_root=='matchFive' || input.dm_root=='desktopIssues'">
+                    <goto next="desktopIssues.vxml#A1_5"/>
+                </if>
+                <!--人工服务-->
+                <if cond="input==0 || input.dm_root=='matchZero' || input.dm_root=='manualSys'">
+                    <goto next="#transfer"/>
+                </if>
+                <!--重播-->
+                <if cond="input==9 || input.dm_root=='matchNine' || input.dm_root=='hearing'">
+                    <goto next="#A1"/>
                 </if>
 
-                <!--智能系统-->
-                <if cond="input==2 || input.dm_root=='matchTwo' || input.dm_root=='aiSys'">
-                    <log>进入智能系统</log>
-                    <value expr="noAdd"/>
-                    <goto next="manualService.vxml"/>
-                </if>
                 <prompt>
                     <value expr="inputInvalid"/>
                 </prompt>
-                <goto next="#main"/>
+                <goto next="#A1"/>
             </filled>
             <catch event="noinput nomatch" count="1">
                 <prompt>
-                    <value expr="inputError"/>                    <value expr="mainP"/>
+                    <value expr="inputError"/>
+                    <value expr="A1P"/>
                 </prompt>
             </catch>
 
             <catch event="noinput nomatch" count="2">
                 <prompt>
                     <value expr="inputError"/>
-                    <value expr="mainP"/>
+                    <value expr="A1P"/>
                 </prompt>
             </catch>
+
             <catch event="noinput nomatch" count="3">
                 <prompt>
                     <value expr="inputError"/>
@@ -69,5 +111,20 @@
         </field>
     </form>
 
-
+    <!--转人工-->
+    <form id="transfer">
+        <transfer name="call" dest="8000" bridge="false">
+            <prompt>正在为您转接,请稍后</prompt>
+            <filled>
+                <prompt>
+                    <value expr="call"/>
+                </prompt>
+                <if cond="call=='noanswer'">
+                    <prompt>话务员无法接听你的电话</prompt>
+                    <disconnect/>
+                    <exit/>
+                </if>
+            </filled>
+        </transfer>
+    </form>
 </vxml>
