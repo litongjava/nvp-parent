@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+
+<vxml version="2.0">
+    <!--转人工-->
+    <form id="transfer">
+        <transfer name="call" dest="8000" bridge="false">
+            <prompt>正在为您转接,请稍后</prompt>
+            <filled>
+                <prompt>
+                    <value expr="call"/>
+                </prompt>
+                <if cond="call=='noanswer'">
+                    <prompt>话务员无法接听你的电话</prompt>
+                    <disconnect/>
+                    <exit/>
+                </if>
+            </filled>
+        </transfer>
+    </form>
+</vxml>
