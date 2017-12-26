@@ -20,7 +20,7 @@
             <!--<grammar src="../grammars/full_dtmf.grxml"/>-->
             <grammar src="../grammars/confirm.grxml"/>
             <filled>
-                <!---->
+
                 <log expr="input.dm_root"/>
 
                 <if cond="input.dm_root=='answerYes' || input==1">
