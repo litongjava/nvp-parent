@@ -2,13 +2,8 @@
 <!--添加vxml约束,必须添加-->
 <!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
 <!--指定xml版本-->
-<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
-    <!--结束话术-->
-    <var name="endP" expr="'感谢您的致电,再见'"/>
-    <!--输入错误时的话术-->
-    <var name="inputError" expr="'您的输入无效,'"/>
-    <!--输入无效话术-->
-    <var name="inputInvalid" expr="'您的意思我没有太理解,'"/>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN" application="../application/application.vxml">
+
     <!--营销系统-->
     <var name="A1_1P" expr="'是否选择协同办公系统坐席为您服务'"/>
 
@@ -17,11 +12,12 @@
             <prompt>
                 <value expr="A1_1P"/>
             </prompt>
-            <!--<grammar src="../grammars/full_dtmf.grxml"/>-->
+
             <grammar src="../grammars/confirm.grxml"/>
             <filled>
 
                 <log expr="input.dm_root"/>
+
 
                 <if cond="input.dm_root=='answerYes' || input==1">
                     <goto next="manualService.vxml#transfer"/>

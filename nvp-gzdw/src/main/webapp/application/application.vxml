@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--添加vxml约束,必须添加-->
+<!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
+<!--指定xml版本-->
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
+    <!--开始定义请求数据变量,此文件存放公共值-->
+    <!--请求数据的地址-->
+    <var name="remote" expr="'http://192.168.28.216:8080/recive/test2.do'"/>
+    <var name="filename" expr="'/dianli/vxml/index.vxml'"/>
+    <!--请求正确后返回执行的formid-->
+    <var name="formidSuccess" expr="'#success'"/>
+    <!--请求错误后返回执行的formid-->
+    <var name="formidFail" expr="'#fail'"/>
+    <var name="qname" expr="''"/>
+    <var name="shangji" expr="'*'"/>
+    <var name="toindex" expr="'#'"/>
+    <!--结束话术-->
+    <var name="endP" expr="'感谢您的致电,再见'"/>
+    <!--输入错误时的话术:用户没有输入,或者输入的话在我的系统中没有匹配时,我的话术时-->
+    <var name="inputError" expr="'你的意思我没有太明白,'"/>
+    <!--输入无效话术:用户话术在我的系统中没有写时我的提示是-->
+    <var name="inputInvalid" expr="'您的输入无效,'"/>
+    <!--电话拨通后的提示-->
+    <var name="mainP" expr="'欢迎致电贵阳电网信息服务热线,请直接说出您的问题,
+    或者是你要进入的系统,
+                协同办公系统,
+                人资系统，
+                营销系统,
+                财务系统,
+                桌面问题,
+                '"/>
+    <!--测试时转接的分机-->
+    <var name="ceshizhuanjie" expr="'sip:0006@192.168.28.190'"/>
+    <!--默认转接的手机号-->
+    <var name="zhuanjie" expr="13121933622"/>
+    <!--定义录音文件-->
+    <var name="mainpv" expr="'../wav/mainP.wav'"/>
+</vxml>

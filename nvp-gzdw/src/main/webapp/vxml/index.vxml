@@ -2,44 +2,17 @@
 <!--添加vxml约束,必须添加-->
 <!DOCTYPE vxml PUBLIC "-//Nuance/DTD VoiceXML 2.0//ZH" "http://voicexml.nuance.com/dtd/nuancevoicexml-2-0.dtd">
 <!--指定xml版本-->
-<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN">
-    <!--开始定义请求数据变量-->
-    <!--请求数据的地址-->
-    <var name="remote" expr="'http://192.168.28.216:8080/recive/test2.do'"/>
-    <var name="filename" expr="'/dianli/vxml/index.vxml'"/>
-    <!--请求正确后返回执行的formid-->
-    <var name="formidSuccess" expr="'#success'"/>
-    <!--请求错误后返回执行的formid-->
-    <var name="formidFail" expr="'#fail'"/>
-    <var name="qname" expr="''"/>
-    <var name="shangji" expr="'*'"/>
-    <var name="toindex" expr="'#'"/>
-    <!--结束话术-->
-    <var name="endP" expr="'感谢您的致电,再见'"/>
-    <!--输入错误时的话术-->
-    <var name="inputError" expr="'您的输入无效,'"/>
-    <!--输入无效话术-->
-    <var name="inputInvalid" expr="'您的意思我没有太理解,'"/>
-
-    <!--<form>-->
-    <!--<block>测试成功</block>-->
-    <!--</form>-->
-
-    <var name="A1P" expr="'欢迎致电贵阳电网信息服务热线,请直接说出您的问题,或选择以下系统,
-                协同办公系统,
-                人资系统，
-                营销系统,
-                财务系统,
-                桌面问题,
-                人工服务,
-                或选择重听
-                '"/>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN" application="../application/application.vxml">
 
     <!--人工系统-->
-    <form id="A1">
+    <form id="main">
+        <var name="thisE" expr="'#main'"/>
+        <var name="thisP" expr="mainP"/>
         <field name="input" type="digits?language=zh-CN;length=1">
             <prompt>
-                <value expr="A1P"/>
+                <audio src="../wav/A11.wav">
+                    <value expr="thisP"/>
+                </audio>
             </prompt>
             <grammar src="../grammars/query1.grxml"/>
             <!--匹配协同办公系统-->
@@ -79,25 +52,24 @@
                 </if>
                 <!--重播-->
                 <if cond="input==9 || input.dm_root=='matchNine' || input.dm_root=='hearing'">
-                    <goto next="#A1"/>
+                    <goto expr="thisE"/>
                 </if>
 
                 <prompt>
                     <value expr="inputInvalid"/>
                 </prompt>
-                <goto next="#A1"/>
             </filled>
             <catch event="noinput nomatch" count="1">
                 <prompt>
                     <value expr="inputError"/>
-                    <value expr="A1P"/>
+                    <value expr="thisP"/>
                 </prompt>
             </catch>
 
             <catch event="noinput nomatch" count="2">
                 <prompt>
                     <value expr="inputError"/>
-                    <value expr="A1P"/>
+                    <value expr="thisP"/>
                 </prompt>
             </catch>
 
@@ -113,17 +85,15 @@
 
     <!--转人工-->
     <form id="transfer">
-        <transfer name="call" dest="8000" bridge="false">
+        <transfer name="call" destexpr="ceshizhuanjie" bridge="true">
             <prompt>正在为您转接,请稍后</prompt>
             <filled>
-                <prompt>
-                    <value expr="call"/>
-                </prompt>
                 <if cond="call=='noanswer'">
                     <prompt>话务员无法接听你的电话</prompt>
                     <disconnect/>
                     <exit/>
                 </if>
+                <goto next="#main"/>
             </filled>
         </transfer>
     </form>

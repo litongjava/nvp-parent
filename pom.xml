@@ -11,6 +11,7 @@
     <modules>
         <module>nvp-cloudconnect</module>
         <module>nvp-dianli</module>
+        <module>nvp-common</module>
         <module>nvp-gy</module>
         <module>nvp-receive-mvc</module>
         <module>nvp-study</module>
@@ -22,6 +23,8 @@
         <module>nvp-waihu-ap</module>
         <module>nvp-gzdw</module>
         <module>nvp-zhuanjie</module>
+        <module>nvp-zhuanjie-success</module>
+        <module>nvp-convert</module>
 
 
     </modules>
@@ -30,4 +33,12 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.2.RELEASE</version>
     </parent>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

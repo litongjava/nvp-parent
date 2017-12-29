@@ -3,6 +3,7 @@ package com.vxml.controller;
 import com.vxml.utils.VxmlUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,33 +42,38 @@ public class ReadVxmlController {
      * @param response
      * @throws java.io.IOException
      */
-    //默认情况下匹配不到name中拓展名,:匹配表达式
-    @RequestMapping(value = "/{suffix}/{name:.*}")
+    //默认情况下匹配不到name中拓展名,:匹配表达式(.)是任意字符,** 是零个或多个
+    @RequestMapping(value = "/{suffix}/{name:.*xml}")
     public void readVxml(@PathVariable String suffix, @PathVariable String name, HttpServletRequest request, HttpServletResponse response) throws IOException {
         //String accept = request.getHeader("accept");
+        //如果是请求流程文件和语法文件,显示在屏幕上
+        if (name.endsWith(".vxml") || name.endsWith(".grxml")) {
+            //UTF-8必须大写
+            response.setContentType("text/xml;charset=UTF-8");
+            PrintWriter out = null;
+            try {
+                out = response.getWriter();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        //UTF-8必须大写
-        response.setContentType("text/xml;charset=UTF-8");
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            e.printStackTrace();
+            String filename = "/" + suffix + "/" + name;
+            log.info(filename);
+            //只替换xml文件
+            String realPath = sc.getRealPath(filename);
+            log.info(realPath);
+            String result = null;
+            if (name.endsWith(".xml")) {
+                result = VxmlUtil.replaceVarNname(realPath, name);
+            } else {
+                try {
+                    result = VxmlUtil.getContent(realPath);
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+            }
+            out.println(result);
         }
 
-        String filename = "/" + suffix + "/" + name;
-        log.info(filename);
-        //只替换xml文件
-        String realPath = sc.getRealPath(filename);
-        log.info(realPath);
-        String result=null;
-        if(name.endsWith(".xml")){
-            result = VxmlUtil.replaceVarNname(realPath, name);
-        }else{
-            result=VxmlUtil.getContent(realPath);
-        }
-
-        out.println(result);
-        //log.info(result);
     }
 }

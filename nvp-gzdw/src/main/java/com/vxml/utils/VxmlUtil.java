@@ -37,13 +37,9 @@ public class VxmlUtil {
         //返回xml文本
         return doc.asXML();
     }
-    public static String getContent(String filename){
+    public static String getContent(String filename) throws DocumentException {
         Document doc=null;
-        try {
-            doc= instance.read(filename);
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
+        doc= instance.read(filename);
         return doc.asXML();
     }
 }

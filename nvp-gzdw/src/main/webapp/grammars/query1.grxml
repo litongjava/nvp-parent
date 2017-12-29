@@ -100,7 +100,8 @@
                                 <item>想</item>
                                 <item>要</item>
                             </one-of>
-                            去</item>
+                            去
+                        </item>
                         人工
                         <item repeat="0-1">服务</item>
                         <item repeat="0-1">系统</item>
@@ -122,7 +123,8 @@
                                 <item>想</item>
                                 <item>要</item>
                             </one-of>
-                            去</item>
+                            去
+                        </item>
                         智能
                         <item repeat="0-1">问题</item>
                         <item repeat="0-1">系统</item>
@@ -143,19 +145,22 @@
                     </item>
                 </one-of>
             </item>
-
             <item>
                 <tag>SWI_meaning='hearing'</tag>
                 <one-of>
+                    <item>重听</item>
                     <item>
                         <item repeat="0-1">我想 问</item>
                         <item repeat="0-1">我
                             <one-of>
-                                <item>想</item>
-                                <item>要</item>
+                                <item repeat="0-1">想</item>
+                                <item repeat="0-1">要</item>
                             </one-of>
-                            </item>
-                        重听
+                        </item>
+                        <one-of>
+                            <item>重听</item>
+                            <item>再说</item>
+                        </one-of>
                         <item repeat="0-1">一遍</item>
                         <item repeat="0-1">一次</item>
                     </item>

@@ -34,6 +34,7 @@
             <item>
                 <tag>SWI_meaning='humanRecourceSys'</tag>
                 <one-of>
+                    <item>人资 系统</item>
                     <item>
                         <ruleref uri="#main"/>
                         <item repeat="0-1">我想 问</item>

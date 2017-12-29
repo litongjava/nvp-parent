@@ -33,7 +33,7 @@ public class ReadVxmlController {
      * @throws IOException
      */
     //默认情况下匹配不到name中拓展名,:匹配表达式
-    @RequestMapping(value = "/nvp-study/{suffix}/{name:.*}")
+    //@RequestMapping(value = "/nvp-study/{suffix}/{name:.*}")
     public void readVxml(@PathVariable String suffix,@PathVariable String name,HttpServletRequest request,HttpServletResponse response) throws IOException {
         //String accept = request.getHeader("accept");
 

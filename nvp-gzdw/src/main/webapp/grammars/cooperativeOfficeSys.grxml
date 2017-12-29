@@ -35,6 +35,9 @@
                 <tag>SWI_meaning='cooperativeOfficeSys'</tag>
                 <one-of>
                     <item>
+                        协同 办公 系统
+                    </item>
+                    <item>
                         <item repeat="0-1">我想 问</item>
                         <item repeat="0-1">我
                             <one-of>
@@ -44,7 +47,6 @@
                             去</item>
                         协同 办公
                         <item repeat="0-1">系统</item>
-
                     </item>
                     <item>协同
                         <item repeat="0-1">办公</item>
@@ -167,18 +169,24 @@
                         o 文件 新启 错误 删除
                     </item>
                     <item>
-                        <ruleref uri="#main"/>
-                        十九<item repeat="0-1">大</item> 供电
-                        <item repeat="0-1">总结</item> 表彰
-                        <item repeat="0-1">大会</item>
-                        <item repeat="0-1">需要</item> 调整
-                        <item repeat="0-1">分发</item>环节
-
+                        <item repeat="0-1">有一个</item>
+                        大会需要调整到分发环节
                     </item>
                     <item>
                         <ruleref uri="#main"/>
-                        十九 保 供电 表彰 大会 调整 分发
-                        <item repeat="0-1">环节</item>
+
+                        <!--19大供电表彰大会需要分发到环节-->
+                        <item reapeat="0-1">有一个</item>
+                        <oneof repeat="0-1">
+                            <item reapeat="0-1">十九 大</item>
+                            <item reapeat="0-1">供电 表彰</item>
+                        </oneof>
+                        <item>大会
+                        <item repeat="0-1">需要</item>
+                        调整
+                            <item repeat="0-1">到</item>
+                            <item repeat="0-1">分发</item>
+                        环节</item>
                     </item>
                     <item>
                         <ruleref uri="#main"/>
