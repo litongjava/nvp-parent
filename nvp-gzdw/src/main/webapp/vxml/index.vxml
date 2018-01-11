@@ -4,7 +4,7 @@
 <!--指定xml版本-->
 <vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="zh-CN" application="../application/application.vxml">
 
-    <!--人工系统-->
+    <!--主节点-->
     <form id="main">
         <var name="thisE" expr="'#main'"/>
         <var name="thisP" expr="mainP"/>

@@ -74,12 +74,11 @@
                 <configuration>
                     <port>8081</port>
                     <path>/nvp-gzdw</path>
-                    <url>http://192.168.28.200:8082/manager/text</url>
+                    <url>http://192.168.28.195:8082/manager/text</url>
                     <username>tomcat</username>
                     <password>tomcat</password>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

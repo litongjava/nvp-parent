@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SSMTraining version="1.0.0" xml:lang="zh-cn">
+    <!--迭代3000次学习-->
+    <param name="num_iterations">
+        <value>50</value>
+    </param>
+    <features>
+        <word>李通</word>
+        <word>名字</word>
+    </features>
+    <semantic_models>
+        <SSM>
+            <meaning prior="0.0">
+                <slot name="litong">名字 李通</slot>
+            </meaning>
+        </SSM>
+    </semantic_models>
+
+    <training>
+        <sentance count="1">
+            <semantics>
+                <slot name="litong">name</slot>
+            </semantics>
+            名字 李通
+        </sentance>
+    </training>
+
+    <test>
+        <sentance count="1">
+            <semantics>
+                <slot name="litong">名字 李通</slot>
+            </semantics>
+            名字 李通
+        </sentance>
+    </test>
+</SSMTraining>

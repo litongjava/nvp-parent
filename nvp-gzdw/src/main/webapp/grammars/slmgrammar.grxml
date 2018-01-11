@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="zh-cn" xmlns="http://www.w3.org/2001/06/grammar" tag-format="swi-semantics/1.0"
+         root="ROOT">
+    <meta name="swirec_normalize_to_probabilities" content="1"/>
+    <meta name="swirec_optimization" content="12"/>
+    <rule>
+        <one-of>
+            <item>周日 <tag>SWI_meaning="sunday"</tag></item>
+            <item>周一 <tag>SWI_meaning="monday"</tag></item>
+        </one-of>
+        
+    </rule>
+</grammar>

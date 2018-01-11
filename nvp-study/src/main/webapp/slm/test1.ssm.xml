@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<SLMTraining version="1.0.0" xml:lang="zh-cn">
+    <param name="language">
+        <value>zh-CN</value>
+    </param>
+    <param name="ngram_order">
+        <value>3</value>
+    </param>
+    <vocab>
+        <item>名字</item>
+        <item>李通</item>
+    </vocab>
+    <training>
+        <sentence count="1">
+            名字 李通
+        </sentence>
+    </training>
+</SLMTraining>
