@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>nvp-cloudconnect</module>
-        <module>nvp-dianli</module>
+        <module>nvp-guangxi-dianli</module>
         <module>nvp-common</module>
         <module>nvp-gy</module>
         <module>nvp-receive-mvc</module>
@@ -26,6 +26,7 @@
         <module>nvp-zhuanjie-success</module>
         <module>nvp-convert</module>
         <module>nvp-jssip-tryit</module>
+        <module>nvp-showvxml</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
